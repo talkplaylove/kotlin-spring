@@ -1,8 +1,8 @@
-package me.hong.kotlinspring.data.repository
+package me.hong.kotlinspring.data.repo
 
 import me.hong.kotlinspring.data.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface UserRepository : JpaRepository<User, Long> {
+interface UserRepo : JpaRepository<User, Long> {
   fun findByEmail(email: String): User?
 }
