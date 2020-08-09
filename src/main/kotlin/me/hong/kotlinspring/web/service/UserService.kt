@@ -1,10 +1,10 @@
 package me.hong.kotlinspring.web.service
 
-import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.data.entity.User
 import me.hong.kotlinspring.data.repo.UserRepo
-import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.CustomException
+import me.hong.kotlinspring.web.advice.CustomMessage
+import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.user.SigninReq
 import me.hong.kotlinspring.web.model.user.SigninRes
 import me.hong.kotlinspring.web.model.user.SignupReq
@@ -27,7 +27,11 @@ class UserService(
 
     userSession.id = user.id!!
     userSession.name = user.name
-    return SigninRes(user.id, user.name, user.gender)
+    return SigninRes(
+        id = user.id,
+        name = user.name,
+        gender = user.gender
+    )
   }
 
   fun signup(req: SignupReq): SignupRes {
@@ -37,6 +41,6 @@ class UserService(
         passwordEncoder.encode(req.password),
         req.gender
     ))
-    return SignupRes(user.id)
+    return SignupRes(id = user.id)
   }
 }

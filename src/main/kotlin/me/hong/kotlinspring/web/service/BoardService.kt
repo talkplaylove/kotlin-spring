@@ -20,12 +20,12 @@ class BoardService(
         ?: throw CustomException(CustomMessage.BOARD_NOT_FOUND)
 
     return BoardRes(
-        board.id,
-        board.title,
-        board.content,
-        board.userId,
-        board.createdAt,
-        board.updatedAt
+        id = board.id,
+        title = board.title,
+        content = board.content,
+        userId = board.userId,
+        createdAt = board.createdAt,
+        updatedAt = board.updatedAt
     )
   }
 
@@ -37,12 +37,12 @@ class BoardService(
     ))
 
     return BoardRes(
-        board.id,
-        board.title,
-        board.content,
-        board.userId,
-        board.createdAt,
-        board.updatedAt
+        id = board.id,
+        title = board.title,
+        content = board.content,
+        userId = board.userId,
+        createdAt = board.createdAt,
+        updatedAt = board.updatedAt
     )
   }
 
@@ -59,12 +59,12 @@ class BoardService(
     board.content = req.content
 
     return BoardRes(
-        board.id,
-        board.title,
-        board.content,
-        board.userId,
-        board.createdAt,
-        board.updatedAt
+        id = board.id,
+        title = board.title,
+        content = board.content,
+        userId = board.userId,
+        createdAt = board.createdAt,
+        updatedAt = board.updatedAt
     )
   }
 
