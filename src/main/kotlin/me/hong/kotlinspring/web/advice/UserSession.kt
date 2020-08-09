@@ -12,10 +12,18 @@ class UserSession {
   var name: String = "게스트"
 
   fun exists(): Boolean {
-    return this.id == 0L
+    return this.id != 0L
+  }
+
+  fun unexists(): Boolean {
+    return !exists()
   }
 
   fun matches(userId: Long?): Boolean {
     return this.id == userId
+  }
+
+  fun unmatches(userId: Long?): Boolean {
+    return !matches(userId)
   }
 }

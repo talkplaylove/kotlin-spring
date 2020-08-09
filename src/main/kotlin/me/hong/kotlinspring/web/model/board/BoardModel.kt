@@ -12,6 +12,7 @@ data class BoardRes(
     val title: String,
     val content: String,
     val userId: Long?,
+    val userName: String,
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?
 )

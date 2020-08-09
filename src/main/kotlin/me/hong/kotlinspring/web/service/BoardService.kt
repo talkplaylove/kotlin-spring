@@ -2,6 +2,7 @@ package me.hong.kotlinspring.web.service
 
 import me.hong.kotlinspring.data.entity.Board
 import me.hong.kotlinspring.data.repo.BoardRepo
+import me.hong.kotlinspring.data.repo.UserRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
@@ -13,23 +14,26 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class BoardService(
     private val boardRepo: BoardRepo,
-    private val userSession: UserSession
+    private val userRepo: UserRepo
 ) {
   fun get(id: Long): BoardRes {
     val board = boardRepo.findByIdAndDeleted(id, false)
         ?: throw CustomException(CustomMessage.BOARD_NOT_FOUND)
+
+    val user = userRepo.findById(board.userId)
 
     return BoardRes(
         id = board.id,
         title = board.title,
         content = board.content,
         userId = board.userId,
+        userName = user!!.name,
         createdAt = board.createdAt,
         updatedAt = board.updatedAt
     )
   }
 
-  fun create(req: BoardReq): BoardRes {
+  fun create(req: BoardReq, userSession: UserSession): BoardRes {
     val board = boardRepo.save(Board(
         req.title,
         req.content,
@@ -41,17 +45,18 @@ class BoardService(
         title = board.title,
         content = board.content,
         userId = board.userId,
+        userName = userSession.name,
         createdAt = board.createdAt,
         updatedAt = board.updatedAt
     )
   }
 
   @Transactional
-  fun update(id: Long, req: BoardReq): BoardRes {
+  fun update(id: Long, req: BoardReq, userSession: UserSession): BoardRes {
     val board = boardRepo.findByIdAndDeleted(id, false)
         ?: throw CustomException(CustomMessage.BOARD_NOT_FOUND)
 
-    if (userSession.matches(board.userId)) {
+    if (userSession.unmatches(board.userId)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
@@ -63,17 +68,18 @@ class BoardService(
         title = board.title,
         content = board.content,
         userId = board.userId,
+        userName = userSession.name,
         createdAt = board.createdAt,
         updatedAt = board.updatedAt
     )
   }
 
   @Transactional
-  fun delete(id: Long) {
+  fun delete(id: Long, userSession: UserSession) {
     val board = boardRepo.findByIdAndDeleted(id, false)
         ?: throw CustomException(CustomMessage.BOARD_NOT_FOUND)
 
-    if (userSession.matches(board.userId)) {
+    if (userSession.unmatches(board.userId)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 

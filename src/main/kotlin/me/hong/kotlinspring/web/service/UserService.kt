@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(
     private val userRepo: UserRepo,
-    private val passwordEncoder: PasswordEncoder,
-    private val userSession: UserSession
+    private val passwordEncoder: PasswordEncoder
 ) {
   fun signin(req: SigninReq): SigninRes {
     val user = userRepo.findByEmail(req.email)
@@ -25,8 +24,6 @@ class UserService(
     if (!passwordEncoder.matches(req.password, user.password))
       throw CustomException(CustomMessage.INCORRECT_PASSWORD)
 
-    userSession.id = user.id!!
-    userSession.name = user.name
     return SigninRes(
         id = user.id,
         name = user.name,

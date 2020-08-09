@@ -23,23 +23,23 @@ class BoardController(
   @PostMapping("/board")
   @ResponseStatus(HttpStatus.CREATED)
   fun create(@RequestBody req: BoardReq): BoardRes {
-    if (userSession.exists())
+    if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
-    return boardService.create(req)
+    return boardService.create(req, userSession)
   }
 
   @PatchMapping("/board/{boardId}")
   fun update(@PathVariable boardId: Long, @RequestBody req: BoardReq): BoardRes {
-    if (userSession.exists())
+    if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
-    return boardService.update(boardId, req)
+    return boardService.update(boardId, req, userSession)
   }
 
   @DeleteMapping("/board/{boardId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   fun delete(@PathVariable boardId: Long) {
-    if (userSession.exists())
+    if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
-    boardService.delete(boardId)
+    boardService.delete(boardId, userSession)
   }
 }

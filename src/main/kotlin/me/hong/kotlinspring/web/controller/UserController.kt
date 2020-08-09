@@ -1,5 +1,6 @@
 package me.hong.kotlinspring.web.controller
 
+import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.user.SigninReq
 import me.hong.kotlinspring.web.model.user.SigninRes
 import me.hong.kotlinspring.web.model.user.SignupReq
@@ -13,12 +14,16 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val userSession: UserSession
 ) {
 
   @PostMapping("/user/signin")
   fun signin(@RequestBody req: SigninReq): SigninRes {
-    return userService.signin(req)
+    val res = userService.signin(req)
+    userSession.id = res.id!!
+    userSession.name = res.name
+    return res
   }
 
   @PostMapping("/user/signup")
