@@ -21,8 +21,10 @@ class UserController(
   @PostMapping("/user/signin")
   fun signin(@RequestBody req: SigninReq): SigninRes {
     val res = userService.signin(req)
-    userSession.id = res.id!!
-    userSession.name = res.name
+    userSession.set(
+        id = res.id!!,
+        name = res.name
+    )
     return res
   }
 

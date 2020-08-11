@@ -11,6 +11,11 @@ class UserSession {
   var id: Long = 0L
   var name: String = "게스트"
 
+  fun set(id: Long, name: String) {
+    this.id = id
+    this.name = name
+  }
+
   fun exists(): Boolean {
     return this.id != 0L
   }
