@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.web.model.user
 
-import me.hong.kotlinspring.constant.Gender
+import me.hong.kotlinspring.constant.user.Gender
 
 data class SigninReq(
     val email: String,

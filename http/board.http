@@ -1,5 +1,5 @@
 ### 게시글 조회
-GET http://localhost:8080/board/4
+GET http://localhost:8080/board/5
 
 ### 게시글 등록
 POST http://localhost:8080/board

@@ -12,7 +12,7 @@ import javax.persistence.*
 class Board(
     title: String,
     content: String,
-    deleted: Boolean
+    hitCount: Long
 ) {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ class Board(
   @Column(length = 1000)
   var content: String = content
 
-  var deleted: Boolean = deleted
+  var hitCount: Long = hitCount
 
   @CreatedBy
   var userId: Long? = null

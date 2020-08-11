@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.data.entity
 
-import me.hong.kotlinspring.constant.Gender
+import me.hong.kotlinspring.constant.user.Gender
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
