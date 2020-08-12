@@ -17,7 +17,6 @@ class UserController(
     private val userService: UserService,
     private val userSession: UserSession
 ) {
-
   @PostMapping("/user/signin")
   fun signin(@RequestBody req: SigninReq): SigninRes {
     val res = userService.signin(req)
@@ -33,5 +32,4 @@ class UserController(
   fun signup(@RequestBody req: SignupReq): SignupRes {
     return userService.signup(req)
   }
-
 }

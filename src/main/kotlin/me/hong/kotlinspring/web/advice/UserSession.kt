@@ -9,7 +9,7 @@ import org.springframework.web.context.WebApplicationContext
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 class UserSession {
   var id: Long = 0L
-  var name: String = "게스트"
+  var name: String = ""
 
   fun set(id: Long, name: String) {
     this.id = id

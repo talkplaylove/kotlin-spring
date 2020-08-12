@@ -1,5 +1,5 @@
 ### 회원 로그인
-POST http://localhost:8080/user/signin
+POST {{server_url}}/user/signin
 Content-Type: application/json
 
 {
@@ -7,8 +7,10 @@ Content-Type: application/json
   "password": "1234"
 }
 
+
+
 ### 회원 가입
-POST http://localhost:8080/user/signup
+POST {{server_url}}/user/signup
 Content-Type: application/json
 
 {

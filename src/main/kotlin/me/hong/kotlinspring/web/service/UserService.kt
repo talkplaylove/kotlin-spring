@@ -1,10 +1,8 @@
 package me.hong.kotlinspring.web.service
 
-import me.hong.kotlinspring.data.entity.User
-import me.hong.kotlinspring.data.repo.UserRepo
+import me.hong.kotlinspring.data.repo.user.UserRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
-import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.user.SigninReq
 import me.hong.kotlinspring.web.model.user.SigninRes
 import me.hong.kotlinspring.web.model.user.SignupReq
@@ -24,20 +22,13 @@ class UserService(
     if (!passwordEncoder.matches(req.password, user.password))
       throw CustomException(CustomMessage.INCORRECT_PASSWORD)
 
-    return SigninRes(
-        id = user.id,
-        name = user.name,
-        gender = user.gender
-    )
+    return SigninRes.of(user)
   }
 
   fun signup(req: SignupReq): SignupRes {
-    val user = userRepo.save(User(
-        req.email,
-        req.name,
-        passwordEncoder.encode(req.password),
-        req.gender
-    ))
-    return SignupRes(id = user.id)
+    val encodedPassword = passwordEncoder.encode(req.password)
+    val user = userRepo.save(req.toEntity(encodedPassword))
+
+    return SignupRes.of(user)
   }
 }

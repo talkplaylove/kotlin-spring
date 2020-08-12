@@ -1,7 +1,7 @@
-package me.hong.kotlinspring.data.entity
+package me.hong.kotlinspring.data.entity.board
 
 import me.hong.kotlinspring.constant.board.LikeOrHate
-import me.hong.kotlinspring.data.entity.embedded.BoardHitId
+import me.hong.kotlinspring.data.entity.board.embedded.BoardHitId
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime

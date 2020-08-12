@@ -1,6 +1,6 @@
-package me.hong.kotlinspring.data.repo
+package me.hong.kotlinspring.data.repo.board
 
-import me.hong.kotlinspring.data.entity.Board
+import me.hong.kotlinspring.data.entity.board.Board
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 

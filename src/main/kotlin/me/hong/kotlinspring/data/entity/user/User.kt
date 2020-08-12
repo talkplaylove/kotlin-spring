@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.data.entity
+package me.hong.kotlinspring.data.entity.user
 
 import me.hong.kotlinspring.constant.user.Gender
 import org.hibernate.annotations.CreationTimestamp

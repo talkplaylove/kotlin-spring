@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.data.entity
+package me.hong.kotlinspring.data.entity.board
 
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
