@@ -1,33 +1,38 @@
 package me.hong.kotlinspring.web.controller
 
 import me.hong.kotlinspring.web.advice.UserSession
-import me.hong.kotlinspring.web.model.user.SigninReq
-import me.hong.kotlinspring.web.model.user.SigninRes
-import me.hong.kotlinspring.web.model.user.SignupReq
-import me.hong.kotlinspring.web.model.user.SignupRes
+import me.hong.kotlinspring.web.model.user.*
 import me.hong.kotlinspring.web.service.UserService
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
+import javax.validation.constraints.Email
+import javax.validation.constraints.Size
 
+@Validated
 @RestController
 class UserController(
     private val userService: UserService,
     private val userSession: UserSession
 ) {
-  @PostMapping("/user/signin")
+  @GetMapping("/users/email/duplicate")
+  fun duplicateEmail(@RequestParam @Email email: String): UserDuplicateRes {
+    return userService.duplicateEmail(email)
+  }
+
+  @GetMapping("/users/name/duplicate")
+  fun duplicateName(@RequestParam @Size(min = 1) name: String): UserDuplicateRes {
+    return userService.duplicateName(name)
+  }
+
+  @PostMapping("/users/signin")
   fun signin(@RequestBody req: SigninReq): SigninRes {
     val res = userService.signin(req)
-    userSession.set(
-        id = res.id!!,
-        name = res.name
-    )
+    userSession.set(res.id!!, res.name)
     return res
   }
 
-  @PostMapping("/user/signup")
+  @PostMapping("/users/signup")
   @ResponseStatus(HttpStatus.CREATED)
   fun signup(@RequestBody req: SignupReq): SignupRes {
     return userService.signup(req)

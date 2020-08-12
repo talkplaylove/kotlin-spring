@@ -7,6 +7,10 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
+@Table(indexes = [
+  Index(name = "IndexUserEmail", columnList = "email", unique = true),
+  Index(name = "IndexUserName", columnList = "name", unique = true)
+])
 class User(
     email: String,
     name: String,

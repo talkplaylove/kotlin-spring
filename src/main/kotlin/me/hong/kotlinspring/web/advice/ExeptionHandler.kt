@@ -1,22 +1,41 @@
 package me.hong.kotlinspring.web.advice
 
-import me.hong.kotlinspring.web.model.ErrorModel
+import me.hong.kotlinspring.web.model.ErrorRes
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.ServletRequestBindingException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import javax.validation.ValidationException
 
 @RestControllerAdvice
 class ExeptionHandler {
 
+  val logger = LoggerFactory.getLogger(this.javaClass)
+
   @ExceptionHandler(Exception::class)
-  fun handle(exception: Exception): ResponseEntity<ErrorModel> {
-    return ResponseEntity(exception.message?.let { ErrorModel(it) }, HttpStatus.INTERNAL_SERVER_ERROR)
+  fun handle(exception: Exception): ResponseEntity<ErrorRes> {
+    val customMessage = CustomMessage.ERROR
+    logger.error(customMessage.message, exception)
+    return ResponseEntity(ErrorRes.of(customMessage), customMessage.status)
+  }
+
+  @ExceptionHandler(ValidationException::class)
+  fun handle(exception: ValidationException): ResponseEntity<ErrorRes> {
+    val status = HttpStatus.BAD_REQUEST
+    return ResponseEntity(ErrorRes.of(status.name, exception.message), status)
+  }
+
+  @ExceptionHandler(ServletRequestBindingException::class)
+  fun handle(exception: ServletRequestBindingException): ResponseEntity<ErrorRes> {
+    val status = HttpStatus.BAD_REQUEST
+    return ResponseEntity(ErrorRes.of(status.name, exception.message), status)
   }
 
   @ExceptionHandler(CustomException::class)
-  fun handle(exception: CustomException): ResponseEntity<ErrorModel> {
-    val errorMessage = exception.customMessage
-    return ResponseEntity(ErrorModel(errorMessage.message), errorMessage.status)
+  fun handle(exception: CustomException): ResponseEntity<ErrorRes> {
+    val customMessage = exception.customMessage
+    return ResponseEntity(ErrorRes.of(customMessage), customMessage.status)
   }
 }

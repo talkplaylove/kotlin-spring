@@ -3,6 +3,7 @@ package me.hong.kotlinspring.web.advice
 import org.springframework.http.HttpStatus
 
 enum class CustomMessage(val status: HttpStatus, val message: String) {
+  ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "시스템 오류입니다."),
   UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "사용자 인증이 필요합니다."),
   FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 

@@ -13,12 +13,12 @@ class BoardController(
     private val boardService: BoardService,
     private val userSession: UserSession
 ) {
-  @GetMapping("/board/{boardId}")
+  @GetMapping("/boards/{boardId}")
   fun get(@PathVariable boardId: Long): BoardDetailRes {
     return boardService.get(boardId)
   }
 
-  @PostMapping("/board")
+  @PostMapping("/boards")
   @ResponseStatus(HttpStatus.CREATED)
   fun create(@RequestBody req: BoardPutReq): BoardPutRes {
     if (userSession.unexists())
@@ -26,14 +26,14 @@ class BoardController(
     return boardService.create(req, userSession)
   }
 
-  @PatchMapping("/board/{boardId}")
+  @PatchMapping("/boards/{boardId}")
   fun update(@PathVariable boardId: Long, @RequestBody req: BoardPutReq): BoardPutRes {
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
     return boardService.update(boardId, req, userSession)
   }
 
-  @DeleteMapping("/board/{boardId}")
+  @DeleteMapping("/boards/{boardId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   fun delete(@PathVariable boardId: Long) {
     if (userSession.unexists())
@@ -41,7 +41,7 @@ class BoardController(
     return boardService.delete(boardId, userSession)
   }
 
-  @PutMapping("/board/{boardId}/like-or-hate")
+  @PutMapping("/boards/{boardId}/like-or-hate")
   fun likeOrHate(@PathVariable boardId: Long, @RequestBody req: BoardHitReq): BoardHitRes {
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
