@@ -1,25 +1,14 @@
 package me.hong.kotlinspring.data.entity.board
 
-import me.hong.kotlinspring.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.embedded.BoardHitId
-import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.UpdateTimestamp
-import java.time.LocalDateTime
-import javax.persistence.*
+import javax.persistence.EmbeddedId
+import javax.persistence.Entity
 
 @Entity
-class BoardHit(id: BoardHitId?, likeOrHate: LikeOrHate) {
+class BoardHit(id: BoardHitId?) {
 
   @EmbeddedId
   val id: BoardHitId? = id
 
-  @Enumerated(EnumType.STRING)
-  @Column(length = 4)
-  var likeOrHate: LikeOrHate = likeOrHate
-
-  @CreationTimestamp
-  val createdAt: LocalDateTime? = null
-
-  @UpdateTimestamp
-  val updatedAt: LocalDateTime? = null
+  var hit: Long? = 0
 }

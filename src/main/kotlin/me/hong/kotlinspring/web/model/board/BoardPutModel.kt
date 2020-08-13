@@ -11,8 +11,7 @@ data class BoardPutReq(
   fun toEntity(): Board {
     return Board(
         title = this.title,
-        content = this.content,
-        hitCount = 0L
+        content = this.content
     )
   }
 }
@@ -21,7 +20,6 @@ data class BoardPutRes(
     val id: Long?,
     val title: String,
     val content: String,
-    var hitCount: Long,
     val userId: Long?,
     val userName: String,
     val createdAt: LocalDateTime?,
@@ -33,7 +31,6 @@ data class BoardPutRes(
           id = board.id,
           title = board.title,
           content = board.content,
-          hitCount = board.hitCount,
           userId = board.userId,
           userName = userSession.name,
           createdAt = board.createdAt,

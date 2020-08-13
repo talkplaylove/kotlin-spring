@@ -42,7 +42,7 @@ class BoardController(
   }
 
   @PutMapping("/boards/{boardId}/like-or-hate")
-  fun likeOrHate(@PathVariable boardId: Long, @RequestBody req: BoardHitReq): BoardHitRes {
+  fun likeOrHate(@PathVariable boardId: Long, @RequestBody req: BoardLIkeReq): BoardLikeRes {
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
     return boardService.likeOrHate(boardId, req, userSession)

@@ -11,8 +11,7 @@ import javax.persistence.*
 @EntityListeners(AuditingEntityListener::class)
 class Board(
     title: String,
-    content: String,
-    hitCount: Long
+    content: String
 ) {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +22,6 @@ class Board(
 
   @Column(length = 1000)
   var content: String = content
-
-  var hitCount: Long = hitCount
 
   @CreatedBy
   var userId: Long? = null

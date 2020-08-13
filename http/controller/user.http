@@ -3,11 +3,9 @@ GET {{server_url}}/users/email/duplicate?email=hkhong91@gmail.com
 User-Agent: {{user_agent}}
 
 
-
 ### 이름 중복 체크
 GET {{server_url}}/users/name/duplicate?name=홍아지
 User-Agent: {{user_agent}}
-
 
 
 ### 회원 로그인
@@ -19,7 +17,6 @@ Content-Type: application/json
   "email": "hkhong91@gmail.com",
   "password": "1234"
 }
-
 
 
 ### 회원 가입

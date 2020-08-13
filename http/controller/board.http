@@ -3,7 +3,6 @@ GET {{server_url}}/boards/5
 User-Agent: {{user_agent}}
 
 
-
 ### 게시글 등록
 POST {{server_url}}/boards
 User-Agent: {{user_agent}}
@@ -13,7 +12,6 @@ Content-Type: application/json
   "title": "제목",
   "content": "내용"
 }
-
 
 
 ### 게시글 수정
@@ -27,11 +25,9 @@ Content-Type: application/json
 }
 
 
-
 ### 게시글 삭제
 DELETE {{server_url}}/boards/4
 User-Agent: {{user_agent}}
-
 
 
 ### 게시글 좋아요/싫어요

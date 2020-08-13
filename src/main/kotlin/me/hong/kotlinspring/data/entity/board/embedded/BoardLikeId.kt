@@ -1,20 +1,16 @@
 package me.hong.kotlinspring.data.entity.board.embedded
 
 import java.io.Serializable
-import java.time.LocalDate
 import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class BoardHitId(date: LocalDate?, boardId: Long?, ip: String?) : Serializable {
-  @Column(name = "date")
-  var id1: LocalDate? = date
-
+class BoardLikeId(boardId: Long?, userId: Long?) : Serializable {
   @Column(name = "boardId")
-  var id2: Long? = boardId
+  var id1: Long? = boardId
 
-  @Column(name = "ip", length = 50)
-  var id3: String? = ip
+  @Column(name = "userId")
+  var id2: Long? = userId
 
   override fun equals(other: Any?): Boolean {
     return super.equals(other)
