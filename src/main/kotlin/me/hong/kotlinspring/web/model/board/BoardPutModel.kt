@@ -3,9 +3,13 @@ package me.hong.kotlinspring.web.model.board
 import me.hong.kotlinspring.data.entity.board.Board
 import me.hong.kotlinspring.web.advice.UserSession
 import java.time.LocalDateTime
+import javax.validation.constraints.NotEmpty
 
 data class BoardPutReq(
+    @NotEmpty
     val title: String,
+
+    @NotEmpty
     val content: String
 ) {
   fun toEntity(): Board {

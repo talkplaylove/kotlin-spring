@@ -23,6 +23,8 @@ class Board(
   @Column(length = 1000)
   var content: String = content
 
+  var deleted: Boolean = false
+
   @CreatedBy
   var userId: Long? = null
 

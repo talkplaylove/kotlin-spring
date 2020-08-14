@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.data.entity.board.embedded
+package me.hong.kotlinspring.data.entity.user.embedded
 
 import java.io.Serializable
 import java.time.LocalDate
@@ -6,15 +6,12 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class BoardHitId(date: LocalDate?, boardId: Long?, ip: String?) : Serializable {
-  @Column(name = "boardId")
-  var id1: Long? = boardId
+class UserAccessId(userId: Long, date: LocalDate) : Serializable {
+  @Column(name = "userId")
+  var id1: Long = userId
 
   @Column(name = "date")
   var id2: LocalDate? = date
-
-  @Column(name = "ip", length = 50)
-  var id3: String? = ip
 
   override fun equals(other: Any?): Boolean {
     return super.equals(other)

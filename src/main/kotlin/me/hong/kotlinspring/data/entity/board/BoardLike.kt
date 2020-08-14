@@ -11,10 +11,10 @@ import javax.persistence.*
 @Table(indexes = [
   Index(name = "IndexBoardLikeUserId", columnList = "userId", unique = false)
 ])
-class BoardLike(id: BoardLikeId?, likeOrHate: LikeOrHate) {
+class BoardLike(id: BoardLikeId, likeOrHate: LikeOrHate) {
 
   @EmbeddedId
-  val id: BoardLikeId? = id
+  val id: BoardLikeId = id
 
   @Enumerated(EnumType.STRING)
   @Column(length = 4)

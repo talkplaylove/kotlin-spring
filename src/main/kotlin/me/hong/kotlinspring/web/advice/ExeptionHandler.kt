@@ -1,6 +1,7 @@
 package me.hong.kotlinspring.web.advice
 
 import me.hong.kotlinspring.web.model.ErrorRes
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,7 +13,7 @@ import javax.validation.ValidationException
 @RestControllerAdvice
 class ExeptionHandler {
 
-  val logger = LoggerFactory.getLogger(this.javaClass)
+  val logger: Logger = LoggerFactory.getLogger(this.javaClass)
 
   @ExceptionHandler(Exception::class)
   fun handle(exception: Exception): ResponseEntity<ErrorRes> {

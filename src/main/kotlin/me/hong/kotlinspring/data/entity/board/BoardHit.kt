@@ -5,10 +5,10 @@ import javax.persistence.EmbeddedId
 import javax.persistence.Entity
 
 @Entity
-class BoardHit(id: BoardHitId?) {
+class BoardHit(id: BoardHitId) {
 
   @EmbeddedId
-  val id: BoardHitId? = id
+  val id: BoardHitId = id
 
-  var hit: Long? = 0
+  var hit: Long = 0
 }

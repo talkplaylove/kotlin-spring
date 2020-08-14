@@ -4,8 +4,10 @@ import me.hong.kotlinspring.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.BoardLike
 import me.hong.kotlinspring.data.entity.board.embedded.BoardLikeId
 import java.time.LocalDateTime
+import javax.validation.constraints.NotNull
 
 data class BoardLIkeReq(
+    @NotNull
     var likeOrHate: LikeOrHate
 ) {
   fun toEntity(boardLikeId: BoardLikeId): BoardLike {

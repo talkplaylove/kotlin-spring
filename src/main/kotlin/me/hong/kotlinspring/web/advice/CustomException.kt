@@ -1,5 +1,5 @@
 package me.hong.kotlinspring.web.advice
 
 data class CustomException(
-    val customMessage: CustomMessage
+    var customMessage: CustomMessage
 ) : RuntimeException()
