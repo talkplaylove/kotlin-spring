@@ -9,6 +9,4 @@ class BoardHit(id: BoardHitId) {
 
   @EmbeddedId
   val id: BoardHitId = id
-
-  var hit: Long = 0
 }

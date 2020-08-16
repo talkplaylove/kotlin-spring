@@ -6,7 +6,7 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class BoardHitId(date: LocalDate?, boardId: Long?, ip: String?) : Serializable {
+class BoardHitId(boardId: Long?, date: LocalDate?, ip: String?) : Serializable {
   @Column(name = "boardId")
   var id1: Long? = boardId
 

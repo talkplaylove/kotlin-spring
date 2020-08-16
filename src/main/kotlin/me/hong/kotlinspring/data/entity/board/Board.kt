@@ -25,6 +25,8 @@ class Board(
 
   var deleted: Boolean = false
 
+  var hit: Long = 0
+
   @CreatedBy
   var userId: Long? = null
 

@@ -1,5 +1,6 @@
 package me.hong.kotlinspring.web.controller
 
+import me.hong.kotlinspring.util.IPUtils
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
@@ -8,6 +9,7 @@ import me.hong.kotlinspring.web.service.BoardService
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 import javax.validation.constraints.Min
 
@@ -58,6 +60,12 @@ class BoardController(
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
     return boardService.deleteBoard(boardId, userSession)
+  }
+
+  @PostMapping("/boards/{boardId}/hit")
+  fun hit(@PathVariable boardId: Long, request: HttpServletRequest) {
+    val ip = IPUtils.getIp(request)
+    return boardService.hitBoard(boardId, ip)
   }
 
   @PutMapping("/boards/{boardId}/like-or-hate")

@@ -35,6 +35,11 @@ DELETE {{server_url}}/boards/4
 User-Agent: {{user_agent}}
 
 
+### 게시글 조회수 히트
+POST {{server_url}}/boards/1/hit
+User-Agent: {{user_agent}}
+
+
 ### 게시글 좋아요/싫어요
 PUT {{server_url}}/boards/4/like-or-hate
 User-Agent: {{user_agent}}

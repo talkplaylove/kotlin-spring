@@ -1,7 +1,10 @@
 package me.hong.kotlinspring.web.service
 
+import me.hong.kotlinspring.data.entity.board.BoardHit
 import me.hong.kotlinspring.data.entity.board.BoardLike
+import me.hong.kotlinspring.data.entity.board.embedded.BoardHitId
 import me.hong.kotlinspring.data.entity.board.embedded.BoardLikeId
+import me.hong.kotlinspring.data.repo.board.BoardHitRepo
 import me.hong.kotlinspring.data.repo.board.BoardLikeRepo
 import me.hong.kotlinspring.data.repo.board.BoardRepo
 import me.hong.kotlinspring.web.advice.CustomException
@@ -13,11 +16,13 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 import java.util.stream.Collectors
 
 @Service
 class BoardService(
     private val boardRepo: BoardRepo,
+    private val boardHitRepo: BoardHitRepo,
     private val boardLikeRepo: BoardLikeRepo,
     private val userService: UserService
 ) {
@@ -105,23 +110,43 @@ class BoardService(
   }
 
   @Transactional
+  fun hitBoard(boardId: Long, ip: String) {
+    val hitId = BoardHitId(
+        boardId = boardId,
+        date = LocalDate.now(),
+        ip = ip
+    )
+
+    if (!boardHitRepo.existsById(hitId)) {
+      val board = boardRepo.findByIdAndDeleted(boardId).orElseThrow {
+        throw CustomException(CustomMessage.BOARD_NOT_FOUND)
+      }
+      boardHitRepo.insert(BoardHit(hitId))
+      board.hit++
+    }
+  }
+
+  @Transactional
   fun likeOrHateBoard(boardId: Long, req: BoardLIkeReq, userSession: UserSession): BoardLikeRes {
     if (boardRepo.existsByIdAndDeleted(boardId)) {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
-    val boardHitId = BoardLikeId(boardId, userSession.id)
+    val likeId = BoardLikeId(
+        boardId = boardId,
+        userId = userSession.id
+    )
 
-    var boardLike: BoardLike? = null
-    boardLikeRepo.findById(boardHitId).ifPresentOrElse({
+    var like: BoardLike? = null
+    boardLikeRepo.findById(likeId).ifPresentOrElse({
       if (it.likeOrHate == req.likeOrHate) {
         throw CustomException(CustomMessage.SAME_VALUES)
       }
       it.likeOrHate = req.likeOrHate
-      boardLike = it
+      like = it
     }, {
-      boardLike = boardLikeRepo.insert(req.toEntity(boardHitId))
+      like = boardLikeRepo.insert(req.toEntity(likeId))
     })
 
-    return BoardLikeRes.of(boardLike)
+    return BoardLikeRes.of(like)
   }
 }
