@@ -1,12 +1,11 @@
 package me.hong.kotlinspring.web.controller
 
-import me.hong.kotlinspring.util.IPUtils
+import me.hong.kotlinspring.util.ServletUtils
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.board.*
 import me.hong.kotlinspring.web.service.BoardService
-import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
@@ -31,15 +30,21 @@ class BoardController(
   }
 
   @GetMapping("/boards/{boardId}")
-  fun get(@PathVariable boardId: Long): BoardDetailRes {
+  fun get(@PathVariable boardId: Long, request: HttpServletRequest): BoardDetailRes {
+    val ip = ServletUtils.getIp(request)
+
     return if (userSession.unexists())
-      boardService.getBoard(boardId)
+      boardService.getBoard(boardId, ip)
     else
-      boardService.getBoard(boardId, userSession)
+      boardService.getBoard(boardId, userSession, ip)
+  }
+
+  @GetMapping("/users/{userId}/boards")
+  fun get(@PathVariable userId: Long): Collection<BoardRes> {
+    return boardService.getBoards(userId)
   }
 
   @PostMapping("/boards")
-  @ResponseStatus(HttpStatus.CREATED)
   fun create(@RequestBody @Valid req: BoardPutReq): BoardPutRes {
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
@@ -55,17 +60,10 @@ class BoardController(
   }
 
   @DeleteMapping("/boards/{boardId}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
   fun delete(@PathVariable boardId: Long) {
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
-    return boardService.deleteBoard(boardId, userSession)
-  }
-
-  @PostMapping("/boards/{boardId}/hit")
-  fun hit(@PathVariable boardId: Long, request: HttpServletRequest) {
-    val ip = IPUtils.getIp(request)
-    return boardService.hitBoard(boardId, ip)
+    boardService.deleteBoard(boardId, userSession)
   }
 
   @PutMapping("/boards/{boardId}/like-or-hate")

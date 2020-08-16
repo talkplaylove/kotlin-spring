@@ -4,7 +4,12 @@ User-Agent: {{user_agent}}
 
 
 ### 게시글 조회
-GET {{server_url}}/boards/5
+GET {{server_url}}/boards/1
+User-Agent: {{user_agent}}
+
+
+### 사용자가 작성한 게시글 조회
+GET {{server_url}}/users/1/boards
 User-Agent: {{user_agent}}
 
 
@@ -32,11 +37,6 @@ Content-Type: application/json
 
 ### 게시글 삭제
 DELETE {{server_url}}/boards/4
-User-Agent: {{user_agent}}
-
-
-### 게시글 조회수 히트
-POST {{server_url}}/boards/1/hit
 User-Agent: {{user_agent}}
 
 

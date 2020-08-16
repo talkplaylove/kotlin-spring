@@ -8,6 +8,9 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
+@Table(indexes = [
+  Index(name = "IndexBoardUserId", columnList = "userId", unique = true)
+])
 @EntityListeners(AuditingEntityListener::class)
 class Board(
     title: String,
@@ -25,7 +28,7 @@ class Board(
 
   var deleted: Boolean = false
 
-  var hit: Long = 0
+  var hitCount: Long = 0
 
   @CreatedBy
   var userId: Long? = null

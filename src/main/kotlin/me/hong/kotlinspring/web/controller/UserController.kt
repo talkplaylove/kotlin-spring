@@ -3,7 +3,6 @@ package me.hong.kotlinspring.web.controller
 import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.user.*
 import me.hong.kotlinspring.web.service.UserService
-import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.validation.constraints.Email
@@ -33,7 +32,6 @@ class UserController(
   }
 
   @PostMapping("/users/signup")
-  @ResponseStatus(HttpStatus.CREATED)
   fun signup(@RequestBody req: SignupReq): SignupRes {
     return userService.signup(req)
   }

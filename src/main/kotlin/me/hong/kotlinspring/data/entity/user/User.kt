@@ -9,7 +9,8 @@ import javax.persistence.*
 @Entity
 @Table(indexes = [
   Index(name = "IndexUserEmail", columnList = "email", unique = true),
-  Index(name = "IndexUserName", columnList = "name", unique = true)
+  Index(name = "IndexUserName", columnList = "name", unique = true),
+  Index(name = "IndexUserCreatedAt", columnList = "createdAt", unique = true)
 ])
 class User(
     email: String,

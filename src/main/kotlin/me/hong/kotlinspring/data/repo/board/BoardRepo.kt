@@ -9,6 +9,8 @@ import java.util.*
 interface BoardRepo : JpaRepository<Board, Long> {
   fun findAllByTitleContainingOrContentContaining(title: String?, content: String?, pageable: Pageable): Page<Board>
 
+  fun findAllByUserIdAndDeletedOrderByIdDesc(userId: Long, deleted: Boolean = false): List<Board>
+
   fun findByIdAndDeleted(id: Long?, deleted: Boolean = false): Optional<Board>
 
   fun existsByIdAndDeleted(id: Long?, deleted: Boolean = false): Boolean

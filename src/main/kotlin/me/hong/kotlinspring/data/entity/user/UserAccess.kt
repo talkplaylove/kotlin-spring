@@ -6,14 +6,19 @@ import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
 import javax.persistence.EmbeddedId
 import javax.persistence.Entity
+import javax.persistence.Index
+import javax.persistence.Table
 
 @Entity
+@Table(indexes = [
+  Index(name = "IndexUserAccessCreatedAt", columnList = "createdAt", unique = true)
+])
 class UserAccess(id: UserAccessId) {
 
   @EmbeddedId
   val id: UserAccessId = id
 
-  var hit: Long = 1
+  var hitCount: Long = 1
 
   @CreationTimestamp
   val createdAt: LocalDateTime? = null

@@ -30,7 +30,7 @@ class UserService(
 
     val userAccessId = UserAccessId(user.id!!, LocalDate.now())
     userAccessRepo.findById(userAccessId).ifPresentOrElse({
-      it.hit++
+      it.hitCount++
     }, {
       userAccessRepo.insert(UserAccess(userAccessId))
     })

@@ -2,7 +2,7 @@ package me.hong.kotlinspring.util
 
 import javax.servlet.http.HttpServletRequest
 
-class IPUtils {
+class ServletUtils {
   companion object {
     fun getIp(request: HttpServletRequest): String {
       var ip = request.getHeader("X-Forwarded-For");

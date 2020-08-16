@@ -1,5 +1,6 @@
 package me.hong.kotlinspring.web.service
 
+import me.hong.kotlinspring.data.entity.board.Board
 import me.hong.kotlinspring.data.entity.board.BoardHit
 import me.hong.kotlinspring.data.entity.board.BoardLike
 import me.hong.kotlinspring.data.entity.board.embedded.BoardHitId
@@ -49,20 +50,32 @@ class BoardService(
     return BoardRes.listOf(boards.content, users)
   }
 
-  fun getBoard(boardId: Long): BoardDetailRes {
+  fun getBoards(userId: Long): Collection<BoardRes> {
+    val boards = boardRepo.findAllByUserIdAndDeletedOrderByIdDesc(userId)
+
+    val users = userService.getUsers(
+        boards.stream().map { it.userId }.collect(Collectors.toSet())
+    )
+
+    return BoardRes.listOf(boards, users)
+  }
+
+  fun getBoard(boardId: Long, ip: String): BoardDetailRes {
     val board = boardRepo.findByIdAndDeleted(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
+    hitBoard(board, ip)
 
     val user = userService.getUser(board.userId)
 
     return BoardDetailRes.of(board, user)
   }
 
-  fun getBoard(boardId: Long, userSession: UserSession): BoardDetailRes {
+  fun getBoard(boardId: Long, userSession: UserSession, ip: String): BoardDetailRes {
     val board = boardRepo.findByIdAndDeleted(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
+    hitBoard(board, ip)
 
     val user = userService.getUser(board.userId)
 
@@ -110,20 +123,19 @@ class BoardService(
   }
 
   @Transactional
-  fun hitBoard(boardId: Long, ip: String) {
+  fun hitBoard(board: Board, ip: String): BoardHit {
     val hitId = BoardHitId(
-        boardId = boardId,
+        boardId = board.id,
         date = LocalDate.now(),
         ip = ip
     )
 
-    if (!boardHitRepo.existsById(hitId)) {
-      val board = boardRepo.findByIdAndDeleted(boardId).orElseThrow {
-        throw CustomException(CustomMessage.BOARD_NOT_FOUND)
-      }
+    val hit = boardHitRepo.findById(hitId)
+    if (hit.isEmpty) {
       boardHitRepo.insert(BoardHit(hitId))
-      board.hit++
+      board.hitCount++
     }
+    return hit.get()
   }
 
   @Transactional
