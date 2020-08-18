@@ -1,21 +1,17 @@
 ### 게시글 다수 조회
 GET {{server_url}}/boards?word=내용&page=0&size=5
-User-Agent: {{user_agent}}
 
 
 ### 게시글 조회
 GET {{server_url}}/boards/1
-User-Agent: {{user_agent}}
 
 
 ### 사용자가 작성한 게시글 조회
 GET {{server_url}}/users/1/boards
-User-Agent: {{user_agent}}
 
 
 ### 게시글 등록
 POST {{server_url}}/boards
-User-Agent: {{user_agent}}
 Content-Type: application/json
 
 {
@@ -26,7 +22,6 @@ Content-Type: application/json
 
 ### 게시글 수정
 PATCH {{server_url}}/boards/3
-User-Agent: {{user_agent}}
 Content-Type: application/json
 
 {
@@ -37,14 +32,12 @@ Content-Type: application/json
 
 ### 게시글 삭제
 DELETE {{server_url}}/boards/4
-User-Agent: {{user_agent}}
 
 
 ### 게시글 좋아요/싫어요
-PUT {{server_url}}/boards/4/like-or-hate
-User-Agent: {{user_agent}}
+PUT {{server_url}}/boards/1/like-or-hate
 Content-Type: application/json
 
 {
-  "likeOrHate": "NONE"
+  "likeOrHate": "LIKE"
 }

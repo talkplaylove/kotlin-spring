@@ -1,16 +1,13 @@
 ### 이메일 중복 체크
 GET {{server_url}}/users/email/duplicate?email=hkhong91@gmail.com
-User-Agent: {{user_agent}}
 
 
 ### 이름 중복 체크
 GET {{server_url}}/users/name/duplicate?name=홍아지
-User-Agent: {{user_agent}}
 
 
 ### 회원 로그인
 POST {{server_url}}/users/signin
-User-Agent: {{user_agent}}
 Content-Type: application/json
 
 {
@@ -21,7 +18,6 @@ Content-Type: application/json
 
 ### 회원 가입
 POST {{server_url}}/users/signup
-User-Agent: {{user_agent}}
 Content-Type: application/json
 
 {

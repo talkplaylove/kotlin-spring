@@ -23,9 +23,9 @@ class BoardController(
           @RequestParam(defaultValue = "0") page: Int,
           @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardRes> {
     return if (word != null) {
-      boardService.getBoards(word.trim(), page, size)
+      boardService.searchBoards(word.trim(), page, size)
     } else {
-      boardService.getBoards(page, size)
+      boardService.boards(page, size)
     }
   }
 
@@ -40,8 +40,10 @@ class BoardController(
   }
 
   @GetMapping("/users/{userId}/boards")
-  fun get(@PathVariable userId: Long): Collection<BoardRes> {
-    return boardService.getBoards(userId)
+  fun get(@PathVariable userId: Long,
+          @RequestParam(defaultValue = "0") page: Int,
+          @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardRes> {
+    return boardService.getBoards(userId, page, size)
   }
 
   @PostMapping("/boards")
@@ -71,6 +73,6 @@ class BoardController(
                  @RequestBody @Valid req: BoardLIkeReq): BoardLikeRes {
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
-    return boardService.likeOrHateBoard(boardId, req, userSession)
+    return boardService.likeOrHateBoard(boardId, req.likeOrHate, userSession)
   }
 }

@@ -1,35 +1,27 @@
 package me.hong.kotlinspring.web.service
 
-import me.hong.kotlinspring.data.entity.board.Board
-import me.hong.kotlinspring.data.entity.board.BoardHit
-import me.hong.kotlinspring.data.entity.board.BoardLike
-import me.hong.kotlinspring.data.entity.board.embedded.BoardHitId
-import me.hong.kotlinspring.data.entity.board.embedded.BoardLikeId
-import me.hong.kotlinspring.data.repo.board.BoardHitRepo
-import me.hong.kotlinspring.data.repo.board.BoardLikeRepo
-import me.hong.kotlinspring.data.repo.board.BoardRepo
+import me.hong.kotlinspring.constant.board.LikeOrHate
+import me.hong.kotlinspring.data.domain.BoardDomain
+import me.hong.kotlinspring.data.domain.BoardHitDomain
+import me.hong.kotlinspring.data.domain.BoardReadDomain
+import me.hong.kotlinspring.data.entity.board.BoardRead
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.board.*
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 import java.util.stream.Collectors
 
 @Service
 class BoardService(
-    private val boardRepo: BoardRepo,
-    private val boardHitRepo: BoardHitRepo,
-    private val boardLikeRepo: BoardLikeRepo,
+    private val boardDomain: BoardDomain,
+    private val boardReadDomain: BoardReadDomain,
+    private val boardHitDomain: BoardHitDomain,
     private val userService: UserService
 ) {
-  fun getBoards(page: Int, size: Int): Collection<BoardRes> {
-    val pageable: Pageable = PageRequest.of(page, size)
-    val boards = boardRepo.findAll(pageable)
+  fun boards(page: Int, size: Int): Collection<BoardRes> {
+    val boards = boardDomain.getBoards(page, size)
 
     val users = userService.getUsers(
         boards.stream().map { it.userId }.collect(Collectors.toSet())
@@ -37,12 +29,11 @@ class BoardService(
     return BoardRes.listOf(boards.content, users)
   }
 
-  fun getBoards(word: String, page: Int, size: Int): Collection<BoardRes> {
+  fun searchBoards(word: String, page: Int, size: Int): Collection<BoardRes> {
     if (word.length == 1)
       throw CustomException(CustomMessage.AT_LEAST_TWO_LETTERS)
 
-    val pageable: Pageable = PageRequest.of(page, size)
-    val boards = boardRepo.findAllByTitleContainingOrContentContaining(word, word, pageable)
+    val boards = boardDomain.searchBoards(word, page, size)
 
     val users = userService.getUsers(
         boards.stream().map { it.userId }.collect(Collectors.toSet())
@@ -50,21 +41,21 @@ class BoardService(
     return BoardRes.listOf(boards.content, users)
   }
 
-  fun getBoards(userId: Long): Collection<BoardRes> {
-    val boards = boardRepo.findAllByUserIdAndDeletedOrderByIdDesc(userId)
+  fun getBoards(userId: Long, page: Int, size: Int): Collection<BoardRes> {
+    val boards = boardDomain.getBoards(userId, page, size)
 
     val users = userService.getUsers(
         boards.stream().map { it.userId }.collect(Collectors.toSet())
     )
 
-    return BoardRes.listOf(boards, users)
+    return BoardRes.listOf(boards.content, users)
   }
 
   fun getBoard(boardId: Long, ip: String): BoardDetailRes {
-    val board = boardRepo.findByIdAndDeleted(boardId).orElseThrow {
+    val board = boardDomain.getBoard(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
-    hitBoard(board, ip)
+    boardHitDomain.hit(board, ip)
 
     val user = userService.getUser(board.userId)
 
@@ -72,30 +63,31 @@ class BoardService(
   }
 
   fun getBoard(boardId: Long, userSession: UserSession, ip: String): BoardDetailRes {
-    val board = boardRepo.findByIdAndDeleted(boardId).orElseThrow {
+    val board = boardDomain.getBoard(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
-    hitBoard(board, ip)
+    boardHitDomain.hit(board, ip)
+    readBoard(boardId, LikeOrHate.NONE, userSession)
 
     val user = userService.getUser(board.userId)
 
-    val like = boardLikeRepo.findByIdOrNull(BoardLikeId(boardId, board.userId))
-    return if (like != null) {
-      BoardDetailRes.of(board, user, like.likeOrHate)
+    val read = boardReadDomain.getRead(boardId, userSession.id)
+    return if (read.isPresent) {
+      BoardDetailRes.of(board, read.get().likeOrHate, user)
     } else {
       BoardDetailRes.of(board, user)
     }
   }
 
   fun createBoard(req: BoardPutReq, userSession: UserSession): BoardPutRes {
-    val board = boardRepo.save(req.toEntity())
+    val board = boardDomain.saveBoard(req.toEntity())
 
     return BoardPutRes.of(board, userSession)
   }
 
   @Transactional
   fun updateBoard(boardId: Long, req: BoardPutReq, userSession: UserSession): BoardPutRes {
-    val board = boardRepo.findByIdAndDeleted(boardId).orElseThrow {
+    val board = boardDomain.getBoard(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
 
@@ -111,7 +103,7 @@ class BoardService(
 
   @Transactional
   fun deleteBoard(boardId: Long, userSession: UserSession) {
-    val board = boardRepo.findByIdAndDeleted(boardId).orElseThrow {
+    val board = boardDomain.getBoard(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
 
@@ -122,43 +114,26 @@ class BoardService(
     board.deleted = true
   }
 
-  @Transactional
-  fun hitBoard(board: Board, ip: String): BoardHit {
-    val hitId = BoardHitId(
-        boardId = board.id,
-        date = LocalDate.now(),
-        ip = ip
-    )
-
-    val hit = boardHitRepo.findById(hitId)
-    if (hit.isEmpty) {
-      boardHitRepo.insert(BoardHit(hitId))
-      board.hitCount++
+  fun likeOrHateBoard(boardId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardLikeRes {
+    if (!boardDomain.existsBoard(boardId)) {
+      throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
-    return hit.get()
+    return readBoard(boardId, likeOrHate, userSession)
   }
 
   @Transactional
-  fun likeOrHateBoard(boardId: Long, req: BoardLIkeReq, userSession: UserSession): BoardLikeRes {
-    if (boardRepo.existsByIdAndDeleted(boardId)) {
-      throw CustomException(CustomMessage.BOARD_NOT_FOUND)
-    }
-    val likeId = BoardLikeId(
-        boardId = boardId,
-        userId = userSession.id
-    )
-
-    var like: BoardLike? = null
-    boardLikeRepo.findById(likeId).ifPresentOrElse({
-      if (it.likeOrHate == req.likeOrHate) {
+  fun readBoard(boardId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardLikeRes {
+    var read: BoardRead? = null
+    boardReadDomain.getRead(boardId, userSession.id).ifPresentOrElse({
+      if (it.likeOrHate == likeOrHate) {
         throw CustomException(CustomMessage.SAME_VALUES)
       }
-      it.likeOrHate = req.likeOrHate
-      like = it
+      it.likeOrHate = likeOrHate
+      read = it
     }, {
-      like = boardLikeRepo.insert(req.toEntity(likeId))
+      read = boardReadDomain.likeOrHate(boardId, userSession.id, likeOrHate)
     })
 
-    return BoardLikeRes.of(like)
+    return BoardLikeRes.of(read)
   }
 }

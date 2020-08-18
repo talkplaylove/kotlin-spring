@@ -5,7 +5,7 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class BoardLikeId(boardId: Long?, userId: Long?) : Serializable {
+class BoardReadId(boardId: Long?, userId: Long?) : Serializable {
   @Column(name = "boardId")
   var id1: Long? = boardId
 
