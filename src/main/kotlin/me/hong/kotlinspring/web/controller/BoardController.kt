@@ -19,24 +19,24 @@ class BoardController(
     private val userSession: UserSession
 ) {
   @GetMapping("/boards")
-  fun get(@RequestParam(required = false) word: String?,
+  fun get(@RequestParam(defaultValue = "0") page: Int,
+          @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardRes> {
+    return boardService.boards(page, size)
+  }
+
+  @GetMapping("/boards/search")
+  fun get(@RequestParam word: String,
           @RequestParam(defaultValue = "0") page: Int,
           @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardRes> {
-    return if (word != null) {
-      boardService.searchBoards(word.trim(), page, size)
-    } else {
-      boardService.boards(page, size)
-    }
+    return boardService.searchBoards(word.trim(), page, size)
   }
 
   @GetMapping("/boards/{boardId}")
-  fun get(@PathVariable boardId: Long, request: HttpServletRequest): BoardDetailRes {
-    val ip = ServletUtils.getIp(request)
-
+  fun get(@PathVariable boardId: Long): BoardDetailRes {
     return if (userSession.unexists())
-      boardService.getBoard(boardId, ip)
+      boardService.getBoard(boardId)
     else
-      boardService.getBoard(boardId, userSession, ip)
+      boardService.getBoard(boardId, userSession)
   }
 
   @GetMapping("/users/{userId}/boards")
@@ -68,11 +68,21 @@ class BoardController(
     boardService.deleteBoard(boardId, userSession)
   }
 
+  @PostMapping("/boards/{boardId}/hit")
+  fun hit(@PathVariable boardId: Long, request: HttpServletRequest) {
+    val ip = ServletUtils.getIp(request)
+
+    if (userSession.unexists())
+      boardService.hitBoard(boardId, ip)
+    else
+      boardService.hitBoard(boardId, ip, userSession)
+  }
+
   @PutMapping("/boards/{boardId}/like-or-hate")
   fun likeOrHate(@PathVariable boardId: Long,
                  @RequestBody @Valid req: BoardLIkeReq): BoardLikeRes {
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
-    return boardService.likeOrHateBoard(boardId, req.likeOrHate, userSession)
+    return boardService.readBoard(boardId, req.likeOrHate, userSession)
   }
 }
