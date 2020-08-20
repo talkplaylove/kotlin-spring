@@ -11,7 +11,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(indexes = [
-  Index(name = "IndexUserAccessCreatedAt", columnList = "createdAt", unique = true)
+  Index(name = "IndexUserAccessCreatedAt", columnList = "createdAt")
 ])
 class UserAccess(id: UserAccessId) {
 

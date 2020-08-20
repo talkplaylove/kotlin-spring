@@ -9,26 +9,24 @@ import javax.persistence.*
 
 @Entity
 @Table(indexes = [
-  Index(name = "IndexBoardUserId", columnList = "userId")
+  Index(name = "IndexBoardCommentBoardId", columnList = "boardId"),
+  Index(name = "IndexBoardCommentUserId", columnList = "userId")
 ])
 @EntityListeners(AuditingEntityListener::class)
-class Board(
-    title: String,
+class BoardComment(
+    boardId: Long,
     content: String
 ) {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long? = null
 
-  @Column(length = 200)
-  var title: String = title
+  val boardId: Long = boardId
 
-  @Column(length = 1000)
+  @Column(length = 500)
   var content: String = content
 
   var deleted: Boolean = false
-
-  var hitCount: Long = 0
 
   @CreatedBy
   var userId: Long? = null

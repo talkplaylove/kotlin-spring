@@ -21,7 +21,7 @@ class BoardController(
   @GetMapping("/boards")
   fun get(@RequestParam(defaultValue = "0") page: Int,
           @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardRes> {
-    return boardService.boards(page, size)
+    return boardService.getBoards(page, size)
   }
 
   @GetMapping("/boards/search")

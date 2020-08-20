@@ -10,7 +10,7 @@ import javax.persistence.*
 @Table(indexes = [
   Index(name = "IndexUserEmail", columnList = "email", unique = true),
   Index(name = "IndexUserName", columnList = "name", unique = true),
-  Index(name = "IndexUserCreatedAt", columnList = "createdAt", unique = true)
+  Index(name = "IndexUserCreatedAt", columnList = "createdAt")
 ])
 class User(
     email: String,

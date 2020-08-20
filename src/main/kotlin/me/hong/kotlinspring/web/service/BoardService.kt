@@ -25,7 +25,7 @@ class BoardService(
     private val boardHitRepo: BoardHitRepo,
     private val userService: UserService
 ) {
-  fun boards(page: Int, size: Int): Collection<BoardRes> {
+  fun getBoards(page: Int, size: Int): Collection<BoardRes> {
     val boards = boardRepo.findAll(PageRequest.of(page, size))
 
     val users = userService.getUsers(
