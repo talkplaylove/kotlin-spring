@@ -14,24 +14,24 @@ class UserController(
     private val userService: UserService,
     private val userSession: UserSession
 ) {
-  @GetMapping("/users/email/duplicate")
+  @GetMapping("/user/email/duplicate")
   fun duplicateEmail(@RequestParam @Email email: String): UserDuplicateRes {
     return userService.duplicateEmail(email)
   }
 
-  @GetMapping("/users/name/duplicate")
+  @GetMapping("/user/name/duplicate")
   fun duplicateName(@RequestParam @Size(min = 1) name: String): UserDuplicateRes {
     return userService.duplicateName(name)
   }
 
-  @PostMapping("/users/signin")
+  @PostMapping("/user/signin")
   fun signin(@RequestBody req: SigninReq): SigninRes {
     val res = userService.signin(req)
     userSession.set(res.id!!, res.name)
     return res
   }
 
-  @PostMapping("/users/signup")
+  @PostMapping("/user/signup")
   fun signup(@RequestBody req: SignupReq): SignupRes {
     return userService.signup(req)
   }
