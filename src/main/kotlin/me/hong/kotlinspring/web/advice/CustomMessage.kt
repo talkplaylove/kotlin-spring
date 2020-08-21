@@ -14,6 +14,7 @@ enum class CustomMessage(val status: HttpStatus, val message: String) {
   USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
   INCORRECT_PASSWORD(HttpStatus.NOT_FOUND, "패스워드가 틀립니다."),
   BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
+  COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
 
   SAME_VALUES(HttpStatus.CONFLICT, "수정 값이 동일합니다."),
 }

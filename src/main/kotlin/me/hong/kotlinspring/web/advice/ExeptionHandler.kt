@@ -5,9 +5,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.ServletRequestBindingException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import javax.servlet.ServletException
 import javax.validation.ValidationException
 
 @RestControllerAdvice
@@ -28,8 +28,8 @@ class ExeptionHandler {
     return ResponseEntity(ErrorRes.of(status.name, exception.message), status)
   }
 
-  @ExceptionHandler(ServletRequestBindingException::class)
-  fun handle(exception: ServletRequestBindingException): ResponseEntity<ErrorRes> {
+  @ExceptionHandler(ServletException::class)
+  fun handle(exception: ServletException): ResponseEntity<ErrorRes> {
     val status = HttpStatus.BAD_REQUEST
     return ResponseEntity(ErrorRes.of(status.name, exception.message), status)
   }

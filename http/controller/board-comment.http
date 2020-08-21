@@ -9,3 +9,16 @@ Content-Type: application/json
 {
   "content": "댓글"
 }
+
+
+### 댓글 수정
+PATCH {{server_url}}/boards/1/comments/1
+Content-Type: application/json
+
+{
+  "content": "댓글수정"
+}
+
+
+### 댓글 삭제
+DELETE {{server_url}}/boards/1/comments/1

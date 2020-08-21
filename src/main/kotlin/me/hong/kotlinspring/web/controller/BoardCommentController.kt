@@ -30,4 +30,21 @@ class BoardCommentController(
       throw CustomException(CustomMessage.UNAUTHORIZED)
     return boardCommentService.createComment(boardId, req, userSession)
   }
+
+  @PatchMapping("/boards/{boardId}/comments/{commentId}")
+  fun update(@PathVariable boardId: Long,
+             @PathVariable commentId: Long,
+             @RequestBody @Valid req: BoardCommentPutReq): BoardCommentPutRes {
+    if (userSession.unexists())
+      throw CustomException(CustomMessage.UNAUTHORIZED)
+    return boardCommentService.updateComment(boardId, commentId, req, userSession)
+  }
+
+  @DeleteMapping("/boards/{boardId}/comments/{commentId}")
+  fun delete(@PathVariable boardId: Long,
+             @PathVariable commentId: Long) {
+    if (userSession.unexists())
+      throw CustomException(CustomMessage.UNAUTHORIZED)
+    boardCommentService.deleteComment(boardId, commentId, userSession)
+  }
 }

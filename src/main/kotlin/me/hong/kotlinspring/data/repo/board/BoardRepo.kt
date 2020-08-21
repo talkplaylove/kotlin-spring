@@ -23,9 +23,4 @@ interface BoardRepo : JpaRepository<Board, Long> {
       id: Long?,
       deleted: Boolean = false
   ): Optional<Board>
-
-  fun existsByIdAndDeleted(
-      id: Long?,
-      deleted: Boolean = false
-  ): Boolean
 }
