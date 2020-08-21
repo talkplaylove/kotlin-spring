@@ -7,11 +7,13 @@ import me.hong.kotlinspring.web.model.board.BoardCommentPutReq
 import me.hong.kotlinspring.web.model.board.BoardCommentPutRes
 import me.hong.kotlinspring.web.model.board.BoardCommentRes
 import me.hong.kotlinspring.web.service.BoardCommentService
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 import javax.validation.constraints.Min
 
 @RestController
+@Validated
 class BoardCommentController(
     private val boardCommentService: BoardCommentService,
     private val userSession: UserSession

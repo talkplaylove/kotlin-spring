@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.web.model.board
 
-import me.hong.kotlinspring.constant.board.LikeOrHate
+import me.hong.kotlinspring.data.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.Board
 import me.hong.kotlinspring.data.entity.user.User
 import java.time.LocalDateTime

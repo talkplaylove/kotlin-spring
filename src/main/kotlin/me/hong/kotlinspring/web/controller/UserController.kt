@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.Size
 
-@Validated
 @RestController
+@Validated
 class UserController(
     private val userService: UserService,
     private val userSession: UserSession

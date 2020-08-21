@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.constant.board
+package me.hong.kotlinspring.data.constant.board
 
 enum class LikeOrHate {
   NONE,

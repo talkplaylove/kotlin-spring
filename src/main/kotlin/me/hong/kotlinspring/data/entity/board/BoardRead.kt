@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.data.entity.board
 
-import me.hong.kotlinspring.constant.board.LikeOrHate
+import me.hong.kotlinspring.data.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.embedded.BoardReadId
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
