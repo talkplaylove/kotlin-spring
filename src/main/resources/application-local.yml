@@ -18,8 +18,3 @@ spring:
 logging:
   file:
     path: /Users/hong/Logs/kotlin-spring
-    max-size: 500MB
-    max-history: 10
-  level:
-    root: info
-    me.hong.kotlinspring: debug
