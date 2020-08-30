@@ -17,4 +17,6 @@ enum class CustomMessage(val status: HttpStatus, val message: String) {
   COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
 
   SAME_VALUES(HttpStatus.CONFLICT, "수정 값이 동일합니다."),
+  EXISTS_EMAIL(HttpStatus.CONFLICT, "중복되는 이메일입니다."),
+  EXISTS_NAME(HttpStatus.CONFLICT, "중복되는 이름입니다."),
 }

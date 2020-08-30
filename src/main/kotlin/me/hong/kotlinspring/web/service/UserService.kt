@@ -39,6 +39,11 @@ class UserService(
   }
 
   fun signup(req: SignupReq): SignupRes {
+    if (this.duplicateEmail(req.email).duplicated)
+      throw CustomException(CustomMessage.EXISTS_EMAIL)
+    if (this.duplicateName(req.name).duplicated)
+      throw CustomException(CustomMessage.EXISTS_NAME)
+
     val encodedPassword = passwordEncoder.encode(req.password)
     val user = userRepo.save(req.toEntity(encodedPassword))
 
