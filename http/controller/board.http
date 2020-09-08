@@ -25,12 +25,12 @@ Content-Type: application/json
 
 
 ### 게시글 수정
-PATCH {{server_url}}/boards/3
+PATCH {{server_url}}/boards/11
 Content-Type: application/json
 
 {
-  "title": "제목3",
-  "content": "내용3"
+  "title": "제목11",
+  "content": "내용11"
 }
 
 
@@ -39,11 +39,11 @@ DELETE {{server_url}}/boards/4
 
 
 ### 게시글 히트
-POST {{server_url}}/boards/1/hit
+POST {{server_url}}/boards/11/hit
 
 
 ### 게시글 좋아요/싫어요
-PUT {{server_url}}/boards/1/like-or-hate
+PUT {{server_url}}/boards/11/like-or-hate
 Content-Type: application/json
 
 {

@@ -9,8 +9,8 @@ data class BoardDetailRes(
     val id: Long?,
     val title: String,
     val content: String,
-    val userId: Long?,
-    val userName: String,
+    val createdBy: Long?,
+    val createdName: String,
     val likeOrHate: LikeOrHate,
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?
@@ -25,8 +25,8 @@ data class BoardDetailRes(
           id = board.id,
           title = board.title,
           content = board.content,
-          userId = board.userId,
-          userName = user!!.name,
+          createdBy = board.createdBy,
+          createdName = user!!.name,
           likeOrHate = likeOrHate,
           createdAt = board.createdAt,
           updatedAt = board.updatedAt

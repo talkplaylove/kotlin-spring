@@ -29,7 +29,7 @@ class BoardService(
     val boards = boardRepo.findAll(PageRequest.of(page, size))
 
     val users = userService.getUsers(
-        ids = boards.stream().map { it.userId }.collect(Collectors.toSet())
+        ids = boards.stream().map { it.createdBy }.collect(Collectors.toSet())
     )
     return BoardRes.listOf(boards.content, users)
   }
@@ -45,19 +45,19 @@ class BoardService(
     )
 
     val users = userService.getUsers(
-        ids = boards.stream().map { it.userId }.collect(Collectors.toSet())
+        ids = boards.stream().map { it.createdBy }.collect(Collectors.toSet())
     )
     return BoardRes.listOf(boards.content, users)
   }
 
   fun getBoards(userId: Long, page: Int, size: Int): Collection<BoardRes> {
-    val boards = boardRepo.findAllByUserIdAndDeletedOrderByIdDesc(
-        userId = userId,
+    val boards = boardRepo.findAllByCreatedByAndDeletedOrderByIdDesc(
+        createdBy = userId,
         pageable = PageRequest.of(page, size)
     )
 
     val users = userService.getUsers(
-        boards.stream().map { it.userId }.collect(Collectors.toSet())
+        boards.stream().map { it.createdBy }.collect(Collectors.toSet())
     )
 
     return BoardRes.listOf(boards.content, users)
@@ -68,7 +68,7 @@ class BoardService(
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
 
-    val user = userService.getUser(board.userId)
+    val user = userService.getUser(board.createdBy)
 
     return BoardDetailRes.of(board, user)
   }
@@ -78,7 +78,7 @@ class BoardService(
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
 
-    val user = userService.getUser(board.userId)
+    val user = userService.getUser(board.createdBy)
 
     val read = boardReadRepo.findById(BoardReadId(
         boardId = boardId,
@@ -103,7 +103,7 @@ class BoardService(
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
 
-    if (userSession.unmatches(board.userId)) {
+    if (userSession.unmatches(board.createdBy)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
@@ -119,7 +119,7 @@ class BoardService(
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
 
-    if (userSession.unmatches(board.userId)) {
+    if (userSession.unmatches(board.createdBy )) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 

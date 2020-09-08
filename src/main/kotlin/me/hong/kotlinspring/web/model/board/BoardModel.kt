@@ -7,8 +7,8 @@ import java.time.LocalDateTime
 data class BoardRes(
     val id: Long?,
     val title: String,
-    val userId: Long?,
-    val userName: String,
+    val createdBy: Long?,
+    val createdName: String,
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?
 ) {
@@ -17,8 +17,8 @@ data class BoardRes(
       return BoardRes(
           id = board.id,
           title = board.title,
-          userId = board.userId,
-          userName = user!!.name,
+          createdBy = board.createdBy,
+          createdName = user!!.name,
           createdAt = board.createdAt,
           updatedAt = board.updatedAt
       )
@@ -27,7 +27,7 @@ data class BoardRes(
     fun listOf(boards: List<Board>, users: Map<Long?, User>): Collection<BoardRes> {
       val res = mutableListOf<BoardRes>()
       boards.forEach {
-        res.add(of(it, users[it.userId]))
+        res.add(of(it, users[it.createdBy]))
       }
       return res
     }

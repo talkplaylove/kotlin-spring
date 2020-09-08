@@ -9,7 +9,7 @@ import javax.persistence.*
 
 @Entity
 @Table(indexes = [
-  Index(name = "IndexBoardUserId", columnList = "userId")
+  Index(name = "IndexBoardCreatedBy", columnList = "createdBy")
 ])
 @EntityListeners(AuditingEntityListener::class)
 class Board(
@@ -31,7 +31,7 @@ class Board(
   var hitCount: Long = 0
 
   @CreatedBy
-  var userId: Long? = null
+  var createdBy: Long? = null
 
   @CreationTimestamp
   val createdAt: LocalDateTime? = null

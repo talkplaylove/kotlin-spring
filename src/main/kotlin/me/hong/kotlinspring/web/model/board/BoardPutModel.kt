@@ -24,8 +24,8 @@ data class BoardPutRes(
     val id: Long?,
     val title: String,
     val content: String,
-    val userId: Long?,
-    val userName: String,
+    val createdBy: Long?,
+    val createdName: String,
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?
 ) {
@@ -35,8 +35,8 @@ data class BoardPutRes(
           id = board.id,
           title = board.title,
           content = board.content,
-          userId = board.userId,
-          userName = userSession.name,
+          createdBy = board.createdBy,
+          createdName = userSession.name,
           createdAt = board.createdAt,
           updatedAt = board.updatedAt
       )
