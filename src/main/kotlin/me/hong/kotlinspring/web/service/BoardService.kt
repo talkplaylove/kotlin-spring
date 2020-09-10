@@ -119,7 +119,7 @@ class BoardService(
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
 
-    if (userSession.unmatches(board.createdBy )) {
+    if (userSession.unmatches(board.createdBy)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
@@ -134,7 +134,13 @@ class BoardService(
         ip = ip
     )
 
-    boardHitRepo.save(BoardHit(hitId))
+    if (boardHitRepo.findById(hitId).isPresent)
+      return
+
+    boardHitRepo.insert(BoardHit(hitId))
+    boardRepo.findById(boardId).ifPresent {
+      it.hitCount++
+    }
   }
 
   @Transactional
