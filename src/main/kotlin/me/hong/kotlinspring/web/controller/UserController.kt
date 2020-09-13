@@ -1,7 +1,10 @@
 package me.hong.kotlinspring.web.controller
 
 import me.hong.kotlinspring.web.advice.UserSession
-import me.hong.kotlinspring.web.model.user.*
+import me.hong.kotlinspring.web.model.user.SigninReq
+import me.hong.kotlinspring.web.model.user.SigninRes
+import me.hong.kotlinspring.web.model.user.SignupReq
+import me.hong.kotlinspring.web.model.user.SignupRes
 import me.hong.kotlinspring.web.service.UserService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -14,24 +17,24 @@ class UserController(
     private val userService: UserService,
     private val userSession: UserSession
 ) {
-  @GetMapping("/user/email/duplicate")
-  fun duplicateEmail(@RequestParam @Email email: String): UserDuplicateRes {
-    return userService.duplicateEmail(email)
+  @GetMapping("/users/emails/{email}/duplicate")
+  fun duplicateEmail(@PathVariable @Email email: String) {
+    userService.duplicateEmail(email)
   }
 
-  @GetMapping("/user/name/duplicate")
-  fun duplicateName(@RequestParam @Size(min = 1) name: String): UserDuplicateRes {
-    return userService.duplicateName(name)
+  @GetMapping("/users/names/{name}/duplicate")
+  fun duplicateName(@PathVariable @Size(min = 1) name: String) {
+    userService.duplicateName(name)
   }
 
-  @PostMapping("/user/signin")
+  @PostMapping("/users/signin")
   fun signin(@RequestBody req: SigninReq): SigninRes {
     val res = userService.signin(req)
     userSession.set(res.id!!, res.name)
     return res
   }
 
-  @PostMapping("/user/signup")
+  @PostMapping("/users/signup")
   fun signup(@RequestBody req: SignupReq): SignupRes {
     return userService.signup(req)
   }

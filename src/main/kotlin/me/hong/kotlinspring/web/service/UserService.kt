@@ -7,7 +7,10 @@ import me.hong.kotlinspring.data.repo.user.UserAccessRepo
 import me.hong.kotlinspring.data.repo.user.UserRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
-import me.hong.kotlinspring.web.model.user.*
+import me.hong.kotlinspring.web.model.user.SigninReq
+import me.hong.kotlinspring.web.model.user.SigninRes
+import me.hong.kotlinspring.web.model.user.SignupReq
+import me.hong.kotlinspring.web.model.user.SignupRes
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -39,10 +42,8 @@ class UserService(
   }
 
   fun signup(req: SignupReq): SignupRes {
-    if (this.duplicateEmail(req.email).duplicated)
-      throw CustomException(CustomMessage.EXISTS_EMAIL)
-    if (this.duplicateName(req.name).duplicated)
-      throw CustomException(CustomMessage.EXISTS_NAME)
+    this.duplicateEmail(req.email)
+    this.duplicateName(req.name)
 
     val encodedPassword = passwordEncoder.encode(req.password)
     val user = userRepo.save(req.toEntity(encodedPassword))
@@ -50,16 +51,14 @@ class UserService(
     return SignupRes.of(user)
   }
 
-  fun duplicateEmail(email: String): UserDuplicateRes {
-    val duplicated = userRepo.existsByEmail(email)
-
-    return UserDuplicateRes.of(duplicated)
+  fun duplicateEmail(email: String) {
+    if (userRepo.existsByEmail(email))
+      throw CustomException(CustomMessage.EXISTS_EMAIL)
   }
 
-  fun duplicateName(name: String): UserDuplicateRes {
-    val duplicated = userRepo.existsByName(name)
-
-    return UserDuplicateRes.of(duplicated)
+  fun duplicateName(name: String) {
+    if (userRepo.existsByName(name))
+      throw CustomException(CustomMessage.EXISTS_NAME)
   }
 
   fun getUser(id: Long?): User? {

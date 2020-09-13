@@ -1,13 +1,13 @@
 ### 이메일 중복 체크
-GET {{server_url}}/user/email/duplicate?email=hkhong91@gmail.com
+GET {{server_url}}/users/emails/hkhong91@gmail.com/duplicate
 
 
 ### 이름 중복 체크
-GET {{server_url}}/user/name/duplicate?name=홍아지
+GET {{server_url}}/users/names/홍아지/duplicate
 
 
 ### 회원 로그인
-POST {{server_url}}/user/signin
+POST {{server_url}}/users/signin
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 
 ### 회원 가입
-POST {{server_url}}/user/signup
+POST {{server_url}}/users/signup
 Content-Type: application/json
 
 {
