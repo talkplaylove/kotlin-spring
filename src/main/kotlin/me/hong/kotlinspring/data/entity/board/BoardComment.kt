@@ -28,6 +28,10 @@ class BoardComment(
 
   var deleted: Boolean = false
 
+  var likeCount: Long = 0L
+
+  var hateCount: Long = 0L
+
   @CreatedBy
   var userId: Long? = null
 
