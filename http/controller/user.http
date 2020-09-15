@@ -1,9 +1,9 @@
 ### 이메일 중복 체크
-GET {{server_url}}/users/emails/hkhong91@gmail.com/duplicate
+GET {{server_url}}/user-emails/hkhong91@gmail.com/duplicate
 
 
 ### 이름 중복 체크
-GET {{server_url}}/users/names/홍아지/duplicate
+GET {{server_url}}/user-names/홍아지/duplicate
 
 
 ### 회원 로그인
