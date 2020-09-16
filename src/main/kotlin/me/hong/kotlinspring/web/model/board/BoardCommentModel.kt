@@ -8,8 +8,8 @@ data class BoardCommentRes(
     val id: Long?,
     val boardId: Long,
     var content: String,
-    val userId: Long?,
-    val userName: String,
+    val createdBy: Long?,
+    val createdName: String,
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?
 ) {
@@ -19,8 +19,8 @@ data class BoardCommentRes(
           id = comment.id,
           boardId = comment.boardId,
           content = comment.content,
-          userId = comment.userId,
-          userName = user!!.name,
+          createdBy = comment.createdBy,
+          createdName = user!!.name,
           createdAt = comment.createdAt,
           updatedAt = comment.updatedAt
       )
@@ -29,7 +29,7 @@ data class BoardCommentRes(
     fun listOf(comments: List<BoardComment>, users: Map<Long?, User>): Collection<BoardCommentRes> {
       var res = mutableListOf<BoardCommentRes>()
       comments.forEach {
-        res.add(BoardCommentRes.of(it, users[it.userId]))
+        res.add(BoardCommentRes.of(it, users[it.createdBy]))
       }
       return res
     }

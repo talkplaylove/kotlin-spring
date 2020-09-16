@@ -10,7 +10,7 @@ import javax.persistence.*
 @Entity
 @Table(indexes = [
   Index(name = "IndexBoardCommentBoardId", columnList = "boardId"),
-  Index(name = "IndexBoardCommentUserId", columnList = "userId")
+  Index(name = "IndexBoardCommentCreatedBy", columnList = "createdBy")
 ])
 @EntityListeners(AuditingEntityListener::class)
 class BoardComment(
@@ -33,7 +33,7 @@ class BoardComment(
   var hateCount: Long = 0L
 
   @CreatedBy
-  var userId: Long? = null
+  var createdBy: Long? = null
 
   @CreationTimestamp
   val createdAt: LocalDateTime? = null

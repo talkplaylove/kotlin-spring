@@ -12,7 +12,7 @@ Content-Type: application/json
 
 
 ### 댓글 수정
-PATCH {{server_url}}/boards/1/comments/1
+PATCH {{server_url}}/boards/1/comments/7
 Content-Type: application/json
 
 {

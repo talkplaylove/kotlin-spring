@@ -21,8 +21,8 @@ data class BoardCommentPutRes(
     val id: Long?,
     val boardId: Long,
     val content: String,
-    val userId: Long?,
-    val userName: String,
+    val createdBy: Long?,
+    val createdName: String,
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?
 ) {
@@ -32,8 +32,8 @@ data class BoardCommentPutRes(
           id = comment.id,
           boardId = comment.boardId,
           content = comment.content,
-          userId = comment.userId,
-          userName = userSession.name,
+          createdBy = comment.createdBy,
+          createdName = userSession.name,
           createdAt = comment.createdAt,
           updatedAt = comment.updatedAt
       )

@@ -21,7 +21,7 @@ class BoardCommentService(
     val comments = boardCommentRepo.findAllByBoardIdAndDeleted(boardId, PageRequest.of(page, size))
 
     val users = userService.getUsers(
-        ids = comments.stream().map { it.userId }.collect(Collectors.toSet())
+        ids = comments.stream().map { it.createdBy }.collect(Collectors.toSet())
     )
     return BoardCommentRes.listOf(comments.content, users)
   }
@@ -38,7 +38,7 @@ class BoardCommentService(
       throw CustomException(CustomMessage.COMMENT_NOT_FOUND)
     }
 
-    if (userSession.unmatches(comment.userId)) {
+    if (userSession.unmatches(comment.createdBy)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
@@ -52,7 +52,7 @@ class BoardCommentService(
       throw CustomException(CustomMessage.COMMENT_NOT_FOUND)
     }
 
-    if (userSession.unmatches(comment.userId)) {
+    if (userSession.unmatches(comment.createdBy)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
