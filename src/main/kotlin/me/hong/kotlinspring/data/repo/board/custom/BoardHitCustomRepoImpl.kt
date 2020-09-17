@@ -9,8 +9,8 @@ class BoardHitCustomRepoImpl : BoardHitCustomRepo {
   @PersistenceContext
   lateinit var entityManager: EntityManager
 
-  override fun insert(boardHit: BoardHit): BoardHit {
-    entityManager.persist(boardHit)
-    return boardHit
+  override fun insert(hit: BoardHit): BoardHit {
+    entityManager.persist(hit)
+    return hit
   }
 }

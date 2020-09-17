@@ -3,9 +3,7 @@ package me.hong.kotlinspring.web.controller
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
-import me.hong.kotlinspring.web.model.board.BoardCommentPutReq
-import me.hong.kotlinspring.web.model.board.BoardCommentPutRes
-import me.hong.kotlinspring.web.model.board.BoardCommentRes
+import me.hong.kotlinspring.web.model.board.*
 import me.hong.kotlinspring.web.service.BoardCommentService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -48,5 +46,14 @@ class BoardCommentController(
     if (userSession.unexists())
       throw CustomException(CustomMessage.UNAUTHORIZED)
     boardCommentService.deleteComment(boardId, commentId, userSession)
+  }
+
+  @PutMapping("/boards/{boardId}/comments/{commentId}/like-or-hate")
+  fun likeOrHate(@PathVariable boardId: Long,
+                 @PathVariable commentId: Long,
+                 @RequestBody @Valid req: BoardCommentLIkeReq): BoardCommentLikeRes {
+    if (userSession.unexists())
+      throw CustomException(CustomMessage.UNAUTHORIZED)
+    return boardCommentService.likeOrHateComment(boardId, commentId, req.likeOrHate, userSession)
   }
 }

@@ -22,3 +22,12 @@ Content-Type: application/json
 
 ### 댓글 삭제
 DELETE {{server_url}}/boards/1/comments/1
+
+
+### 댓글 좋아요/싫어요
+PUT {{server_url}}/boards/1/comments/7/like-or-hate
+Content-Type: application/json
+
+{
+  "likeOrHate": "LIKE"
+}

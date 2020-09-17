@@ -1,9 +1,14 @@
 package me.hong.kotlinspring.web.service
 
+import me.hong.kotlinspring.data.constant.board.LikeOrHate
+import me.hong.kotlinspring.data.entity.board.BoardCommentRead
+import me.hong.kotlinspring.data.entity.board.embedded.BoardCommentReadId
+import me.hong.kotlinspring.data.repo.board.BoardCommentReadRepo
 import me.hong.kotlinspring.data.repo.board.BoardCommentRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.model.board.BoardCommentLikeRes
 import me.hong.kotlinspring.web.model.board.BoardCommentPutReq
 import me.hong.kotlinspring.web.model.board.BoardCommentPutRes
 import me.hong.kotlinspring.web.model.board.BoardCommentRes
@@ -15,6 +20,7 @@ import java.util.stream.Collectors
 @Service
 class BoardCommentService(
     private val boardCommentRepo: BoardCommentRepo,
+    private val boardCommentReadRepo: BoardCommentReadRepo,
     private val userService: UserService
 ) {
   fun getComments(boardId: Long, page: Int, size: Int): Collection<BoardCommentRes> {
@@ -57,5 +63,26 @@ class BoardCommentService(
     }
 
     comment.deleted = true
+  }
+
+  @Transactional
+  fun likeOrHateComment(boardId: Long, commentId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardCommentLikeRes {
+    var read: BoardCommentRead? = null
+    var readId = BoardCommentReadId(commentId, userSession.id)
+
+    boardCommentReadRepo.findById(readId).ifPresentOrElse({
+      if (it.likeOrHate == likeOrHate) {
+        throw CustomException(CustomMessage.SAME_VALUES)
+      }
+      it.likeOrHate = likeOrHate
+      read = it
+    }, {
+      read = boardCommentReadRepo.insert(BoardCommentRead(
+          id = readId,
+          likeOrHate = likeOrHate
+      ))
+    })
+
+    return BoardCommentLikeRes.of(read)
   }
 }
