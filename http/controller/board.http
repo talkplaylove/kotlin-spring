@@ -1,5 +1,5 @@
 ### 게시글 다수 조회
-GET {{server_url}}/boards?page=0&size=5
+GET {{server_url}}/boards?page=0&size=30
 
 
 ### 게시글 검색
@@ -7,7 +7,7 @@ GET {{server_url}}/boards/search?word=내용&page=0&size=5
 
 
 ### 게시글 조회
-GET {{server_url}}/boards/1
+GET {{server_url}}/boards/4
 
 
 ### 사용자가 작성한 게시글 조회

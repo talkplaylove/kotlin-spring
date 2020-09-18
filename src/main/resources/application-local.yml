@@ -12,9 +12,6 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    properties:
-      hibernate:
-        format_sql: true
 logging:
   file:
     path: /Users/hong/Logs/kotlin-spring

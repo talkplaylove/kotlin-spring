@@ -17,10 +17,10 @@ data class BoardDetailRes(
 ) {
   companion object {
     fun of(board: Board, user: User?): BoardDetailRes {
-      return of(board, LikeOrHate.NONE, user)
+      return of(board, user, LikeOrHate.NONE)
     }
 
-    fun of(board: Board, likeOrHate: LikeOrHate, user: User?): BoardDetailRes {
+    fun of(board: Board, user: User?, likeOrHate: LikeOrHate): BoardDetailRes {
       return BoardDetailRes(
           id = board.id,
           title = board.title,
