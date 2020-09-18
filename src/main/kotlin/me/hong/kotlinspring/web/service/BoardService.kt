@@ -70,7 +70,7 @@ class BoardService(
   }
 
   fun createBoard(req: BoardPutReq, userSession: UserSession): BoardPutRes {
-    val board = boardDomain.createBoard(req.toEntity())
+    val board = boardDomain.createBoard(req.toBoard())
 
     return BoardPutRes.of(board, userSession)
   }

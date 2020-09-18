@@ -37,7 +37,7 @@ class UserService(
     this.duplicateName(req.name)
 
     val encodedPassword = passwordEncoder.encode(req.password)
-    val user = userDomain.createUser(req.toEntity(encodedPassword))
+    val user = userDomain.createUser(req.toUser(encodedPassword))
 
     return SignupRes.of(user)
   }

@@ -9,7 +9,7 @@ data class SignupReq(
     val password: String,
     val gender: Gender
 ) {
-  fun toEntity(encodedPassword: String): User {
+  fun toUser(encodedPassword: String): User {
     return User(
         email = this.email,
         name = this.name,

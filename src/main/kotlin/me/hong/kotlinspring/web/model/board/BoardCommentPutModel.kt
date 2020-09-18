@@ -9,7 +9,7 @@ data class BoardCommentPutReq(
     @NotEmpty
     val content: String
 ) {
-  fun toEntity(boardId: Long): BoardComment {
+  fun toBoardComment(boardId: Long): BoardComment {
     return BoardComment(
         boardId = boardId,
         content = this.content

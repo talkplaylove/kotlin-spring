@@ -12,7 +12,7 @@ data class BoardPutReq(
     @NotEmpty
     val content: String
 ) {
-  fun toEntity(): Board {
+  fun toBoard(): Board {
     return Board(
         title = this.title,
         content = this.content

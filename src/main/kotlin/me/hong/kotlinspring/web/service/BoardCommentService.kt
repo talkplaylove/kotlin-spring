@@ -29,7 +29,7 @@ class BoardCommentService(
   }
 
   fun createComment(boardId: Long, req: BoardCommentPutReq, userSession: UserSession): BoardCommentPutRes {
-    val comment = boardCommentDomain.createComment(req.toEntity(boardId))
+    val comment = boardCommentDomain.createComment(req.toBoardComment(boardId))
 
     return BoardCommentPutRes.of(comment, userSession)
   }
