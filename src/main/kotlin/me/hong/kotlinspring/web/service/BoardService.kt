@@ -56,11 +56,11 @@ class BoardService(
   }
 
   fun getBoard(boardId: Long, userSession: UserSession): BoardDetailRes {
+    val userId = userSession.id
+
     val board = boardDomain.getActiveBoard(boardId)
-
     val user = userService.getUser(board.createdBy)
-
-    val read = boardDomain.optionalBoardRead(boardId, userSession.id)
+    val read = boardDomain.optionalBoardRead(boardId, userId)
 
     return if (read.isPresent) {
       BoardDetailRes.of(board, user, read.get().likeOrHate)
@@ -112,21 +112,23 @@ class BoardService(
 
   @Transactional
   fun hitBoard(boardId: Long, ip: String, userSession: UserSession) {
+    val userId = userSession.id
     this.hitBoard(boardId, ip)
 
-    boardDomain.optionalBoardRead(boardId, userSession.id).orElseGet {
-      boardDomain.readBoard(boardId, userSession.id)
+    boardDomain.optionalBoardRead(boardId, userId).orElseGet {
+      boardDomain.readBoard(boardId, userId)
     }
   }
 
   @Transactional
   fun readBoard(boardId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardLikeRes {
+    val userId = userSession.id
     var read: BoardRead? = null
-    boardDomain.optionalBoardRead(boardId, userSession.id).ifPresentOrElse({
+    boardDomain.optionalBoardRead(boardId, userId).ifPresentOrElse({
       it.likeOrHate = likeOrHate
       read = it
     }, {
-      read = boardDomain.readBoard(boardId, userSession.id, likeOrHate)
+      read = boardDomain.readBoard(boardId, userId, likeOrHate)
     })
 
     return BoardLikeRes.of(read)

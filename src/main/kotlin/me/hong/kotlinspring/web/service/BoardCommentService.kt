@@ -67,8 +67,9 @@ class BoardCommentService(
 
   @Transactional
   fun likeOrHateComment(boardId: Long, commentId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardCommentLikeRes {
+    val userId = userSession.id
     var read: BoardCommentRead? = null
-    var readId = BoardCommentReadId(commentId, userSession.id)
+    val readId = BoardCommentReadId(commentId, userId)
 
     boardCommentReadRepo.findById(readId).ifPresentOrElse({
       if (it.likeOrHate == likeOrHate) {

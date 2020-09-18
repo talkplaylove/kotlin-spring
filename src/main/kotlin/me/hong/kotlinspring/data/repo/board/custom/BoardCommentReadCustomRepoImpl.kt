@@ -1,7 +1,6 @@
 package me.hong.kotlinspring.data.repo.board.custom
 
 import me.hong.kotlinspring.data.entity.board.BoardCommentRead
-import me.hong.kotlinspring.data.entity.board.BoardRead
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
