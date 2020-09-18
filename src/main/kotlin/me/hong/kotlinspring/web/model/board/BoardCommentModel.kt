@@ -8,6 +8,8 @@ data class BoardCommentRes(
     val id: Long?,
     val boardId: Long,
     var content: String,
+    var likeCount: Long,
+    var hateCount: Long,
     val createdBy: Long?,
     val createdName: String,
     val createdAt: LocalDateTime?,
@@ -19,6 +21,8 @@ data class BoardCommentRes(
           id = comment.id,
           boardId = comment.boardId,
           content = comment.content,
+          likeCount = comment.likeCount,
+          hateCount = comment.hateCount,
           createdBy = comment.createdBy,
           createdName = user!!.name,
           createdAt = comment.createdAt,
@@ -27,9 +31,9 @@ data class BoardCommentRes(
     }
 
     fun listOf(comments: List<BoardComment>, users: Map<Long?, User>): Collection<BoardCommentRes> {
-      var res = mutableListOf<BoardCommentRes>()
+      val res = mutableListOf<BoardCommentRes>()
       comments.forEach {
-        res.add(BoardCommentRes.of(it, users[it.createdBy]))
+        res.add(this.of(it, users[it.createdBy]))
       }
       return res
     }

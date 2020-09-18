@@ -27,7 +27,7 @@ data class BoardRes(
     fun listOf(boards: List<Board>, users: Map<Long?, User>): Collection<BoardRes> {
       val res = mutableListOf<BoardRes>()
       boards.forEach {
-        res.add(of(it, users[it.createdBy]))
+        res.add(this.of(it, users[it.createdBy]))
       }
       return res
     }

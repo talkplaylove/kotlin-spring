@@ -17,7 +17,7 @@ data class BoardDetailRes(
 ) {
   companion object {
     fun of(board: Board, user: User?): BoardDetailRes {
-      return of(board, user, LikeOrHate.NONE)
+      return this.of(board, user, LikeOrHate.NONE)
     }
 
     fun of(board: Board, user: User?, likeOrHate: LikeOrHate): BoardDetailRes {

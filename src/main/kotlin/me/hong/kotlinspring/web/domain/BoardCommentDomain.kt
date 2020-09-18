@@ -26,6 +26,12 @@ class BoardCommentDomain(
     return boardCommentRepo.save(comment)
   }
 
+  fun getComment(commentId: Long): BoardComment {
+    return boardCommentRepo.findById(commentId).orElseThrow {
+      throw CustomException(CustomMessage.COMMENT_NOT_FOUND)
+    }
+  }
+
   fun getActiveComment(commentId: Long): BoardComment {
     return boardCommentRepo.findByIdAndDeleted(commentId).orElseThrow {
       throw CustomException(CustomMessage.COMMENT_NOT_FOUND)

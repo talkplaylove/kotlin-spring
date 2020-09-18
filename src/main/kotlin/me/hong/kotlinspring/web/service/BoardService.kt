@@ -125,6 +125,9 @@ class BoardService(
     val userId = userSession.id
     var read: BoardRead? = null
     boardDomain.optionalBoardRead(boardId, userId).ifPresentOrElse({
+      if (it.likeOrHate == likeOrHate) {
+        throw CustomException(CustomMessage.SAME_VALUES)
+      }
       it.likeOrHate = likeOrHate
       read = it
     }, {

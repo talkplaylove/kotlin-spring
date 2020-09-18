@@ -61,16 +61,50 @@ class BoardCommentService(
   fun likeOrHateComment(boardId: Long, commentId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardCommentLikeRes {
     val userId = userSession.id
     var read: BoardCommentRead? = null
+    var currentLikeOrHate = LikeOrHate.NONE
 
     boardCommentDomain.optionalCommentRead(commentId, userId).ifPresentOrElse({
-      if (it.likeOrHate == likeOrHate) {
-        throw CustomException(CustomMessage.SAME_VALUES)
-      }
+      currentLikeOrHate = it.likeOrHate
       it.likeOrHate = likeOrHate
       read = it
     }, {
       read = boardCommentDomain.readComment(commentId, userId, likeOrHate)
     })
+
+    if (currentLikeOrHate == likeOrHate) {
+      throw CustomException(CustomMessage.SAME_VALUES)
+    }
+
+    val comment = boardCommentDomain.getComment(commentId)
+    when (currentLikeOrHate) {
+      LikeOrHate.NONE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.LIKE -> comment.likeCount++
+          LikeOrHate.HATE -> comment.hateCount++
+        }
+      }
+      LikeOrHate.LIKE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> comment.likeCount--
+          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.HATE -> {
+            comment.hateCount++
+            comment.likeCount--
+          }
+        }
+      }
+      LikeOrHate.HATE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> comment.hateCount--
+          LikeOrHate.LIKE -> {
+            comment.likeCount++
+            comment.hateCount--
+          }
+          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
+        }
+      }
+    }
 
     return BoardCommentLikeRes.of(read)
   }
