@@ -1,12 +1,10 @@
 package me.hong.kotlinspring.web.service
 
 import me.hong.kotlinspring.data.entity.user.User
-import me.hong.kotlinspring.data.entity.user.UserAccess
 import me.hong.kotlinspring.data.entity.user.embedded.UserAccessId
-import me.hong.kotlinspring.data.repo.user.UserAccessRepo
-import me.hong.kotlinspring.data.repo.user.UserRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
+import me.hong.kotlinspring.web.domain.UserDomain
 import me.hong.kotlinspring.web.model.user.SigninReq
 import me.hong.kotlinspring.web.model.user.SigninRes
 import me.hong.kotlinspring.web.model.user.SignupReq
@@ -19,24 +17,17 @@ import java.util.stream.Collectors
 
 @Service
 class UserService(
-    private val userRepo: UserRepo,
-    private val userAccessRepo: UserAccessRepo,
+    private val userDomain: UserDomain,
     private val passwordEncoder: PasswordEncoder
 ) {
   @Transactional
   fun signin(req: SigninReq): SigninRes {
-    val user = userRepo.findByEmail(req.email)
-        ?: throw CustomException(CustomMessage.USER_NOT_FOUND)
+    val user = userDomain.findUser(req.email)
 
     if (!passwordEncoder.matches(req.password, user.password))
       throw CustomException(CustomMessage.INCORRECT_PASSWORD)
 
-    val userAccessId = UserAccessId(user.id!!, LocalDate.now())
-    userAccessRepo.findById(userAccessId).ifPresentOrElse({
-      it.hitCount++
-    }, {
-      userAccessRepo.insert(UserAccess(userAccessId))
-    })
+    userDomain.hitUserAccess(UserAccessId(user.id!!, LocalDate.now()))
 
     return SigninRes.of(user)
   }
@@ -46,27 +37,27 @@ class UserService(
     this.duplicateName(req.name)
 
     val encodedPassword = passwordEncoder.encode(req.password)
-    val user = userRepo.save(req.toEntity(encodedPassword))
+    val user = userDomain.createUser(req.toEntity(encodedPassword))
 
     return SignupRes.of(user)
   }
 
   fun duplicateEmail(email: String) {
-    if (userRepo.existsByEmail(email))
+    if (userDomain.existsEmail(email))
       throw CustomException(CustomMessage.EXISTS_EMAIL)
   }
 
   fun duplicateName(name: String) {
-    if (userRepo.existsByName(name))
+    if (userDomain.existsName(name))
       throw CustomException(CustomMessage.EXISTS_NAME)
   }
 
   fun getUser(id: Long?): User? {
-    return userRepo.findById(id)
+    return userDomain.getUser(id)
   }
 
   fun getUsers(ids: Set<Long?>): Map<Long?, User> {
-    val users = userRepo.findAllById(ids)
+    val users = userDomain.getUsers(ids)
     return users.stream().collect(Collectors.toMap(User::id) { it }).toMap()
   }
 }
