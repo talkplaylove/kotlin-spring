@@ -12,6 +12,8 @@ data class BoardDetailRes(
     val createdBy: Long?,
     val createdName: String,
     val likeOrHate: LikeOrHate,
+    val likeCount: Long,
+    val hateCount: Long,
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?
 ) {
@@ -28,6 +30,8 @@ data class BoardDetailRes(
           createdBy = board.createdBy,
           createdName = user!!.name,
           likeOrHate = likeOrHate,
+          likeCount = board.likeCount,
+          hateCount = board.hateCount,
           createdAt = board.createdAt,
           updatedAt = board.updatedAt
       )

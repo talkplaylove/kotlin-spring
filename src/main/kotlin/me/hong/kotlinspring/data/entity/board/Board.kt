@@ -28,6 +28,10 @@ class Board(
 
   var deleted: Boolean = false
 
+  var likeCount: Long = 0L
+
+  var hateCount: Long = 0L
+
   var hitCount: Long = 0
 
   @CreatedBy
