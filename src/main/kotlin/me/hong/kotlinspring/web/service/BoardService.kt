@@ -124,7 +124,10 @@ class BoardService(
   fun readBoard(boardId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardLikeRes {
     val userId = userSession.id
     var read: BoardRead? = null
+    var currentLikeOrHate = LikeOrHate.NONE
+
     boardDomain.optionalBoardRead(boardId, userId).ifPresentOrElse({
+      currentLikeOrHate = it.likeOrHate
       if (it.likeOrHate == likeOrHate) {
         throw CustomException(CustomMessage.SAME_VALUES)
       }
@@ -133,6 +136,41 @@ class BoardService(
     }, {
       read = boardDomain.readBoard(boardId, userId, likeOrHate)
     })
+
+    if (currentLikeOrHate == likeOrHate) {
+      throw CustomException(CustomMessage.SAME_VALUES)
+    }
+
+    val board = boardDomain.getBoard(boardId)
+    when (currentLikeOrHate) {
+      LikeOrHate.NONE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.LIKE -> board.likeCount++
+          LikeOrHate.HATE -> board.hateCount++
+        }
+      }
+      LikeOrHate.LIKE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> board.likeCount--
+          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.HATE -> {
+            board.hateCount++
+            board.likeCount--
+          }
+        }
+      }
+      LikeOrHate.HATE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> board.hateCount--
+          LikeOrHate.LIKE -> {
+            board.likeCount++
+            board.hateCount--
+          }
+          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
+        }
+      }
+    }
 
     return BoardLikeRes.of(read)
   }
