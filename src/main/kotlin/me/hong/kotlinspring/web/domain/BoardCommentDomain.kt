@@ -51,4 +51,38 @@ class BoardCommentDomain(
         likeOrHate = likeOrHate
     ))
   }
+
+  fun countLikeOrHateComment(commentId: Long, currentLikeOrHate: LikeOrHate, requestLikeOrHate: LikeOrHate): BoardComment {
+    val comment = this.getComment(commentId)
+    when (currentLikeOrHate) {
+      LikeOrHate.NONE -> {
+        when (requestLikeOrHate) {
+          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.LIKE -> comment.likeCount++
+          LikeOrHate.HATE -> comment.hateCount++
+        }
+      }
+      LikeOrHate.LIKE -> {
+        when (requestLikeOrHate) {
+          LikeOrHate.NONE -> comment.likeCount--
+          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.HATE -> {
+            comment.hateCount++
+            comment.likeCount--
+          }
+        }
+      }
+      LikeOrHate.HATE -> {
+        when (requestLikeOrHate) {
+          LikeOrHate.NONE -> comment.hateCount--
+          LikeOrHate.LIKE -> {
+            comment.likeCount++
+            comment.hateCount--
+          }
+          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
+        }
+      }
+    }
+    return comment
+  }
 }

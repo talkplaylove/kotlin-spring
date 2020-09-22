@@ -75,36 +75,7 @@ class BoardCommentService(
       throw CustomException(CustomMessage.SAME_VALUES)
     }
 
-    val comment = boardCommentDomain.getComment(commentId)
-    when (currentLikeOrHate) {
-      LikeOrHate.NONE -> {
-        when (likeOrHate) {
-          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.LIKE -> comment.likeCount++
-          LikeOrHate.HATE -> comment.hateCount++
-        }
-      }
-      LikeOrHate.LIKE -> {
-        when (likeOrHate) {
-          LikeOrHate.NONE -> comment.likeCount--
-          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.HATE -> {
-            comment.hateCount++
-            comment.likeCount--
-          }
-        }
-      }
-      LikeOrHate.HATE -> {
-        when (likeOrHate) {
-          LikeOrHate.NONE -> comment.hateCount--
-          LikeOrHate.LIKE -> {
-            comment.likeCount++
-            comment.hateCount--
-          }
-          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
-        }
-      }
-    }
+    boardCommentDomain.countLikeOrHateComment(commentId, currentLikeOrHate, likeOrHate)
 
     return BoardCommentLikeRes.of(read)
   }

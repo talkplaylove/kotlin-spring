@@ -98,4 +98,38 @@ class BoardDomain(
         likeOrHate = likeOrHate
     ))
   }
+
+  fun countLikeOrHateBoard(boardId: Long, currentLikeOrHate: LikeOrHate, requestLikeOrHate: LikeOrHate): Board {
+    val board = this.getBoard(boardId)
+    when (currentLikeOrHate) {
+      LikeOrHate.NONE -> {
+        when (requestLikeOrHate) {
+          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.LIKE -> board.likeCount++
+          LikeOrHate.HATE -> board.hateCount++
+        }
+      }
+      LikeOrHate.LIKE -> {
+        when (requestLikeOrHate) {
+          LikeOrHate.NONE -> board.likeCount--
+          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.HATE -> {
+            board.hateCount++
+            board.likeCount--
+          }
+        }
+      }
+      LikeOrHate.HATE -> {
+        when (requestLikeOrHate) {
+          LikeOrHate.NONE -> board.hateCount--
+          LikeOrHate.LIKE -> {
+            board.likeCount++
+            board.hateCount--
+          }
+          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
+        }
+      }
+    }
+    return board
+  }
 }

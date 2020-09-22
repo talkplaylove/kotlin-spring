@@ -141,36 +141,7 @@ class BoardService(
       throw CustomException(CustomMessage.SAME_VALUES)
     }
 
-    val board = boardDomain.getBoard(boardId)
-    when (currentLikeOrHate) {
-      LikeOrHate.NONE -> {
-        when (likeOrHate) {
-          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.LIKE -> board.likeCount++
-          LikeOrHate.HATE -> board.hateCount++
-        }
-      }
-      LikeOrHate.LIKE -> {
-        when (likeOrHate) {
-          LikeOrHate.NONE -> board.likeCount--
-          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.HATE -> {
-            board.hateCount++
-            board.likeCount--
-          }
-        }
-      }
-      LikeOrHate.HATE -> {
-        when (likeOrHate) {
-          LikeOrHate.NONE -> board.hateCount--
-          LikeOrHate.LIKE -> {
-            board.likeCount++
-            board.hateCount--
-          }
-          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
-        }
-      }
-    }
+    boardDomain.countLikeOrHateBoard(boardId, currentLikeOrHate, likeOrHate)
 
     return BoardLikeRes.of(read)
   }
