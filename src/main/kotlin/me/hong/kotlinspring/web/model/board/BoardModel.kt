@@ -1,7 +1,7 @@
 package me.hong.kotlinspring.web.model.board
 
 import me.hong.kotlinspring.data.entity.board.Board
-import me.hong.kotlinspring.data.entity.user.User
+import me.hong.kotlinspring.data.entity.board.BoardUser
 import java.time.LocalDateTime
 
 data class BoardRes(
@@ -13,18 +13,18 @@ data class BoardRes(
     val updatedAt: LocalDateTime?
 ) {
   companion object {
-    fun of(board: Board, user: User?): BoardRes {
+    fun of(board: Board, user: BoardUser?): BoardRes {
       return BoardRes(
           id = board.id,
           title = board.title,
           createdBy = board.createdBy,
-          createdName = user!!.name,
+          createdName = user?.userName ?: "",
           createdAt = board.createdAt,
           updatedAt = board.updatedAt
       )
     }
 
-    fun listOf(boards: List<Board>, users: Map<Long?, User>): Collection<BoardRes> {
+    fun listOf(boards: List<Board>, users: Map<Long?, BoardUser>): Collection<BoardRes> {
       val res = mutableListOf<BoardRes>()
       boards.forEach {
         res.add(this.of(it, users[it.createdBy]))

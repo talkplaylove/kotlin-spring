@@ -1,5 +1,6 @@
 package me.hong.kotlinspring.web.advice
 
+import me.hong.kotlinspring.data.entity.board.BoardUser
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Component

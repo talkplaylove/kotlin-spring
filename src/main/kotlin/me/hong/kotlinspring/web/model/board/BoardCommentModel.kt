@@ -1,6 +1,7 @@
 package me.hong.kotlinspring.web.model.board
 
 import me.hong.kotlinspring.data.entity.board.BoardComment
+import me.hong.kotlinspring.data.entity.board.BoardUser
 import me.hong.kotlinspring.data.entity.user.User
 import java.time.LocalDateTime
 
@@ -16,7 +17,7 @@ data class BoardCommentRes(
     val updatedAt: LocalDateTime?
 ) {
   companion object {
-    fun of(comment: BoardComment, user: User?): BoardCommentRes {
+    fun of(comment: BoardComment, user: BoardUser?): BoardCommentRes {
       return BoardCommentRes(
           id = comment.id,
           boardId = comment.boardId,
@@ -24,13 +25,13 @@ data class BoardCommentRes(
           likeCount = comment.likeCount,
           hateCount = comment.hateCount,
           createdBy = comment.createdBy,
-          createdName = user!!.name,
+          createdName = user?.userName ?: "",
           createdAt = comment.createdAt,
           updatedAt = comment.updatedAt
       )
     }
 
-    fun listOf(comments: List<BoardComment>, users: Map<Long?, User>): Collection<BoardCommentRes> {
+    fun listOf(comments: List<BoardComment>, users: Map<Long?, BoardUser>): Collection<BoardCommentRes> {
       val res = mutableListOf<BoardCommentRes>()
       comments.forEach {
         res.add(this.of(it, users[it.createdBy]))

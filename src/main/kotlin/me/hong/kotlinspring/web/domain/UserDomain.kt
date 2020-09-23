@@ -14,14 +14,6 @@ class UserDomain(
     private val userRepo: UserRepo,
     private val userAccessRepo: UserAccessRepo
 ) {
-  fun getUser(id: Long?): User? {
-    return userRepo.findById(id)
-  }
-
-  fun getUsers(ids: Set<Long?>): MutableList<User> {
-    return userRepo.findAllById(ids)
-  }
-
   fun findUser(email: String): User {
     return userRepo.findByEmail(email)
         ?: throw CustomException(CustomMessage.USER_NOT_FOUND)

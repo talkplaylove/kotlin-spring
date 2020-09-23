@@ -2,6 +2,7 @@ package me.hong.kotlinspring.web.model.board
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.Board
+import me.hong.kotlinspring.data.entity.board.BoardUser
 import me.hong.kotlinspring.data.entity.user.User
 import java.time.LocalDateTime
 
@@ -18,17 +19,17 @@ data class BoardDetailRes(
     val updatedAt: LocalDateTime?
 ) {
   companion object {
-    fun of(board: Board, user: User?): BoardDetailRes {
+    fun of(board: Board, user: BoardUser?): BoardDetailRes {
       return this.of(board, user, LikeOrHate.NONE)
     }
 
-    fun of(board: Board, user: User?, likeOrHate: LikeOrHate): BoardDetailRes {
+    fun of(board: Board, user: BoardUser?, likeOrHate: LikeOrHate): BoardDetailRes {
       return BoardDetailRes(
           id = board.id,
           title = board.title,
           content = board.content,
           createdBy = board.createdBy,
-          createdName = user!!.name,
+          createdName = user!!.userName,
           likeOrHate = likeOrHate,
           likeCount = board.likeCount,
           hateCount = board.hateCount,

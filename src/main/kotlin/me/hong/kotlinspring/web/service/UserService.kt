@@ -1,6 +1,5 @@
 package me.hong.kotlinspring.web.service
 
-import me.hong.kotlinspring.data.entity.user.User
 import me.hong.kotlinspring.data.entity.user.embedded.UserAccessId
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
@@ -13,12 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
-import java.util.stream.Collectors
 
 @Service
 class UserService(
     private val userDomain: UserDomain,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val boardService: BoardService
 ) {
   @Transactional
   fun signin(req: SigninReq): SigninRes {
@@ -39,6 +38,7 @@ class UserService(
     val encodedPassword = passwordEncoder.encode(req.password)
     val user = userDomain.createUser(req.toUser(encodedPassword))
 
+    boardService.createBoardUser(user.id!!, user.name)
     return SignupRes.of(user)
   }
 
@@ -50,14 +50,5 @@ class UserService(
   fun duplicateName(name: String) {
     if (userDomain.existsName(name))
       throw CustomException(CustomMessage.EXISTS_NAME)
-  }
-
-  fun getUser(id: Long?): User? {
-    return userDomain.getUser(id)
-  }
-
-  fun getUsers(ids: Set<Long?>): Map<Long?, User> {
-    val users = userDomain.getUsers(ids)
-    return users.stream().collect(Collectors.toMap(User::id) { it }).toMap()
   }
 }

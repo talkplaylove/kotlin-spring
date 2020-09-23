@@ -1,6 +1,7 @@
 package me.hong.kotlinspring.web.model.board
 
 import me.hong.kotlinspring.data.entity.board.Board
+import me.hong.kotlinspring.data.entity.board.BoardUser
 import me.hong.kotlinspring.web.advice.UserSession
 import java.time.LocalDateTime
 import javax.validation.constraints.NotEmpty
