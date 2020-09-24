@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 data class BoardRes(
     val id: Long?,
     val title: String,
+    val hitCount: Long,
     val createdBy: Long?,
     val createdName: String,
     val createdAt: LocalDateTime?,
@@ -17,6 +18,7 @@ data class BoardRes(
       return BoardRes(
           id = board.id,
           title = board.title,
+          hitCount = board.hitCount,
           createdBy = board.createdBy,
           createdName = user?.userName ?: "",
           createdAt = board.createdAt,
