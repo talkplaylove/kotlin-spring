@@ -58,27 +58,21 @@ class BoardCommentDomain(
       LikeOrHate.NONE -> {
         when (requestLikeOrHate) {
           LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.LIKE -> comment.likeCount++
-          LikeOrHate.HATE -> comment.hateCount++
+          LikeOrHate.LIKE -> comment.like()
+          LikeOrHate.HATE -> comment.hate()
         }
       }
       LikeOrHate.LIKE -> {
         when (requestLikeOrHate) {
-          LikeOrHate.NONE -> comment.likeCount--
+          LikeOrHate.NONE -> comment.unlike()
           LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.HATE -> {
-            comment.hateCount++
-            comment.likeCount--
-          }
+          LikeOrHate.HATE -> comment.unlikeAndHate()
         }
       }
       LikeOrHate.HATE -> {
         when (requestLikeOrHate) {
-          LikeOrHate.NONE -> comment.hateCount--
-          LikeOrHate.LIKE -> {
-            comment.likeCount++
-            comment.hateCount--
-          }
+          LikeOrHate.NONE -> comment.unhate()
+          LikeOrHate.LIKE -> comment.unhateAndLike()
           LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
         }
       }

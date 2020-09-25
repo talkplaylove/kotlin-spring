@@ -105,27 +105,21 @@ class BoardDomain(
       LikeOrHate.NONE -> {
         when (requestLikeOrHate) {
           LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.LIKE -> board.likeCount++
-          LikeOrHate.HATE -> board.hateCount++
+          LikeOrHate.LIKE -> board.like()
+          LikeOrHate.HATE -> board.hate()
         }
       }
       LikeOrHate.LIKE -> {
         when (requestLikeOrHate) {
-          LikeOrHate.NONE -> board.likeCount--
+          LikeOrHate.NONE -> board.unlike()
           LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.HATE -> {
-            board.hateCount++
-            board.likeCount--
-          }
+          LikeOrHate.HATE -> board.unlikeAndHate()
         }
       }
       LikeOrHate.HATE -> {
         when (requestLikeOrHate) {
-          LikeOrHate.NONE -> board.hateCount--
-          LikeOrHate.LIKE -> {
-            board.likeCount++
-            board.hateCount--
-          }
+          LikeOrHate.NONE -> board.unhate()
+          LikeOrHate.LIKE -> board.unhateAndLike()
           LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
         }
       }

@@ -100,7 +100,7 @@ class BoardService(
       boardDomain.hitBoard(boardId, ip)
 
       val board = boardDomain.getBoard(boardId)
-      board.hitCount++
+      board.hit()
     }
   }
 

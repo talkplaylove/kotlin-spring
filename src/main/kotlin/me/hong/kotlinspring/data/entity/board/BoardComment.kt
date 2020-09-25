@@ -40,4 +40,30 @@ class BoardComment(
 
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
+
+  fun unlike() {
+    likeCount--
+  }
+
+  fun like() {
+    likeCount++
+  }
+
+  fun hate() {
+    hateCount++
+  }
+
+  fun unhate() {
+    hateCount--
+  }
+
+  fun unhateAndLike() {
+    unhate()
+    like()
+  }
+
+  fun unlikeAndHate() {
+    unlike()
+    hate()
+  }
 }
