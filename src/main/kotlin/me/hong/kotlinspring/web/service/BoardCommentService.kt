@@ -5,8 +5,8 @@ import me.hong.kotlinspring.data.entity.board.BoardCommentRead
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
-import me.hong.kotlinspring.web.domain.BoardCommentDomain
-import me.hong.kotlinspring.web.domain.BoardUserDomain
+import me.hong.kotlinspring.data.domain.BoardCommentDomain
+import me.hong.kotlinspring.data.domain.BoardUserDomain
 import me.hong.kotlinspring.web.model.board.BoardCommentLikeRes
 import me.hong.kotlinspring.web.model.board.BoardCommentPutReq
 import me.hong.kotlinspring.web.model.board.BoardCommentPutRes
@@ -41,7 +41,8 @@ class BoardCommentService(
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    comment.content = req.content
+    comment.update(req.content)
+
     return BoardCommentPutRes.of(comment, userSession)
   }
 
@@ -53,7 +54,7 @@ class BoardCommentService(
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    comment.deleted = true
+    comment.delete()
   }
 
   @Transactional

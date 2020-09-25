@@ -43,33 +43,42 @@ class Board(
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
 
+  fun update(title: String, content: String) {
+    this.title = title
+    this.content = content
+  }
+
+  fun delete() {
+    this.deleted = true
+  }
+
   fun hit() {
-    hitCount++
+    this.hitCount++
   }
 
   fun like() {
-    likeCount++
+    this.likeCount++
   }
 
   fun unlike() {
-    likeCount--
+    this.likeCount--
   }
 
   fun hate() {
-    hateCount++
+    this.hateCount++
   }
 
   fun unhate() {
-    hateCount--
+    this.hateCount--
   }
 
   fun unhateAndLike() {
-    unhate()
-    like()
+    this.unhate()
+    this.like()
   }
 
   fun unlikeAndHate() {
-    unlike()
-    hate()
+    this.unlike()
+    this.hate()
   }
 }

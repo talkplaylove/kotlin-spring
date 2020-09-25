@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.web.domain
+package me.hong.kotlinspring.data.domain
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.BoardComment

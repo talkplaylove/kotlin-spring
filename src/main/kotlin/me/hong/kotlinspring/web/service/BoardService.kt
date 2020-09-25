@@ -6,8 +6,8 @@ import me.hong.kotlinspring.data.entity.board.BoardUser
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
-import me.hong.kotlinspring.web.domain.BoardDomain
-import me.hong.kotlinspring.web.domain.BoardUserDomain
+import me.hong.kotlinspring.data.domain.BoardDomain
+import me.hong.kotlinspring.data.domain.BoardUserDomain
 import me.hong.kotlinspring.web.model.board.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -77,8 +77,7 @@ class BoardService(
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    board.title = req.title
-    board.content = req.content
+    board.update(req.title, req.content)
 
     return BoardPutRes.of(board, userSession)
   }
@@ -91,7 +90,7 @@ class BoardService(
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    board.deleted = true
+    board.delete()
   }
 
   @Transactional

@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.web.domain
+package me.hong.kotlinspring.data.domain
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.Board
@@ -43,15 +43,23 @@ class BoardDomain(
   }
 
   fun getActiveBoard(boardId: Long): Board {
-    return boardRepo.findByIdAndDeleted(boardId).orElseThrow {
+    return this.optionalActiveBoard(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
   }
 
+  fun optionalActiveBoard(boardId: Long): Optional<Board> {
+    return boardRepo.findByIdAndDeleted(boardId)
+  }
+
   fun getBoard(boardId: Long): Board {
-    return boardRepo.findById(boardId).orElseThrow {
+    return this.optionalBoard(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
+  }
+
+  fun optionalBoard(boardId: Long): Optional<Board> {
+    return boardRepo.findById(boardId)
   }
 
   fun optionalBoardRead(boardId: Long, userId: Long): Optional<BoardRead> {
