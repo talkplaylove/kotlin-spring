@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.data.domain
+package me.hong.kotlinspring.data.domain.user
 
 import me.hong.kotlinspring.data.entity.user.User
 import me.hong.kotlinspring.data.entity.user.UserAccess

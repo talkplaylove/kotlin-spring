@@ -1,10 +1,7 @@
-package me.hong.kotlinspring.data.domain
+package me.hong.kotlinspring.data.domain.board
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.BoardComment
-import me.hong.kotlinspring.data.entity.board.BoardCommentRead
-import me.hong.kotlinspring.data.entity.board.embedded.BoardCommentReadId
-import me.hong.kotlinspring.data.repo.board.BoardCommentReadRepo
 import me.hong.kotlinspring.data.repo.board.BoardCommentRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
@@ -15,8 +12,7 @@ import java.util.*
 
 @Component
 class BoardCommentDomain(
-    private val boardCommentRepo: BoardCommentRepo,
-    private val boardCommentReadRepo: BoardCommentReadRepo
+    private val boardCommentRepo: BoardCommentRepo
 ) {
   fun findComments(boardId: Long, page: Int, size: Int): Page<BoardComment> {
     return boardCommentRepo.findAllByBoardIdAndDeleted(boardId, PageRequest.of(page, size))
@@ -54,20 +50,6 @@ class BoardCommentDomain(
   fun deactivateComment(comment: BoardComment): BoardComment {
     comment.deactivate()
     return comment
-  }
-
-  fun optionalCommentRead(commentId: Long, userId: Long): Optional<BoardCommentRead> {
-    return boardCommentReadRepo.findById(BoardCommentReadId(
-        commentId = commentId,
-        userId = userId
-    ))
-  }
-
-  fun readComment(commentId: Long, userId: Long, likeOrHate: LikeOrHate): BoardCommentRead {
-    return boardCommentReadRepo.insert(BoardCommentRead(
-        id = BoardCommentReadId(commentId, userId),
-        likeOrHate = likeOrHate
-    ))
   }
 
   fun countLikeOrHateComment(commentId: Long, currentLikeOrHate: LikeOrHate, requestLikeOrHate: LikeOrHate): BoardComment {

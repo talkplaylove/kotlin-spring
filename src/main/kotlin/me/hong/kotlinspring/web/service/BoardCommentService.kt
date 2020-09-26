@@ -1,8 +1,9 @@
 package me.hong.kotlinspring.web.service
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
-import me.hong.kotlinspring.data.domain.BoardCommentDomain
-import me.hong.kotlinspring.data.domain.BoardUserDomain
+import me.hong.kotlinspring.data.domain.board.BoardCommentDomain
+import me.hong.kotlinspring.data.domain.board.BoardCommentReadDomain
+import me.hong.kotlinspring.data.domain.board.BoardUserDomain
 import me.hong.kotlinspring.data.entity.board.BoardCommentRead
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class BoardCommentService(
     private val boardCommentDomain: BoardCommentDomain,
+    private val boardCommentReadDomain: BoardCommentReadDomain,
     private val boardUserDomain: BoardUserDomain
 ) {
   fun getComments(boardId: Long, page: Int, size: Int): Collection<BoardCommentRes> {
@@ -63,12 +65,12 @@ class BoardCommentService(
     var read: BoardCommentRead? = null
     var currentLikeOrHate = LikeOrHate.NONE
 
-    boardCommentDomain.optionalCommentRead(commentId, userId).ifPresentOrElse({
+    boardCommentReadDomain.optional(commentId, userId).ifPresentOrElse({
       currentLikeOrHate = it.likeOrHate
       it.likeOrHate = likeOrHate
       read = it
     }, {
-      read = boardCommentDomain.readComment(commentId, userId, likeOrHate)
+      read = boardCommentReadDomain.read(commentId, userId, likeOrHate)
     })
 
     if (currentLikeOrHate == likeOrHate) {

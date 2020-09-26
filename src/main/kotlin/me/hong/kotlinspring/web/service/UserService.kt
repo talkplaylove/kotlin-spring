@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.web.service
 
-import me.hong.kotlinspring.data.domain.UserDomain
+import me.hong.kotlinspring.data.domain.user.UserDomain
 import me.hong.kotlinspring.data.entity.user.embedded.UserAccessId
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage

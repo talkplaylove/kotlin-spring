@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.data.domain
+package me.hong.kotlinspring.data.domain.board
 
 import me.hong.kotlinspring.data.entity.board.Board
 import me.hong.kotlinspring.data.entity.board.BoardComment

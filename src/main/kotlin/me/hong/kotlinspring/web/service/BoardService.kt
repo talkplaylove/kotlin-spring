@@ -1,8 +1,10 @@
 package me.hong.kotlinspring.web.service
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
-import me.hong.kotlinspring.data.domain.BoardDomain
-import me.hong.kotlinspring.data.domain.BoardUserDomain
+import me.hong.kotlinspring.data.domain.board.BoardDomain
+import me.hong.kotlinspring.data.domain.board.BoardHitDomain
+import me.hong.kotlinspring.data.domain.board.BoardReadDomain
+import me.hong.kotlinspring.data.domain.board.BoardUserDomain
 import me.hong.kotlinspring.data.entity.board.BoardRead
 import me.hong.kotlinspring.data.entity.board.BoardUser
 import me.hong.kotlinspring.web.advice.CustomException
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class BoardService(
     private val boardDomain: BoardDomain,
+    private val boardHitDomain: BoardHitDomain,
+    private val boardReadDomain: BoardReadDomain,
     private val boardUserDomain: BoardUserDomain
 ) {
   fun getBoards(page: Int, size: Int): Collection<BoardRes> {
@@ -53,7 +57,7 @@ class BoardService(
 
     val board = boardDomain.getActiveBoard(boardId)
     val user = boardUserDomain.getBoardUser(board.createdBy)
-    val read = boardDomain.optionalBoardRead(boardId, userId)
+    val read = boardReadDomain.optional(boardId, userId)
 
     return if (read.isPresent) {
       BoardDetailRes.of(board, user, read.get().likeOrHate)
@@ -95,8 +99,8 @@ class BoardService(
 
   @Transactional
   fun hitBoard(boardId: Long, ip: String) {
-    if (boardDomain.optionalBoardHit(boardId, ip).isEmpty) {
-      boardDomain.hitBoard(boardId, ip)
+    if (boardHitDomain.optional(boardId, ip).isEmpty) {
+      boardHitDomain.hit(boardId, ip)
 
       val board = boardDomain.getBoard(boardId)
       board.hit()
@@ -108,8 +112,8 @@ class BoardService(
     val userId = userSession.id
     this.hitBoard(boardId, ip)
 
-    boardDomain.optionalBoardRead(boardId, userId).orElseGet {
-      boardDomain.readBoard(boardId, userId)
+    boardReadDomain.optional(boardId, userId).orElseGet {
+      boardReadDomain.read(boardId, userId)
     }
   }
 
@@ -119,7 +123,7 @@ class BoardService(
     var read: BoardRead? = null
     var currentLikeOrHate = LikeOrHate.NONE
 
-    boardDomain.optionalBoardRead(boardId, userId).ifPresentOrElse({
+    boardReadDomain.optional(boardId, userId).ifPresentOrElse({
       currentLikeOrHate = it.likeOrHate
       if (it.likeOrHate == likeOrHate) {
         throw CustomException(CustomMessage.SAME_VALUES)
@@ -127,7 +131,7 @@ class BoardService(
       it.likeOrHate = likeOrHate
       read = it
     }, {
-      read = boardDomain.readBoard(boardId, userId, likeOrHate)
+      read = boardReadDomain.read(boardId, userId, likeOrHate)
     })
 
     if (currentLikeOrHate == likeOrHate) {
