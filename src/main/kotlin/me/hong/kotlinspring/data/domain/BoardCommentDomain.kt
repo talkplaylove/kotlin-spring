@@ -26,16 +26,34 @@ class BoardCommentDomain(
     return boardCommentRepo.save(comment)
   }
 
+  fun optionalComment(commentId: Long): Optional<BoardComment> {
+    return boardCommentRepo.findById(commentId)
+  }
+
   fun getComment(commentId: Long): BoardComment {
-    return boardCommentRepo.findById(commentId).orElseThrow {
+    return this.optionalComment(commentId).orElseThrow {
       throw CustomException(CustomMessage.COMMENT_NOT_FOUND)
     }
   }
 
+  fun optionalActiveComment(commentId: Long): Optional<BoardComment> {
+    return this.boardCommentRepo.findByIdAndDeleted(commentId)
+  }
+
   fun getActiveComment(commentId: Long): BoardComment {
-    return boardCommentRepo.findByIdAndDeleted(commentId).orElseThrow {
+    return this.optionalActiveComment(commentId).orElseThrow {
       throw CustomException(CustomMessage.COMMENT_NOT_FOUND)
     }
+  }
+
+  fun updateComment(currentComment: BoardComment, requestComment: BoardComment): BoardComment {
+    currentComment.update(requestComment)
+    return currentComment
+  }
+
+  fun deactivateComment(comment: BoardComment): BoardComment {
+    comment.deactivate()
+    return comment
   }
 
   fun optionalCommentRead(commentId: Long, userId: Long): Optional<BoardCommentRead> {

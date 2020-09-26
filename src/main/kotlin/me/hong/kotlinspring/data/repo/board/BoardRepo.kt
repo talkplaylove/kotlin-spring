@@ -13,14 +13,14 @@ interface BoardRepo : JpaRepository<Board, Long> {
       pageable: Pageable
   ): Page<Board>
 
-  fun findAllByCreatedByAndDeletedOrderByIdDesc(
+  fun findAllByCreatedByAndActiveOrderByIdDesc(
       createdBy: Long,
-      deleted: Boolean = false,
+      active: Boolean = false,
       pageable: Pageable
   ): Page<Board>
 
-  fun findByIdAndDeleted(
+  fun findByIdAndActive(
       id: Long?,
-      deleted: Boolean = false
+      active: Boolean = false
   ): Optional<Board>
 }

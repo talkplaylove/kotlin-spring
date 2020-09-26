@@ -26,7 +26,7 @@ class Board(
   @Column(length = 1000)
   var content: String = content
 
-  var deleted: Boolean = false
+  var active: Boolean = true
 
   var likeCount: Long = 0L
 
@@ -35,7 +35,7 @@ class Board(
   var hitCount: Long = 0
 
   @CreatedBy
-  var createdBy: Long? = null
+  val createdBy: Long? = null
 
   @CreationTimestamp
   val createdAt: LocalDateTime? = null
@@ -43,13 +43,13 @@ class Board(
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
 
-  fun update(title: String, content: String) {
-    this.title = title
-    this.content = content
+  fun update(board: Board) {
+    this.title = board.title
+    this.content = board.content
   }
 
-  fun delete() {
-    this.deleted = true
+  fun deactivate() {
+    this.active = false
   }
 
   fun hit() {

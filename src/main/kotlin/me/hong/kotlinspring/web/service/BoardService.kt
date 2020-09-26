@@ -77,7 +77,7 @@ class BoardService(
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    board.update(req.title, req.content)
+    boardDomain.updateBoard(board, req.toBoard())
 
     return BoardPutRes.of(board, userSession)
   }
@@ -90,7 +90,7 @@ class BoardService(
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    board.delete()
+    boardDomain.deactivateBoard(board)
   }
 
   @Transactional

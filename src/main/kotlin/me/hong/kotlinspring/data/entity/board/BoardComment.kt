@@ -26,14 +26,14 @@ class BoardComment(
   @Column(length = 500)
   var content: String = content
 
-  var deleted: Boolean = false
+  var active: Boolean = true
 
   var likeCount: Long = 0L
 
   var hateCount: Long = 0L
 
   @CreatedBy
-  var createdBy: Long? = null
+  val createdBy: Long? = null
 
   @CreationTimestamp
   val createdAt: LocalDateTime? = null
@@ -41,12 +41,12 @@ class BoardComment(
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
 
-  fun update(content: String) {
-    this.content = content
+  fun update(comment: BoardComment) {
+    this.content = comment.content
   }
 
-  fun delete() {
-    this.deleted = true
+  fun deactivate() {
+    this.active = false
   }
 
   fun like() {

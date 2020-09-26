@@ -36,7 +36,7 @@ class BoardDomain(
   }
 
   fun findBoards(createdBy: Long, page: Int, size: Int): Page<Board> {
-    return boardRepo.findAllByCreatedByAndDeletedOrderByIdDesc(
+    return boardRepo.findAllByCreatedByAndActiveOrderByIdDesc(
         createdBy = createdBy,
         pageable = PageRequest.of(page, size)
     )
@@ -48,8 +48,18 @@ class BoardDomain(
     }
   }
 
+  fun updateBoard(currentBoard: Board, requestBoard: Board): Board {
+    currentBoard.update(requestBoard)
+    return currentBoard
+  }
+
+  fun deactivateBoard(board: Board): Board {
+    board.deactivate()
+    return board
+  }
+
   fun optionalActiveBoard(boardId: Long): Optional<Board> {
-    return boardRepo.findByIdAndDeleted(boardId)
+    return boardRepo.findByIdAndActive(boardId)
   }
 
   fun getBoard(boardId: Long): Board {

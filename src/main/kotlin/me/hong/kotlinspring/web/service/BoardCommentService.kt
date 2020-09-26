@@ -41,7 +41,7 @@ class BoardCommentService(
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    comment.update(req.content)
+    boardCommentDomain.updateComment(comment, req.toBoardComment(boardId))
 
     return BoardCommentPutRes.of(comment, userSession)
   }
@@ -54,7 +54,7 @@ class BoardCommentService(
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    comment.delete()
+    boardCommentDomain.deactivateComment(comment)
   }
 
   @Transactional
