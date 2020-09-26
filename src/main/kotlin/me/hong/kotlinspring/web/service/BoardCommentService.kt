@@ -1,12 +1,12 @@
 package me.hong.kotlinspring.web.service
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
+import me.hong.kotlinspring.data.domain.BoardCommentDomain
+import me.hong.kotlinspring.data.domain.BoardUserDomain
 import me.hong.kotlinspring.data.entity.board.BoardCommentRead
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
-import me.hong.kotlinspring.data.domain.BoardCommentDomain
-import me.hong.kotlinspring.data.domain.BoardUserDomain
 import me.hong.kotlinspring.web.model.board.BoardCommentLikeRes
 import me.hong.kotlinspring.web.model.board.BoardCommentPutReq
 import me.hong.kotlinspring.web.model.board.BoardCommentPutRes

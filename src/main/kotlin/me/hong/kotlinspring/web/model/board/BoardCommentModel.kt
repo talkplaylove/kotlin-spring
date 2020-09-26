@@ -2,7 +2,6 @@ package me.hong.kotlinspring.web.model.board
 
 import me.hong.kotlinspring.data.entity.board.BoardComment
 import me.hong.kotlinspring.data.entity.board.BoardUser
-import me.hong.kotlinspring.data.entity.user.User
 import java.time.LocalDateTime
 
 data class BoardCommentRes(

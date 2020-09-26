@@ -1,13 +1,13 @@
 package me.hong.kotlinspring.web.service
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
+import me.hong.kotlinspring.data.domain.BoardDomain
+import me.hong.kotlinspring.data.domain.BoardUserDomain
 import me.hong.kotlinspring.data.entity.board.BoardRead
 import me.hong.kotlinspring.data.entity.board.BoardUser
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
-import me.hong.kotlinspring.data.domain.BoardDomain
-import me.hong.kotlinspring.data.domain.BoardUserDomain
 import me.hong.kotlinspring.web.model.board.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
