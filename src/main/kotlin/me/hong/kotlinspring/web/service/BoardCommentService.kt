@@ -14,6 +14,7 @@ import me.hong.kotlinspring.web.model.board.BoardCommentPutRes
 import me.hong.kotlinspring.web.model.board.BoardCommentRes
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.stream.Collectors
 
 @Service
 class BoardCommentService(
@@ -22,41 +23,42 @@ class BoardCommentService(
     private val boardUserDomain: BoardUserDomain
 ) {
   fun getComments(boardId: Long, page: Int, size: Int): Collection<BoardCommentRes> {
-    val comments = boardCommentDomain.findComments(boardId, page, size)
+    val comments = boardCommentDomain.getActivePage(boardId, page, size)
 
-    val users = boardUserDomain.getCommentUsers(comments)
+    val userIds = comments.stream().map { it.createdBy }.collect(Collectors.toSet())
+    val users = boardUserDomain.getMap(userIds)
     return BoardCommentRes.listOf(comments.content, users)
   }
 
   @Transactional
   fun createComment(boardId: Long, req: BoardCommentPutReq, userSession: UserSession): BoardCommentPutRes {
-    val comment = boardCommentDomain.createComment(req.toBoardComment(boardId))
+    val comment = boardCommentDomain.create(req.toBoardComment(boardId))
 
     return BoardCommentPutRes.of(comment, userSession)
   }
 
   @Transactional
   fun updateComment(boardId: Long, commentId: Long, req: BoardCommentPutReq, userSession: UserSession): BoardCommentPutRes {
-    val comment = boardCommentDomain.getActiveComment(commentId)
+    val comment = boardCommentDomain.getActiveOne(commentId)
 
     if (userSession.unmatches(comment.createdBy)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    boardCommentDomain.updateComment(comment, req.toBoardComment(boardId))
+    boardCommentDomain.update(comment, req.toBoardComment(boardId))
 
     return BoardCommentPutRes.of(comment, userSession)
   }
 
   @Transactional
   fun deleteComment(boardId: Long, commentId: Long, userSession: UserSession) {
-    val comment = boardCommentDomain.getActiveComment(commentId)
+    val comment = boardCommentDomain.getActiveOne(commentId)
 
     if (userSession.unmatches(comment.createdBy)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    boardCommentDomain.deactivateComment(comment)
+    boardCommentDomain.deactivate(comment)
   }
 
   @Transactional
@@ -65,7 +67,7 @@ class BoardCommentService(
     var read: BoardCommentRead? = null
     var currentLikeOrHate = LikeOrHate.NONE
 
-    boardCommentReadDomain.optional(commentId, userId).ifPresentOrElse({
+    boardCommentReadDomain.getOptional(commentId, userId).ifPresentOrElse({
       currentLikeOrHate = it.likeOrHate
       it.likeOrHate = likeOrHate
       read = it
@@ -77,7 +79,7 @@ class BoardCommentService(
       throw CustomException(CustomMessage.SAME_VALUES)
     }
 
-    boardCommentDomain.countLikeOrHateComment(commentId, currentLikeOrHate, likeOrHate)
+    boardCommentDomain.countLikeOrHate(commentId, currentLikeOrHate, likeOrHate)
 
     return BoardCommentLikeRes.of(read)
   }

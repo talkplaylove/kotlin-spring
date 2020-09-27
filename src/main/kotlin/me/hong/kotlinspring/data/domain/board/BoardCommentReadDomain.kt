@@ -11,7 +11,7 @@ import java.util.*
 class BoardCommentReadDomain(
     private val boardCommentReadRepo: BoardCommentReadRepo
 ) {
-  fun optional(commentId: Long, userId: Long): Optional<BoardCommentRead> {
+  fun getOptional(commentId: Long, userId: Long): Optional<BoardCommentRead> {
     return boardCommentReadRepo.findById(BoardCommentReadId(
         commentId = commentId,
         userId = userId

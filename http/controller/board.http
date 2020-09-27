@@ -7,7 +7,7 @@ GET {{server_url}}/boards/search?word=내용&page=0&size=5
 
 
 ### 게시글 조회
-GET {{server_url}}/boards/4
+GET {{server_url}}/boards/3
 
 
 ### 사용자가 작성한 게시글 조회

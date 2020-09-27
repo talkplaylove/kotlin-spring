@@ -8,14 +8,14 @@ import java.util.*
 
 interface BoardCommentRepo : JpaRepository<BoardComment, Long> {
 
-  fun findAllByBoardIdAndDeleted(
+  fun findAllByBoardIdAndActive(
       boardId: Long,
-      pageable: Pageable,
-      deleted: Boolean = false
+      active: Boolean = true,
+      pageable: Pageable
   ): Page<BoardComment>
 
-  fun findByIdAndDeleted(
+  fun findByIdAndActive(
       id: Long,
-      deleted: Boolean = false
+      active: Boolean = true
   ): Optional<BoardComment>
 }

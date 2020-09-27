@@ -13,6 +13,7 @@ import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.board.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.stream.Collectors
 
 @Service
 class BoardService(
@@ -22,9 +23,10 @@ class BoardService(
     private val boardUserDomain: BoardUserDomain
 ) {
   fun getBoards(page: Int, size: Int): Collection<BoardRes> {
-    val boards = boardDomain.findBoards(page, size)
+    val boards = boardDomain.getActivePage(page, size)
 
-    val users = boardUserDomain.getBoardUsers(boards)
+    val userIds = boards.stream().map { it.createdBy }.collect(Collectors.toSet())
+    val users = boardUserDomain.getMap(userIds)
     return BoardRes.listOf(boards.content, users)
   }
 
@@ -32,32 +34,34 @@ class BoardService(
     if (word.length == 1)
       throw CustomException(CustomMessage.AT_LEAST_TWO_LETTERS)
 
-    val boards = boardDomain.findBoards(word, page, size)
+    val boards = boardDomain.getActivePage(word, page, size)
 
-    val users = boardUserDomain.getBoardUsers(boards)
+    val userIds = boards.stream().map { it.createdBy }.collect(Collectors.toSet())
+    val users = boardUserDomain.getMap(userIds)
     return BoardRes.listOf(boards.content, users)
   }
 
   fun getBoards(userId: Long, page: Int, size: Int): Collection<BoardRes> {
-    val boards = boardDomain.findBoards(userId, page, size)
+    val boards = boardDomain.getActivePage(userId, page, size)
 
-    val users = boardUserDomain.getBoardUsers(boards)
+    val userIds = boards.stream().map { it.createdBy }.collect(Collectors.toSet())
+    val users = boardUserDomain.getMap(userIds)
     return BoardRes.listOf(boards.content, users)
   }
 
   fun getBoard(boardId: Long): BoardDetailRes {
-    val board = boardDomain.getActiveBoard(boardId)
+    val board = boardDomain.getActiveOne(boardId)
 
-    val user = boardUserDomain.getBoardUser(board.createdBy)
+    val user = boardUserDomain.getOne(board.createdBy)
     return BoardDetailRes.of(board, user)
   }
 
   fun getBoard(boardId: Long, userSession: UserSession): BoardDetailRes {
     val userId = userSession.id
 
-    val board = boardDomain.getActiveBoard(boardId)
-    val user = boardUserDomain.getBoardUser(board.createdBy)
-    val read = boardReadDomain.optional(boardId, userId)
+    val board = boardDomain.getActiveOne(boardId)
+    val user = boardUserDomain.getOne(board.createdBy)
+    val read = boardReadDomain.getOptional(boardId, userId)
 
     return if (read.isPresent) {
       BoardDetailRes.of(board, user, read.get().likeOrHate)
@@ -68,41 +72,41 @@ class BoardService(
 
   @Transactional
   fun createBoard(req: BoardPutReq, userSession: UserSession): BoardPutRes {
-    val board = boardDomain.createBoard(req.toBoard())
+    val board = boardDomain.create(req.toBoard())
 
     return BoardPutRes.of(board, userSession)
   }
 
   @Transactional
   fun updateBoard(boardId: Long, req: BoardPutReq, userSession: UserSession): BoardPutRes {
-    val board = boardDomain.getActiveBoard(boardId)
+    val board = boardDomain.getActiveOne(boardId)
 
     if (userSession.unmatches(board.createdBy)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    boardDomain.updateBoard(board, req.toBoard())
+    boardDomain.update(board, req.toBoard())
 
     return BoardPutRes.of(board, userSession)
   }
 
   @Transactional
   fun deleteBoard(boardId: Long, userSession: UserSession) {
-    val board = boardDomain.getActiveBoard(boardId)
+    val board = boardDomain.getActiveOne(boardId)
 
     if (userSession.unmatches(board.createdBy)) {
       throw CustomException(CustomMessage.FORBIDDEN)
     }
 
-    boardDomain.deactivateBoard(board)
+    boardDomain.deactivate(board)
   }
 
   @Transactional
   fun hitBoard(boardId: Long, ip: String) {
-    if (boardHitDomain.optional(boardId, ip).isEmpty) {
+    if (boardHitDomain.getOptional(boardId, ip).isEmpty) {
       boardHitDomain.hit(boardId, ip)
 
-      val board = boardDomain.getBoard(boardId)
+      val board = boardDomain.getOne(boardId)
       board.hit()
     }
   }
@@ -112,7 +116,7 @@ class BoardService(
     val userId = userSession.id
     this.hitBoard(boardId, ip)
 
-    boardReadDomain.optional(boardId, userId).orElseGet {
+    boardReadDomain.getOptional(boardId, userId).orElseGet {
       boardReadDomain.read(boardId, userId)
     }
   }
@@ -123,7 +127,7 @@ class BoardService(
     var read: BoardRead? = null
     var currentLikeOrHate = LikeOrHate.NONE
 
-    boardReadDomain.optional(boardId, userId).ifPresentOrElse({
+    boardReadDomain.getOptional(boardId, userId).ifPresentOrElse({
       currentLikeOrHate = it.likeOrHate
       if (it.likeOrHate == likeOrHate) {
         throw CustomException(CustomMessage.SAME_VALUES)
@@ -138,12 +142,12 @@ class BoardService(
       throw CustomException(CustomMessage.SAME_VALUES)
     }
 
-    boardDomain.countLikeOrHateBoard(boardId, currentLikeOrHate, likeOrHate)
+    boardDomain.countLikeOrHate(boardId, currentLikeOrHate, likeOrHate)
 
     return BoardLikeRes.of(read)
   }
 
   fun createBoardUser(userId: Long, userName: String) {
-    boardUserDomain.createBoardUser(BoardUser(userId, userName))
+    boardUserDomain.create(BoardUser(userId, userName))
   }
 }

@@ -1,33 +1,27 @@
 package me.hong.kotlinspring.data.domain.user
 
 import me.hong.kotlinspring.data.entity.user.User
-import me.hong.kotlinspring.data.entity.user.UserAccess
-import me.hong.kotlinspring.data.entity.user.embedded.UserAccessId
-import me.hong.kotlinspring.data.repo.user.UserAccessRepo
 import me.hong.kotlinspring.data.repo.user.UserRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class UserDomain(
-    private val userRepo: UserRepo,
-    private val userAccessRepo: UserAccessRepo
+    private val userRepo: UserRepo
 ) {
-  fun findUser(email: String): User {
+  fun getOptional(email: String): Optional<User> {
     return userRepo.findByEmail(email)
-        ?: throw CustomException(CustomMessage.USER_NOT_FOUND)
   }
 
-  fun hitUserAccess(accessId: UserAccessId) {
-    userAccessRepo.findById(accessId).ifPresentOrElse({
-      it.hitCount++
-    }, {
-      userAccessRepo.insert(UserAccess(accessId))
-    })
+  fun getOne(email: String): User {
+    return this.getOptional(email).orElseThrow {
+      throw CustomException(CustomMessage.USER_NOT_FOUND)
+    }
   }
 
-  fun createUser(user: User): User {
+  fun create(user: User): User {
     return userRepo.save(user)
   }
 

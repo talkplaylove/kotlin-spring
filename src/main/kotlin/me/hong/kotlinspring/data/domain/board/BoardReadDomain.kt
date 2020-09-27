@@ -11,7 +11,7 @@ import java.util.*
 class BoardReadDomain(
     private val boardReadRepo: BoardReadRepo
 ) {
-  fun optional(boardId: Long, userId: Long): Optional<BoardRead> {
+  fun getOptional(boardId: Long, userId: Long): Optional<BoardRead> {
     return boardReadRepo.findById(BoardReadId(
         boardId = boardId,
         userId = userId

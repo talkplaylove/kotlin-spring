@@ -14,46 +14,48 @@ import java.util.*
 class BoardCommentDomain(
     private val boardCommentRepo: BoardCommentRepo
 ) {
-  fun findComments(boardId: Long, page: Int, size: Int): Page<BoardComment> {
-    return boardCommentRepo.findAllByBoardIdAndDeleted(boardId, PageRequest.of(page, size))
+  fun getActivePage(boardId: Long, page: Int, size: Int): Page<BoardComment> {
+    return boardCommentRepo.findAllByBoardIdAndActive(
+        boardId = boardId, pageable = PageRequest.of(page, size)
+    )
   }
 
-  fun createComment(comment: BoardComment): BoardComment {
+  fun create(comment: BoardComment): BoardComment {
     return boardCommentRepo.save(comment)
   }
 
-  fun optionalComment(commentId: Long): Optional<BoardComment> {
+  fun getOptional(commentId: Long): Optional<BoardComment> {
     return boardCommentRepo.findById(commentId)
   }
 
-  fun getComment(commentId: Long): BoardComment {
-    return this.optionalComment(commentId).orElseThrow {
+  fun getOne(commentId: Long): BoardComment {
+    return this.getOptional(commentId).orElseThrow {
       throw CustomException(CustomMessage.COMMENT_NOT_FOUND)
     }
   }
 
-  fun optionalActiveComment(commentId: Long): Optional<BoardComment> {
-    return this.boardCommentRepo.findByIdAndDeleted(commentId)
+  fun getActiveOptional(commentId: Long): Optional<BoardComment> {
+    return this.boardCommentRepo.findByIdAndActive(commentId)
   }
 
-  fun getActiveComment(commentId: Long): BoardComment {
-    return this.optionalActiveComment(commentId).orElseThrow {
+  fun getActiveOne(commentId: Long): BoardComment {
+    return this.getActiveOptional(commentId).orElseThrow {
       throw CustomException(CustomMessage.COMMENT_NOT_FOUND)
     }
   }
 
-  fun updateComment(currentComment: BoardComment, requestComment: BoardComment): BoardComment {
+  fun update(currentComment: BoardComment, requestComment: BoardComment): BoardComment {
     currentComment.update(requestComment)
     return currentComment
   }
 
-  fun deactivateComment(comment: BoardComment): BoardComment {
+  fun deactivate(comment: BoardComment): BoardComment {
     comment.deactivate()
     return comment
   }
 
-  fun countLikeOrHateComment(commentId: Long, currentLikeOrHate: LikeOrHate, requestLikeOrHate: LikeOrHate): BoardComment {
-    val comment = this.getComment(commentId)
+  fun countLikeOrHate(commentId: Long, currentLikeOrHate: LikeOrHate, requestLikeOrHate: LikeOrHate): BoardComment {
+    val comment = this.getOne(commentId)
     when (currentLikeOrHate) {
       LikeOrHate.NONE -> {
         when (requestLikeOrHate) {

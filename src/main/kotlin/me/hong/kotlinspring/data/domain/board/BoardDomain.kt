@@ -14,61 +14,61 @@ import java.util.*
 class BoardDomain(
     private val boardRepo: BoardRepo
 ) {
-  fun findBoards(page: Int, size: Int): Page<Board> {
-    return boardRepo.findAll(PageRequest.of(page, size))
+  fun getActivePage(page: Int, size: Int): Page<Board> {
+    return boardRepo.findAllByActive(PageRequest.of(page, size))
   }
 
-  fun findBoards(word: String, page: Int, size: Int): Page<Board> {
-    return boardRepo.findAllByTitleContainingOrContentContaining(
+  fun getActivePage(word: String, page: Int, size: Int): Page<Board> {
+    return boardRepo.findAllByTitleContainingOrContentContainingAndActive(
         title = word,
         content = word,
         pageable = PageRequest.of(page, size)
     )
   }
 
-  fun findBoards(createdBy: Long, page: Int, size: Int): Page<Board> {
+  fun getActivePage(createdBy: Long, page: Int, size: Int): Page<Board> {
     return boardRepo.findAllByCreatedByAndActiveOrderByIdDesc(
         createdBy = createdBy,
         pageable = PageRequest.of(page, size)
     )
   }
 
-  fun getActiveBoard(boardId: Long): Board {
-    return this.optionalActiveBoard(boardId).orElseThrow {
-      throw CustomException(CustomMessage.BOARD_NOT_FOUND)
-    }
-  }
-
-  fun updateBoard(currentBoard: Board, requestBoard: Board): Board {
+  fun update(currentBoard: Board, requestBoard: Board): Board {
     currentBoard.update(requestBoard)
     return currentBoard
   }
 
-  fun deactivateBoard(board: Board): Board {
+  fun deactivate(board: Board): Board {
     board.deactivate()
     return board
   }
 
-  fun optionalActiveBoard(boardId: Long): Optional<Board> {
+  fun getActiveOptional(boardId: Long): Optional<Board> {
     return boardRepo.findByIdAndActive(boardId)
   }
 
-  fun getBoard(boardId: Long): Board {
-    return this.optionalBoard(boardId).orElseThrow {
+  fun getActiveOne(boardId: Long): Board {
+    return this.getActiveOptional(boardId).orElseThrow {
       throw CustomException(CustomMessage.BOARD_NOT_FOUND)
     }
   }
 
-  fun optionalBoard(boardId: Long): Optional<Board> {
+  fun getOptional(boardId: Long): Optional<Board> {
     return boardRepo.findById(boardId)
   }
 
-  fun createBoard(board: Board): Board {
+  fun getOne(boardId: Long): Board {
+    return this.getOptional(boardId).orElseThrow {
+      throw CustomException(CustomMessage.BOARD_NOT_FOUND)
+    }
+  }
+
+  fun create(board: Board): Board {
     return boardRepo.save(board)
   }
 
-  fun countLikeOrHateBoard(boardId: Long, currentLikeOrHate: LikeOrHate, requestLikeOrHate: LikeOrHate): Board {
-    val board = this.getBoard(boardId)
+  fun countLikeOrHate(boardId: Long, currentLikeOrHate: LikeOrHate, requestLikeOrHate: LikeOrHate): Board {
+    val board = this.getOne(boardId)
     when (currentLikeOrHate) {
       LikeOrHate.NONE -> {
         when (requestLikeOrHate) {

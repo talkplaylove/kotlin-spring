@@ -11,7 +11,7 @@ import java.util.*
 class BoardHitDomain(
     private val boardHitRepo: BoardHitRepo
 ) {
-  fun optional(boardId: Long, ip: String): Optional<BoardHit> {
+  fun getOptional(boardId: Long, ip: String): Optional<BoardHit> {
     return boardHitRepo.findById(
         BoardHitId(
             boardId = boardId,
