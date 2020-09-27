@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.web.service
+package me.hong.kotlinspring.web.service.user
 
 import me.hong.kotlinspring.data.domain.user.UserAccessDomain
 import me.hong.kotlinspring.data.domain.user.UserDomain
@@ -9,6 +9,7 @@ import me.hong.kotlinspring.web.model.user.SigninReq
 import me.hong.kotlinspring.web.model.user.SigninRes
 import me.hong.kotlinspring.web.model.user.SignupReq
 import me.hong.kotlinspring.web.model.user.SignupRes
+import me.hong.kotlinspring.web.service.board.BoardService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

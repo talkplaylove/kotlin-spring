@@ -1,11 +1,11 @@
-package me.hong.kotlinspring.web.controller
+package me.hong.kotlinspring.web.controller.user
 
 import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.user.SigninReq
 import me.hong.kotlinspring.web.model.user.SigninRes
 import me.hong.kotlinspring.web.model.user.SignupReq
 import me.hong.kotlinspring.web.model.user.SignupRes
-import me.hong.kotlinspring.web.service.UserService
+import me.hong.kotlinspring.web.service.user.UserService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.validation.constraints.Email

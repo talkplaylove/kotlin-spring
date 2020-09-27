@@ -1,11 +1,11 @@
-package me.hong.kotlinspring.web.controller
+package me.hong.kotlinspring.web.controller.board
 
 import me.hong.kotlinspring.util.ServletUtils
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.UserSession
 import me.hong.kotlinspring.web.model.board.*
-import me.hong.kotlinspring.web.service.BoardService
+import me.hong.kotlinspring.web.service.board.BoardService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest

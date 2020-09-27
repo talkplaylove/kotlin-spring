@@ -1,4 +1,4 @@
-package me.hong.kotlinspring.web.service
+package me.hong.kotlinspring.web.service.board
 
 import me.hong.kotlinspring.data.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.domain.board.BoardDomain
