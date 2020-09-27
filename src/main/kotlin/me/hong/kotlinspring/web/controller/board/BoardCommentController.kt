@@ -26,8 +26,7 @@ class BoardCommentController(
   @PostMapping("/boards/{boardId}/comments")
   fun create(@PathVariable boardId: Long,
              @RequestBody @Valid req: BoardCommentPutReq): BoardCommentPutRes {
-    if (userSession.unexists())
-      throw CustomException(CustomMessage.UNAUTHORIZED)
+    userSession.unexistsThrow()
     return boardCommentService.createComment(boardId, req, userSession)
   }
 
@@ -35,16 +34,14 @@ class BoardCommentController(
   fun update(@PathVariable boardId: Long,
              @PathVariable commentId: Long,
              @RequestBody @Valid req: BoardCommentPutReq): BoardCommentPutRes {
-    if (userSession.unexists())
-      throw CustomException(CustomMessage.UNAUTHORIZED)
+    userSession.unexistsThrow()
     return boardCommentService.updateComment(boardId, commentId, req, userSession)
   }
 
   @DeleteMapping("/boards/{boardId}/comments/{commentId}")
   fun delete(@PathVariable boardId: Long,
              @PathVariable commentId: Long) {
-    if (userSession.unexists())
-      throw CustomException(CustomMessage.UNAUTHORIZED)
+    userSession.unexistsThrow()
     boardCommentService.deleteComment(boardId, commentId, userSession)
   }
 
@@ -52,8 +49,7 @@ class BoardCommentController(
   fun likeOrHate(@PathVariable boardId: Long,
                  @PathVariable commentId: Long,
                  @RequestBody @Valid req: BoardCommentLIkeReq): BoardCommentLikeRes {
-    if (userSession.unexists())
-      throw CustomException(CustomMessage.UNAUTHORIZED)
+    userSession.unexistsThrow()
     return boardCommentService.likeOrHateComment(boardId, commentId, req.likeOrHate, userSession)
   }
 }

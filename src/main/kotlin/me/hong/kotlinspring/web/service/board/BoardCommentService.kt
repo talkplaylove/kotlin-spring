@@ -41,9 +41,7 @@ class BoardCommentService(
   fun updateComment(boardId: Long, commentId: Long, req: BoardCommentPutReq, userSession: UserSession): BoardCommentPutRes {
     val comment = boardCommentDomain.getActiveOne(commentId)
 
-    if (userSession.unmatches(comment.createdBy)) {
-      throw CustomException(CustomMessage.FORBIDDEN)
-    }
+    userSession.unmatchesThrow(comment.createdBy)
 
     boardCommentDomain.update(comment, req.toBoardComment(boardId))
 
@@ -54,9 +52,7 @@ class BoardCommentService(
   fun deleteComment(boardId: Long, commentId: Long, userSession: UserSession) {
     val comment = boardCommentDomain.getActiveOne(commentId)
 
-    if (userSession.unmatches(comment.createdBy)) {
-      throw CustomException(CustomMessage.FORBIDDEN)
-    }
+    userSession.unmatchesThrow(comment.createdBy)
 
     boardCommentDomain.deactivate(comment)
   }

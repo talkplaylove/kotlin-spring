@@ -24,11 +24,21 @@ class UserSession {
     return !exists()
   }
 
+  fun unexistsThrow() {
+    if (unexists())
+      throw CustomException(CustomMessage.UNAUTHORIZED)
+  }
+
   fun matches(userId: Long?): Boolean {
     return this.id == userId
   }
 
   fun unmatches(userId: Long?): Boolean {
     return !matches(userId)
+  }
+
+  fun unmatchesThrow(userId: Long?) {
+    if (unmatches(userId))
+      throw CustomException(CustomMessage.FORBIDDEN)
   }
 }

@@ -81,9 +81,7 @@ class BoardService(
   fun updateBoard(boardId: Long, req: BoardPutReq, userSession: UserSession): BoardPutRes {
     val board = boardDomain.getActiveOne(boardId)
 
-    if (userSession.unmatches(board.createdBy)) {
-      throw CustomException(CustomMessage.FORBIDDEN)
-    }
+    userSession.unmatchesThrow(board.createdBy)
 
     boardDomain.update(board, req.toBoard())
 
@@ -94,9 +92,7 @@ class BoardService(
   fun deleteBoard(boardId: Long, userSession: UserSession) {
     val board = boardDomain.getActiveOne(boardId)
 
-    if (userSession.unmatches(board.createdBy)) {
-      throw CustomException(CustomMessage.FORBIDDEN)
-    }
+    userSession.unmatchesThrow(board.createdBy)
 
     boardDomain.deactivate(board)
   }
