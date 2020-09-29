@@ -5,10 +5,8 @@ import me.hong.kotlinspring.data.domain.user.UserDomain
 import me.hong.kotlinspring.data.entity.user.embedded.UserAccessId
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
-import me.hong.kotlinspring.web.model.user.SigninReq
-import me.hong.kotlinspring.web.model.user.SigninRes
-import me.hong.kotlinspring.web.model.user.SignupReq
-import me.hong.kotlinspring.web.model.user.SignupRes
+import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.model.user.*
 import me.hong.kotlinspring.web.service.board.BoardService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -54,5 +52,14 @@ class UserService(
   fun duplicateName(name: String) {
     if (userDomain.existsName(name))
       throw CustomException(CustomMessage.EXISTS_NAME)
+  }
+
+  @Transactional
+  fun updateUser(req: UserNamePutReq, userSession: UserSession) {
+    val user = userDomain.getOne(userSession.id)
+    if (user.name == req.name)
+      throw CustomException(CustomMessage.SAME_VALUES)
+
+    user.updateName(req.name)
   }
 }

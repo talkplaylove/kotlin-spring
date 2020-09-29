@@ -83,7 +83,7 @@ class BoardService(
 
     userSession.unmatchesThrow(board.createdBy)
 
-    boardDomain.update(board, req.toBoard())
+    board.update(req.toBoard())
 
     return BoardPutRes.of(board, userSession)
   }
@@ -94,7 +94,7 @@ class BoardService(
 
     userSession.unmatchesThrow(board.createdBy)
 
-    boardDomain.deactivate(board)
+    board.deactivate()
   }
 
   @Transactional
@@ -134,11 +134,30 @@ class BoardService(
       read = boardReadDomain.read(boardId, userId, likeOrHate)
     })
 
-    if (currentLikeOrHate == likeOrHate) {
-      throw CustomException(CustomMessage.SAME_VALUES)
+    val board = boardDomain.getOne(boardId)
+    when (currentLikeOrHate) {
+      LikeOrHate.NONE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.LIKE -> board.like()
+          LikeOrHate.HATE -> board.hate()
+        }
+      }
+      LikeOrHate.LIKE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> board.unlike()
+          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.HATE -> board.unlikeAndHate()
+        }
+      }
+      LikeOrHate.HATE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> board.unhate()
+          LikeOrHate.LIKE -> board.unhateAndLike()
+          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
+        }
+      }
     }
-
-    boardDomain.countLikeOrHate(boardId, currentLikeOrHate, likeOrHate)
 
     return BoardLikeRes.of(read)
   }

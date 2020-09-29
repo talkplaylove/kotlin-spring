@@ -43,7 +43,7 @@ class BoardCommentService(
 
     userSession.unmatchesThrow(comment.createdBy)
 
-    boardCommentDomain.update(comment, req.toBoardComment(boardId))
+    comment.update(req.toBoardComment(boardId))
 
     return BoardCommentPutRes.of(comment, userSession)
   }
@@ -54,7 +54,7 @@ class BoardCommentService(
 
     userSession.unmatchesThrow(comment.createdBy)
 
-    boardCommentDomain.deactivate(comment)
+    comment.deactivate()
   }
 
   @Transactional
@@ -71,11 +71,30 @@ class BoardCommentService(
       read = boardCommentReadDomain.read(commentId, userId, likeOrHate)
     })
 
-    if (currentLikeOrHate == likeOrHate) {
-      throw CustomException(CustomMessage.SAME_VALUES)
+    val comment = boardCommentDomain.getOne(commentId)
+    when (currentLikeOrHate) {
+      LikeOrHate.NONE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.LIKE -> comment.like()
+          LikeOrHate.HATE -> comment.hate()
+        }
+      }
+      LikeOrHate.LIKE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> comment.unlike()
+          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
+          LikeOrHate.HATE -> comment.unlikeAndHate()
+        }
+      }
+      LikeOrHate.HATE -> {
+        when (likeOrHate) {
+          LikeOrHate.NONE -> comment.unhate()
+          LikeOrHate.LIKE -> comment.unhateAndLike()
+          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
+        }
+      }
     }
-
-    boardCommentDomain.countLikeOrHate(commentId, currentLikeOrHate, likeOrHate)
 
     return BoardCommentLikeRes.of(read)
   }

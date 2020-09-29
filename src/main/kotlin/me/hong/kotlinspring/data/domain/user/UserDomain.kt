@@ -21,6 +21,16 @@ class UserDomain(
     }
   }
 
+  fun getOptional(id: Long): Optional<User> {
+    return userRepo.findById(id)
+  }
+
+  fun getOne(id: Long): User {
+    return this.getOptional(id).orElseThrow {
+      throw CustomException(CustomMessage.USER_NOT_FOUND)
+    }
+  }
+
   fun create(user: User): User {
     return userRepo.save(user)
   }

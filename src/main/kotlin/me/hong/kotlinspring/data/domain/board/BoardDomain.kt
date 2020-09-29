@@ -33,16 +33,6 @@ class BoardDomain(
     )
   }
 
-  fun update(currentBoard: Board, requestBoard: Board): Board {
-    currentBoard.update(requestBoard)
-    return currentBoard
-  }
-
-  fun deactivate(board: Board): Board {
-    board.deactivate()
-    return board
-  }
-
   fun getActiveOptional(boardId: Long): Optional<Board> {
     return boardRepo.findByIdAndActive(boardId)
   }
@@ -65,33 +55,5 @@ class BoardDomain(
 
   fun create(board: Board): Board {
     return boardRepo.save(board)
-  }
-
-  fun countLikeOrHate(boardId: Long, currentLikeOrHate: LikeOrHate, requestLikeOrHate: LikeOrHate): Board {
-    val board = this.getOne(boardId)
-    when (currentLikeOrHate) {
-      LikeOrHate.NONE -> {
-        when (requestLikeOrHate) {
-          LikeOrHate.NONE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.LIKE -> board.like()
-          LikeOrHate.HATE -> board.hate()
-        }
-      }
-      LikeOrHate.LIKE -> {
-        when (requestLikeOrHate) {
-          LikeOrHate.NONE -> board.unlike()
-          LikeOrHate.LIKE -> throw CustomException(CustomMessage.SAME_VALUES)
-          LikeOrHate.HATE -> board.unlikeAndHate()
-        }
-      }
-      LikeOrHate.HATE -> {
-        when (requestLikeOrHate) {
-          LikeOrHate.NONE -> board.unhate()
-          LikeOrHate.LIKE -> board.unhateAndLike()
-          LikeOrHate.HATE -> throw CustomException(CustomMessage.SAME_VALUES)
-        }
-      }
-    }
-    return board
   }
 }

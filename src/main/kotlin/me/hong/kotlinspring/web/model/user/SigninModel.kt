@@ -2,9 +2,12 @@ package me.hong.kotlinspring.web.model.user
 
 import me.hong.kotlinspring.data.constant.user.Gender
 import me.hong.kotlinspring.data.entity.user.User
+import javax.validation.constraints.NotBlank
 
 data class SigninReq(
+    @NotBlank
     val email: String,
+    @NotBlank
     val password: String
 )
 

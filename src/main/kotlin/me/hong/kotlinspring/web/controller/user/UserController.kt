@@ -1,13 +1,11 @@
 package me.hong.kotlinspring.web.controller.user
 
 import me.hong.kotlinspring.web.advice.UserSession
-import me.hong.kotlinspring.web.model.user.SigninReq
-import me.hong.kotlinspring.web.model.user.SigninRes
-import me.hong.kotlinspring.web.model.user.SignupReq
-import me.hong.kotlinspring.web.model.user.SignupRes
+import me.hong.kotlinspring.web.model.user.*
 import me.hong.kotlinspring.web.service.user.UserService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 import javax.validation.constraints.Email
 import javax.validation.constraints.Size
 
@@ -28,14 +26,20 @@ class UserController(
   }
 
   @PostMapping("/users/signin")
-  fun signin(@RequestBody req: SigninReq): SigninRes {
+  fun signin(@RequestBody @Valid req: SigninReq): SigninRes {
     val res = userService.signin(req)
     userSession.set(res.id!!, res.name)
     return res
   }
 
-  @PostMapping("/users/signup")
-  fun signup(@RequestBody req: SignupReq): SignupRes {
+  @PostMapping("/ users/signup")
+  fun signup(@RequestBody @Valid req: SignupReq): SignupRes {
     return userService.signup(req)
+  }
+
+  @PatchMapping("/users/{userId}/name")
+  fun updateUser(@PathVariable userId: Long, @RequestBody @Valid req: UserNamePutReq) {
+    userSession.unmatchesThrow(userId)
+    userService.updateUser(req, userSession)
   }
 }

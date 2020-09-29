@@ -40,4 +40,8 @@ class User(
 
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
+
+  fun updateName(name: String) {
+    this.name = name
+  }
 }
