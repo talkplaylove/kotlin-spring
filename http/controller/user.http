@@ -27,6 +27,14 @@ Content-Type: application/json
   "gender": "MALE"
 }
 
+### 이메일 변경
+PATCH {{server_url}}/users/1/email
+Content-Type: application/json
+
+{
+  "email": "hkhong91@gmail.com"
+}
+
 ### 이름 변경
 PATCH {{server_url}}/users/1/name
 Content-Type: application/json

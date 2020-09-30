@@ -2,6 +2,7 @@ package me.hong.kotlinspring.web.model.user
 
 import me.hong.kotlinspring.data.constant.user.Gender
 import me.hong.kotlinspring.data.entity.user.User
+import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
@@ -9,6 +10,7 @@ data class SignupReq(
     @NotBlank
     val name: String,
     @NotBlank
+    @Email
     val email: String,
     @NotBlank
     val password: String,

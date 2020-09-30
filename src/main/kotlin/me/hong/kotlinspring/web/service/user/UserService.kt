@@ -34,9 +34,6 @@ class UserService(
 
   @Transactional
   fun signup(req: SignupReq): SignupRes {
-    this.duplicateEmail(req.email)
-    this.duplicateName(req.name)
-
     val encodedPassword = passwordEncoder.encode(req.password)
     val user = userDomain.create(req.toUser(encodedPassword))
 
@@ -55,11 +52,29 @@ class UserService(
   }
 
   @Transactional
-  fun updateUser(req: UserNamePutReq, userSession: UserSession) {
+  fun updateEmail(req: UserEmailPutReq, userSession: UserSession) {
+    val user = userDomain.getOne(userSession.id)
+    if (user.email == req.email)
+      throw CustomException(CustomMessage.SAME_VALUES)
+
+    user.updateEmail(req.email)
+  }
+
+  @Transactional
+  fun updateName(req: UserNamePutReq, userSession: UserSession) {
     val user = userDomain.getOne(userSession.id)
     if (user.name == req.name)
       throw CustomException(CustomMessage.SAME_VALUES)
 
     user.updateName(req.name)
+  }
+
+  @Transactional
+  fun updatePassword(req: UserPasswordPutReq, userSession: UserSession) {
+    val user = userDomain.getOne(userSession.id)
+    if (!passwordEncoder.matches(req.password, user.password))
+      throw CustomException(CustomMessage.INCORRECT_PASSWORD)
+
+    user.updatePassword(passwordEncoder.encode(req.password))
   }
 }

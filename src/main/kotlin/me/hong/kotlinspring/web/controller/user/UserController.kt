@@ -37,9 +37,22 @@ class UserController(
     return userService.signup(req)
   }
 
-  @PatchMapping("/users/{userId}/name")
-  fun updateUser(@PathVariable userId: Long, @RequestBody @Valid req: UserNamePutReq) {
+  @PatchMapping("/users/{userId}/email")
+  fun updateEmail(@PathVariable userId: Long, @RequestBody @Valid req: UserEmailPutReq) {
     userSession.unmatchesThrow(userId)
-    userService.updateUser(req, userSession)
+    userService.updateEmail(req, userSession)
+  }
+
+  @PatchMapping("/users/{userId}/name")
+  fun updateName(@PathVariable userId: Long, @RequestBody @Valid req: UserNamePutReq) {
+    userSession.unmatchesThrow(userId)
+    userService.updateName(req, userSession)
+    userSession.set(req.name)
+  }
+
+  @PatchMapping("/users/{userId}/password")
+  fun updatePassword(@PathVariable userId: Long, @RequestBody @Valid req: UserPasswordPutReq) {
+    userSession.unmatches(userId)
+    userService.updatePassword(req, userSession)
   }
 }

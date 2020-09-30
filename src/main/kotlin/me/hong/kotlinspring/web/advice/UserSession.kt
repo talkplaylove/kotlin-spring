@@ -11,6 +11,10 @@ class UserSession {
   var id: Long = 0L
   var name: String = ""
 
+  fun set(name: String) {
+    this.name = name
+  }
+
   fun set(id: Long, name: String) {
     this.id = id
     this.name = name
