@@ -32,7 +32,7 @@ class UserController(
     return res
   }
 
-  @PostMapping("/ users/signup")
+  @PostMapping("/users/signup")
   fun signup(@RequestBody @Valid req: SignupReq): SignupRes {
     return userService.signup(req)
   }
