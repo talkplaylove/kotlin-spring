@@ -41,6 +41,13 @@ class User(
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
 
+  fun update(user: User) {
+    this.email = user.email
+    this.name = user.name
+    this.password = user.password
+    this.gender = user.gender
+  }
+
   fun updateName(name: String) {
     this.name = name
   }

@@ -15,12 +15,12 @@ class UserController(
     private val userService: UserService,
     private val userSession: UserSession
 ) {
-  @GetMapping("/user-emails/{email}/duplicate")
+  @GetMapping("/users/emails/{email}/duplicate")
   fun duplicateEmail(@PathVariable @Email email: String) {
     userService.duplicateEmail(email)
   }
 
-  @GetMapping("/user-names/{name}/duplicate")
+  @GetMapping("/users/names/{name}/duplicate")
   fun duplicateName(@PathVariable @Size(min = 1) name: String) {
     userService.duplicateName(name)
   }
