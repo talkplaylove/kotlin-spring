@@ -5,10 +5,12 @@ import me.hong.kotlinspring.data.entity.board.BoardRead
 import java.time.LocalDateTime
 import javax.validation.constraints.NotNull
 
-data class BoardLIkeReq(
-    @NotNull
-    var likeOrHate: LikeOrHate
-)
+class BoardLIkeReq(
+    likeOrHate: LikeOrHate
+) {
+  @NotNull
+  val likeOrHate: LikeOrHate = likeOrHate
+}
 
 data class BoardLikeRes(
     var likeOrHate: LikeOrHate,

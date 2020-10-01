@@ -5,13 +5,16 @@ import me.hong.kotlinspring.web.advice.UserSession
 import java.time.LocalDateTime
 import javax.validation.constraints.NotEmpty
 
-data class BoardPutReq(
-    @NotEmpty
-    val title: String,
-
-    @NotEmpty
-    val content: String
+class BoardPutReq(
+    title: String,
+    content: String
 ) {
+  @NotEmpty
+  val title: String = title
+
+  @NotEmpty
+  val content: String = content
+
   fun toBoard(): Board {
     return Board(
         title = this.title,

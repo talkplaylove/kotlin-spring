@@ -6,17 +6,25 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-data class SignupReq(
-    @NotBlank
-    val name: String,
-    @NotBlank
-    @Email
-    val email: String,
-    @NotBlank
-    val password: String,
-    @NotNull
-    val gender: Gender
+class SignupReq(
+    name: String,
+    email: String,
+    password: String,
+    gender: Gender
 ) {
+  @NotBlank
+  val name: String = name
+
+  @NotBlank
+  @Email
+  val email: String = email
+
+  @NotBlank
+  val password: String = password
+
+  @NotNull
+  val gender: Gender = gender
+
   fun toUser(encodedPassword: String): User {
     return User(
         email = this.email,

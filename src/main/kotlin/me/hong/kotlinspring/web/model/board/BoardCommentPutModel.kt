@@ -5,10 +5,12 @@ import me.hong.kotlinspring.web.advice.UserSession
 import java.time.LocalDateTime
 import javax.validation.constraints.NotEmpty
 
-data class BoardCommentPutReq(
-    @NotEmpty
-    val content: String
+class BoardCommentPutReq(
+    content: String
 ) {
+  @NotEmpty
+  val content: String = content
+
   fun toBoardComment(boardId: Long): BoardComment {
     return BoardComment(
         boardId = boardId,
