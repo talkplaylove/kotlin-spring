@@ -1,6 +1,7 @@
 package me.hong.kotlinspring.web.model
 
 import me.hong.kotlinspring.web.advice.CustomMessage
+import org.springframework.http.HttpStatus
 
 data class ErrorRes(
     val name: String,
@@ -14,10 +15,10 @@ data class ErrorRes(
       )
     }
 
-    fun of(name: String, message: String?): ErrorRes {
+    fun of(status: HttpStatus, message: String): ErrorRes {
       return ErrorRes(
-          name = name,
-          message = message!!
+          name = status.name,
+          message = message
       )
     }
   }

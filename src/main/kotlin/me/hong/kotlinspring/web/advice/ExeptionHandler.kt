@@ -18,20 +18,21 @@ class ExeptionHandler {
   @ExceptionHandler(Exception::class)
   fun handle(exception: Exception): ResponseEntity<ErrorRes> {
     val customMessage = CustomMessage.ERROR
+    val status = customMessage.status
     logger.error(customMessage.message, exception)
-    return ResponseEntity(ErrorRes.of(customMessage), customMessage.status)
+    return ResponseEntity(ErrorRes.of(status, exception.message!!), status)
   }
 
   @ExceptionHandler(ValidationException::class)
   fun handle(exception: ValidationException): ResponseEntity<ErrorRes> {
     val status = HttpStatus.BAD_REQUEST
-    return ResponseEntity(ErrorRes.of(status.name, exception.message), status)
+    return ResponseEntity(ErrorRes.of(status, exception.message!!), status)
   }
 
   @ExceptionHandler(ServletException::class)
   fun handle(exception: ServletException): ResponseEntity<ErrorRes> {
     val status = HttpStatus.BAD_REQUEST
-    return ResponseEntity(ErrorRes.of(status.name, exception.message), status)
+    return ResponseEntity(ErrorRes.of(status, exception.message!!), status)
   }
 
   @ExceptionHandler(CustomException::class)
