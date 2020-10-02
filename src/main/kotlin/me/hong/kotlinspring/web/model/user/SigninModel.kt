@@ -2,6 +2,7 @@ package me.hong.kotlinspring.web.model.user
 
 import me.hong.kotlinspring.data.constant.user.Gender
 import me.hong.kotlinspring.data.entity.user.User
+import me.hong.kotlinspring.web.validation.Password
 import javax.validation.constraints.NotBlank
 
 class SigninReq(
@@ -11,7 +12,7 @@ class SigninReq(
   @NotBlank
   val email: String = email
 
-  @NotBlank
+  @Password
   val password: String = password
 }
 

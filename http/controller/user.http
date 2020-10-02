@@ -11,8 +11,8 @@ POST {{server_url}}/users/signin
 Content-Type: application/json
 
 {
-  "email": "hkhong91@gmail.com",
-  "password": "1234"
+  "email": "cjdeks@hanmail.net",
+  "password": "abc123!!"
 }
 
 
@@ -23,7 +23,7 @@ Content-Type: application/json
 {
   "email": "hkhong91@gmail.com",
   "name": "홍아지",
-  "password": "1234",
+  "password": "abc123!!",
   "gender": "MALE"
 }
 
@@ -36,17 +36,17 @@ Content-Type: application/json
 }
 
 ### 이름 변경
-PATCH {{server_url}}/users/1/name
+PATCH {{server_url}}/users/2/name
 Content-Type: application/json
 
 {
-  "name": "홍아지"
+  "name": "홍단친구청단"
 }
 
 ### 패스워드 변경
-PATCH {{server_url}}/users/1/password
+PATCH {{server_url}}/users/2/password
 Content-Type: application/json
 
 {
-  "password": "1234"
+  "password": "abc123!!"
 }

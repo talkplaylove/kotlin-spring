@@ -1,10 +1,10 @@
 package me.hong.kotlinspring.web.model.user
 
-import javax.validation.constraints.NotBlank
+import me.hong.kotlinspring.web.validation.Password
 
 class UserPasswordPutReq(
     password: String
 ) {
-  @NotBlank
+  @Password
   val password: String = password
 }
