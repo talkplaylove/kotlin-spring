@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.web.controller.user
 
-import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.advice.SigninUser
 import me.hong.kotlinspring.web.model.user.*
 import me.hong.kotlinspring.web.service.user.UserService
 import org.springframework.validation.annotation.Validated
@@ -13,7 +13,7 @@ import javax.validation.constraints.Size
 @Validated
 class UserController(
     private val userService: UserService,
-    private val userSession: UserSession
+    private val signinUser: SigninUser
 ) {
   @GetMapping("/users/emails/{email}/duplicate")
   fun duplicateEmail(@PathVariable @Email email: String) {
@@ -28,7 +28,7 @@ class UserController(
   @PostMapping("/users/signin")
   fun signin(@RequestBody @Valid req: SigninReq): SigninRes {
     val res = userService.signin(req)
-    userSession.set(res.id!!, res.name)
+    signinUser.set(res.id!!, res.name)
     return res
   }
 
@@ -39,20 +39,20 @@ class UserController(
 
   @PatchMapping("/users/{userId}/email")
   fun updateEmail(@PathVariable userId: Long, @RequestBody @Valid req: UserEmailPutReq) {
-    userSession.unmatchesThrow(userId)
-    userService.updateEmail(req, userSession)
+    signinUser.unmatchesThrow(userId)
+    userService.updateEmail(req, signinUser)
   }
 
   @PatchMapping("/users/{userId}/name")
   fun updateName(@PathVariable userId: Long, @RequestBody @Valid req: UserNamePutReq) {
-    userSession.unmatchesThrow(userId)
-    userService.updateName(req, userSession)
-    userSession.set(req.name)
+    signinUser.unmatchesThrow(userId)
+    userService.updateName(req, signinUser)
+    signinUser.set(req.name)
   }
 
   @PatchMapping("/users/{userId}/password")
   fun updatePassword(@PathVariable userId: Long, @RequestBody @Valid req: UserPasswordPutReq) {
-    userSession.unmatchesThrow(userId)
-    userService.updatePassword(req, userSession)
+    signinUser.unmatchesThrow(userId)
+    userService.updatePassword(req, signinUser)
   }
 }

@@ -1,7 +1,7 @@
 package me.hong.kotlinspring.web.model.board
 
 import me.hong.kotlinspring.data.entity.board.Board
-import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.advice.SigninUser
 import java.time.LocalDateTime
 import javax.validation.constraints.NotEmpty
 
@@ -33,13 +33,13 @@ data class BoardPutRes(
     val updatedAt: LocalDateTime?
 ) {
   companion object {
-    fun of(board: Board, userSession: UserSession): BoardPutRes {
+    fun of(board: Board, signinUser: SigninUser): BoardPutRes {
       return BoardPutRes(
           id = board.id,
           title = board.title,
           content = board.content,
           createdBy = board.createdBy,
-          createdName = userSession.name,
+          createdName = signinUser.name,
           createdAt = board.createdAt,
           updatedAt = board.updatedAt
       )

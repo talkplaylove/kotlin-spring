@@ -7,7 +7,7 @@ import me.hong.kotlinspring.data.domain.board.BoardUserDomain
 import me.hong.kotlinspring.data.entity.board.BoardCommentRead
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
-import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.advice.SigninUser
 import me.hong.kotlinspring.web.model.board.BoardCommentLikeRes
 import me.hong.kotlinspring.web.model.board.BoardCommentPutReq
 import me.hong.kotlinspring.web.model.board.BoardCommentPutRes
@@ -31,35 +31,35 @@ class BoardCommentService(
   }
 
   @Transactional
-  fun createComment(boardId: Long, req: BoardCommentPutReq, userSession: UserSession): BoardCommentPutRes {
+  fun createComment(boardId: Long, req: BoardCommentPutReq, signinUser: SigninUser): BoardCommentPutRes {
     val comment = boardCommentDomain.create(req.toBoardComment(boardId))
 
-    return BoardCommentPutRes.of(comment, userSession)
+    return BoardCommentPutRes.of(comment, signinUser)
   }
 
   @Transactional
-  fun updateComment(boardId: Long, commentId: Long, req: BoardCommentPutReq, userSession: UserSession): BoardCommentPutRes {
+  fun updateComment(boardId: Long, commentId: Long, req: BoardCommentPutReq, signinUser: SigninUser): BoardCommentPutRes {
     val comment = boardCommentDomain.getActiveOne(commentId)
 
-    userSession.unmatchesThrow(comment.createdBy)
+    signinUser.unmatchesThrow(comment.createdBy)
 
     comment.update(req.toBoardComment(boardId))
 
-    return BoardCommentPutRes.of(comment, userSession)
+    return BoardCommentPutRes.of(comment, signinUser)
   }
 
   @Transactional
-  fun deleteComment(boardId: Long, commentId: Long, userSession: UserSession) {
+  fun deleteComment(boardId: Long, commentId: Long, signinUser: SigninUser) {
     val comment = boardCommentDomain.getActiveOne(commentId)
 
-    userSession.unmatchesThrow(comment.createdBy)
+    signinUser.unmatchesThrow(comment.createdBy)
 
     comment.deactivate()
   }
 
   @Transactional
-  fun likeOrHateComment(boardId: Long, commentId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardCommentLikeRes {
-    val userId = userSession.id
+  fun likeOrHateComment(boardId: Long, commentId: Long, likeOrHate: LikeOrHate, signinUser: SigninUser): BoardCommentLikeRes {
+    val userId = signinUser.id
     var read: BoardCommentRead? = null
     var currentLikeOrHate = LikeOrHate.NONE
 

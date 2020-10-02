@@ -5,7 +5,7 @@ import me.hong.kotlinspring.data.domain.user.UserDomain
 import me.hong.kotlinspring.data.entity.user.embedded.UserAccessId
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
-import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.advice.SigninUser
 import me.hong.kotlinspring.web.model.user.*
 import me.hong.kotlinspring.web.service.board.BoardService
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -52,8 +52,8 @@ class UserService(
   }
 
   @Transactional
-  fun updateEmail(req: UserEmailPutReq, userSession: UserSession) {
-    val user = userDomain.getOne(userSession.id)
+  fun updateEmail(req: UserEmailPutReq, signinUser: SigninUser) {
+    val user = userDomain.getOne(signinUser.id)
     if (user.email == req.email)
       throw CustomException(CustomMessage.SAME_VALUES)
 
@@ -61,8 +61,8 @@ class UserService(
   }
 
   @Transactional
-  fun updateName(req: UserNamePutReq, userSession: UserSession) {
-    val user = userDomain.getOne(userSession.id)
+  fun updateName(req: UserNamePutReq, signinUser: SigninUser) {
+    val user = userDomain.getOne(signinUser.id)
     if (user.name == req.name)
       throw CustomException(CustomMessage.SAME_VALUES)
 
@@ -70,8 +70,8 @@ class UserService(
   }
 
   @Transactional
-  fun updatePassword(req: UserPasswordPutReq, userSession: UserSession) {
-    val user = userDomain.getOne(userSession.id)
+  fun updatePassword(req: UserPasswordPutReq, signinUser: SigninUser) {
+    val user = userDomain.getOne(signinUser.id)
     if (passwordEncoder.matches(req.password, user.password))
       throw CustomException(CustomMessage.SAME_VALUES)
 

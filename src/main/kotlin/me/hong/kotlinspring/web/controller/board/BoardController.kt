@@ -1,9 +1,7 @@
 package me.hong.kotlinspring.web.controller.board
 
 import me.hong.kotlinspring.util.ServletUtils
-import me.hong.kotlinspring.web.advice.CustomException
-import me.hong.kotlinspring.web.advice.CustomMessage
-import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.advice.SigninUser
 import me.hong.kotlinspring.web.model.board.*
 import me.hong.kotlinspring.web.service.board.BoardService
 import org.springframework.validation.annotation.Validated
@@ -16,7 +14,7 @@ import javax.validation.constraints.Min
 @Validated
 class BoardController(
     private val boardService: BoardService,
-    private val userSession: UserSession
+    private val signinUser: SigninUser
 ) {
   @GetMapping("/boards")
   fun get(@RequestParam(defaultValue = "0") page: Int,
@@ -33,10 +31,10 @@ class BoardController(
 
   @GetMapping("/boards/{boardId}")
   fun get(@PathVariable boardId: Long): BoardDetailRes {
-    return if (userSession.unexists())
+    return if (signinUser.unexists())
       boardService.getBoard(boardId)
     else
-      boardService.getBoard(boardId, userSession)
+      boardService.getBoard(boardId, signinUser)
   }
 
   @GetMapping("/users/{userId}/boards")
@@ -48,29 +46,29 @@ class BoardController(
 
   @PostMapping("/boards")
   fun create(@RequestBody @Valid req: BoardPutReq): BoardPutRes {
-    userSession.unexistsThrow()
-    return boardService.createBoard(req, userSession)
+    signinUser.unexistsThrow()
+    return boardService.createBoard(req, signinUser)
   }
 
   @PatchMapping("/boards/{boardId}")
   fun update(@PathVariable boardId: Long,
              @RequestBody @Valid req: BoardPutReq): BoardPutRes {
-    userSession.unexistsThrow()
-    return boardService.updateBoard(boardId, req, userSession)
+    signinUser.unexistsThrow()
+    return boardService.updateBoard(boardId, req, signinUser)
   }
 
   @DeleteMapping("/boards/{boardId}")
   fun delete(@PathVariable boardId: Long) {
-    userSession.unexistsThrow()
-    boardService.deleteBoard(boardId, userSession)
+    signinUser.unexistsThrow()
+    boardService.deleteBoard(boardId, signinUser)
   }
 
   @PostMapping("/boards/{boardId}/hit")
   fun hit(@PathVariable boardId: Long, request: HttpServletRequest) {
     val ip = ServletUtils.getIp(request)
 
-    if (userSession.exists())
-      boardService.hitBoard(boardId, ip, userSession)
+    if (signinUser.exists())
+      boardService.hitBoard(boardId, ip, signinUser)
     else
       boardService.hitBoard(boardId, ip)
   }
@@ -78,7 +76,7 @@ class BoardController(
   @PutMapping("/boards/{boardId}/like-or-hate")
   fun likeOrHate(@PathVariable boardId: Long,
                  @RequestBody @Valid req: BoardLIkeReq): BoardLikeRes {
-    userSession.unexistsThrow()
-    return boardService.readBoard(boardId, req.likeOrHate, userSession)
+    signinUser.unexistsThrow()
+    return boardService.readBoard(boardId, req.likeOrHate, signinUser)
   }
 }

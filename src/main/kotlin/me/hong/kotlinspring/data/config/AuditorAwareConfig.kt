@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.data.config
 
-import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.advice.SigninUser
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.AuditorAware
@@ -10,10 +10,10 @@ import java.util.*
 @EnableJpaAuditing
 @Configuration
 class AuditorAwareConfig(
-    private val userSession: UserSession
+    private val signinUser: SigninUser
 ) {
   @Bean
   fun auditorAware(): AuditorAware<Long> {
-    return AuditorAware { Optional.of(userSession.id) }
+    return AuditorAware { Optional.of(signinUser.id) }
   }
 }

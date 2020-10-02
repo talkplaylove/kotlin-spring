@@ -9,7 +9,7 @@ import me.hong.kotlinspring.data.entity.board.BoardRead
 import me.hong.kotlinspring.data.entity.board.BoardUser
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
-import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.advice.SigninUser
 import me.hong.kotlinspring.web.model.board.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -56,8 +56,8 @@ class BoardService(
     return BoardDetailRes.of(board, user)
   }
 
-  fun getBoard(boardId: Long, userSession: UserSession): BoardDetailRes {
-    val userId = userSession.id
+  fun getBoard(boardId: Long, signinUser: SigninUser): BoardDetailRes {
+    val userId = signinUser.id
 
     val board = boardDomain.getActiveOne(boardId)
     val user = boardUserDomain.getOne(board.createdBy)
@@ -71,28 +71,28 @@ class BoardService(
   }
 
   @Transactional
-  fun createBoard(req: BoardPutReq, userSession: UserSession): BoardPutRes {
+  fun createBoard(req: BoardPutReq, signinUser: SigninUser): BoardPutRes {
     val board = boardDomain.create(req.toBoard())
 
-    return BoardPutRes.of(board, userSession)
+    return BoardPutRes.of(board, signinUser)
   }
 
   @Transactional
-  fun updateBoard(boardId: Long, req: BoardPutReq, userSession: UserSession): BoardPutRes {
+  fun updateBoard(boardId: Long, req: BoardPutReq, signinUser: SigninUser): BoardPutRes {
     val board = boardDomain.getActiveOne(boardId)
 
-    userSession.unmatchesThrow(board.createdBy)
+    signinUser.unmatchesThrow(board.createdBy)
 
     board.update(req.toBoard())
 
-    return BoardPutRes.of(board, userSession)
+    return BoardPutRes.of(board, signinUser)
   }
 
   @Transactional
-  fun deleteBoard(boardId: Long, userSession: UserSession) {
+  fun deleteBoard(boardId: Long, signinUser: SigninUser) {
     val board = boardDomain.getActiveOne(boardId)
 
-    userSession.unmatchesThrow(board.createdBy)
+    signinUser.unmatchesThrow(board.createdBy)
 
     board.deactivate()
   }
@@ -108,8 +108,8 @@ class BoardService(
   }
 
   @Transactional
-  fun hitBoard(boardId: Long, ip: String, userSession: UserSession) {
-    val userId = userSession.id
+  fun hitBoard(boardId: Long, ip: String, signinUser: SigninUser) {
+    val userId = signinUser.id
     this.hitBoard(boardId, ip)
 
     boardReadDomain.getOptional(boardId, userId).orElseGet {
@@ -118,8 +118,8 @@ class BoardService(
   }
 
   @Transactional
-  fun readBoard(boardId: Long, likeOrHate: LikeOrHate, userSession: UserSession): BoardLikeRes {
-    val userId = userSession.id
+  fun readBoard(boardId: Long, likeOrHate: LikeOrHate, signinUser: SigninUser): BoardLikeRes {
+    val userId = signinUser.id
     var read: BoardRead? = null
     var currentLikeOrHate = LikeOrHate.NONE
 

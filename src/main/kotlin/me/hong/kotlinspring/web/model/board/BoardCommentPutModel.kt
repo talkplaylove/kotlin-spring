@@ -1,7 +1,7 @@
 package me.hong.kotlinspring.web.model.board
 
 import me.hong.kotlinspring.data.entity.board.BoardComment
-import me.hong.kotlinspring.web.advice.UserSession
+import me.hong.kotlinspring.web.advice.SigninUser
 import java.time.LocalDateTime
 import javax.validation.constraints.NotEmpty
 
@@ -29,13 +29,13 @@ data class BoardCommentPutRes(
     val updatedAt: LocalDateTime?
 ) {
   companion object {
-    fun of(comment: BoardComment, userSession: UserSession): BoardCommentPutRes {
+    fun of(comment: BoardComment, signinUser: SigninUser): BoardCommentPutRes {
       return BoardCommentPutRes(
           id = comment.id,
           boardId = comment.boardId,
           content = comment.content,
           createdBy = comment.createdBy,
-          createdName = userSession.name,
+          createdName = signinUser.name,
           createdAt = comment.createdAt,
           updatedAt = comment.updatedAt
       )
