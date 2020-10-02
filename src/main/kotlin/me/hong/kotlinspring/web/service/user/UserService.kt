@@ -72,8 +72,8 @@ class UserService(
   @Transactional
   fun updatePassword(req: UserPasswordPutReq, userSession: UserSession) {
     val user = userDomain.getOne(userSession.id)
-    if (!passwordEncoder.matches(req.password, user.password))
-      throw CustomException(CustomMessage.INCORRECT_PASSWORD)
+    if (passwordEncoder.matches(req.password, user.password))
+      throw CustomException(CustomMessage.SAME_VALUES)
 
     user.updatePassword(passwordEncoder.encode(req.password))
   }

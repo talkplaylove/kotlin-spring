@@ -52,7 +52,7 @@ class UserController(
 
   @PatchMapping("/users/{userId}/password")
   fun updatePassword(@PathVariable userId: Long, @RequestBody @Valid req: UserPasswordPutReq) {
-    userSession.unmatches(userId)
+    userSession.unmatchesThrow(userId)
     userService.updatePassword(req, userSession)
   }
 }

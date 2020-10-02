@@ -42,6 +42,7 @@ class UserSession {
   }
 
   fun unmatchesThrow(userId: Long?) {
+    unexistsThrow()
     if (unmatches(userId))
       throw CustomException(CustomMessage.FORBIDDEN)
   }
