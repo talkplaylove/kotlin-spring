@@ -25,4 +25,8 @@ class UserAccess(id: UserAccessId) {
 
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
+
+  fun hit() {
+    this.hitCount++
+  }
 }

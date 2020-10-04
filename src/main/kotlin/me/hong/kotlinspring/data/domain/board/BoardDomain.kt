@@ -1,6 +1,5 @@
 package me.hong.kotlinspring.data.domain.board
 
-import me.hong.kotlinspring.data.constant.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.Board
 import me.hong.kotlinspring.data.repo.board.BoardRepo
 import me.hong.kotlinspring.web.advice.CustomException

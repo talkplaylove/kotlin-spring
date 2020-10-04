@@ -2,7 +2,6 @@ package me.hong.kotlinspring.web.service.user
 
 import me.hong.kotlinspring.data.domain.user.UserAccessDomain
 import me.hong.kotlinspring.data.domain.user.UserDomain
-import me.hong.kotlinspring.data.entity.user.embedded.UserAccessId
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.SigninUser
@@ -27,7 +26,13 @@ class UserService(
     if (!passwordEncoder.matches(req.password, user.password))
       throw CustomException(CustomMessage.INCORRECT_PASSWORD)
 
-    userAccessDomain.access(UserAccessId(user.id!!, LocalDate.now()))
+    val userId = user.id!!
+    val date = LocalDate.now()
+    userAccessDomain.getOptional(userId, date).ifPresentOrElse({
+      it.hit()
+    }, {
+      userAccessDomain.create(userId, date)
+    })
 
     return SigninRes.of(user)
   }
