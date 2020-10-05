@@ -18,11 +18,11 @@ class BoardReadDomain(
     ))
   }
 
-  fun read(boardId: Long, userId: Long): BoardRead {
-    return this.read(boardId, userId, LikeOrHate.NONE)
+  fun create(boardId: Long, userId: Long): BoardRead {
+    return this.create(boardId, userId, LikeOrHate.NONE)
   }
 
-  fun read(boardId: Long, userId: Long, likeOrHate: LikeOrHate): BoardRead {
+  fun create(boardId: Long, userId: Long, likeOrHate: LikeOrHate): BoardRead {
     return boardReadRepo.insert(BoardRead(
         id = BoardReadId(
             boardId = boardId,

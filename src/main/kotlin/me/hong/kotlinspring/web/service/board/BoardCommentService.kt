@@ -32,7 +32,7 @@ class BoardCommentService(
 
   @Transactional
   fun createComment(boardId: Long, req: BoardCommentPutReq, signinUser: SigninUser): BoardCommentPutRes {
-    val comment = boardCommentDomain.create(req.toBoardComment(boardId))
+    val comment = boardCommentDomain.save(req.toBoardComment(boardId))
 
     return BoardCommentPutRes.of(comment, signinUser)
   }
@@ -71,7 +71,7 @@ class BoardCommentService(
       it.read(likeOrHate)
       read = it
     }, {
-      read = boardCommentReadDomain.read(commentId, userId, likeOrHate)
+      read = boardCommentReadDomain.create(commentId, userId, likeOrHate)
     })
 
     val comment = boardCommentDomain.getOne(commentId)

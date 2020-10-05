@@ -19,10 +19,6 @@ class BoardCommentDomain(
     )
   }
 
-  fun create(comment: BoardComment): BoardComment {
-    return boardCommentRepo.save(comment)
-  }
-
   fun getOptional(commentId: Long): Optional<BoardComment> {
     return boardCommentRepo.findById(commentId)
   }
@@ -41,5 +37,9 @@ class BoardCommentDomain(
     return this.getActiveOptional(commentId).orElseThrow {
       throw CustomException(CustomMessage.COMMENT_NOT_FOUND)
     }
+  }
+
+  fun save(comment: BoardComment): BoardComment {
+    return boardCommentRepo.save(comment)
   }
 }

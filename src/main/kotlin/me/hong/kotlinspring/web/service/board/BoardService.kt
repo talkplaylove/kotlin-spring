@@ -52,7 +52,7 @@ class BoardService(
   fun getBoard(boardId: Long): BoardDetailRes {
     val board = boardDomain.getActiveOne(boardId)
 
-    val user = boardUserDomain.getOne(board.createdBy)
+    val user = boardUserDomain.getOneNullable(board.createdBy)
     return BoardDetailRes.of(board, user)
   }
 
@@ -60,7 +60,7 @@ class BoardService(
     val userId = signinUser.id
 
     val board = boardDomain.getActiveOne(boardId)
-    val user = boardUserDomain.getOne(board.createdBy)
+    val user = boardUserDomain.getOneNullable(board.createdBy)
     val read = boardReadDomain.getOptional(boardId, userId)
 
     return if (read.isPresent) {
@@ -72,7 +72,7 @@ class BoardService(
 
   @Transactional
   fun createBoard(req: BoardPutReq, signinUser: SigninUser): BoardPutRes {
-    val board = boardDomain.create(req.toBoard())
+    val board = boardDomain.save(req.toBoard())
 
     return BoardPutRes.of(board, signinUser)
   }
@@ -100,7 +100,7 @@ class BoardService(
   @Transactional
   fun hitBoard(boardId: Long, ip: String) {
     if (boardHitDomain.getOptional(boardId, ip).isEmpty) {
-      boardHitDomain.hit(boardId, ip)
+      boardHitDomain.create(boardId, ip)
 
       val board = boardDomain.getOne(boardId)
       board.hit()
@@ -113,7 +113,7 @@ class BoardService(
     this.hitBoard(boardId, ip)
 
     boardReadDomain.getOptional(boardId, userId).orElseGet {
-      boardReadDomain.read(boardId, userId)
+      boardReadDomain.create(boardId, userId)
     }
   }
 
@@ -131,7 +131,7 @@ class BoardService(
       it.read(likeOrHate)
       read = it
     }, {
-      read = boardReadDomain.read(boardId, userId, likeOrHate)
+      read = boardReadDomain.create(boardId, userId, likeOrHate)
     })
 
     val board = boardDomain.getOne(boardId)
@@ -163,6 +163,14 @@ class BoardService(
   }
 
   fun createBoardUser(userId: Long, userName: String) {
-    boardUserDomain.create(BoardUser(userId, userName))
+    if (boardUserDomain.getOptional(userId).isEmpty) {
+      boardUserDomain.create(BoardUser(userId, userName))
+    }
+  }
+
+  fun updateBoardUser(userId: Long, userName: String) {
+    boardUserDomain.getOptional(userId).ifPresent {
+      it.update(userName)
+    }
   }
 }

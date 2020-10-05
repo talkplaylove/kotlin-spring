@@ -21,7 +21,7 @@ class BoardHitDomain(
     )
   }
 
-  fun hit(boardId: Long, ip: String): BoardHit {
+  fun create(boardId: Long, ip: String): BoardHit {
     return boardHitRepo.insert(BoardHit(
         BoardHitId(
             boardId = boardId,

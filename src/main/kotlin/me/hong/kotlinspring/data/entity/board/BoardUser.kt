@@ -23,4 +23,8 @@ class BoardUser(
 
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
+
+  fun update(userName: String) {
+    this.userName = userName
+  }
 }

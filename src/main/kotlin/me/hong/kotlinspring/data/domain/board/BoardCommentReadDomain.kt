@@ -18,7 +18,7 @@ class BoardCommentReadDomain(
     ))
   }
 
-  fun read(commentId: Long, userId: Long, likeOrHate: LikeOrHate): BoardCommentRead {
+  fun create(commentId: Long, userId: Long, likeOrHate: LikeOrHate): BoardCommentRead {
     return boardCommentReadRepo.insert(BoardCommentRead(
         id = BoardCommentReadId(commentId, userId),
         likeOrHate = likeOrHate

@@ -52,7 +52,7 @@ class BoardDomain(
     }
   }
 
-  fun create(board: Board): Board {
+  fun save(board: Board): Board {
     return boardRepo.save(board)
   }
 }

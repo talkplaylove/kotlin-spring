@@ -72,6 +72,8 @@ class UserService(
       throw CustomException(CustomMessage.SAME_VALUES)
 
     user.updateName(req.name)
+
+    boardService.updateBoardUser(signinUser.id, req.name)
   }
 
   @Transactional
