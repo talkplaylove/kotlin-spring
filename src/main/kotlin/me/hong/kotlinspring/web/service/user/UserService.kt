@@ -40,7 +40,7 @@ class UserService(
   @Transactional
   fun signup(req: SignupReq): SignupRes {
     val encodedPassword = passwordEncoder.encode(req.password)
-    val user = userDomain.create(req.toUser(encodedPassword))
+    val user = userDomain.save(req.toUser(encodedPassword))
 
     boardService.createBoardUser(user.id!!, user.name)
     return SignupRes.of(user)

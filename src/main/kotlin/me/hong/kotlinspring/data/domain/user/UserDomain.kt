@@ -31,7 +31,7 @@ class UserDomain(
     }
   }
 
-  fun create(user: User): User {
+  fun save(user: User): User {
     return userRepo.save(user)
   }
 
