@@ -65,7 +65,10 @@ class BoardCommentService(
 
     boardCommentReadDomain.getOptional(commentId, userId).ifPresentOrElse({
       currentLikeOrHate = it.likeOrHate
-      it.likeOrHate = likeOrHate
+      if (currentLikeOrHate == likeOrHate) {
+        throw CustomException(CustomMessage.SAME_VALUES)
+      }
+      it.read(likeOrHate)
       read = it
     }, {
       read = boardCommentReadDomain.read(commentId, userId, likeOrHate)

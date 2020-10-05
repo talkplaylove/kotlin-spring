@@ -25,4 +25,8 @@ class BoardRead(id: BoardReadId, likeOrHate: LikeOrHate) {
 
   @UpdateTimestamp
   val updatedAt: LocalDateTime? = null
+
+  fun read(likeOrHate: LikeOrHate) {
+    this.likeOrHate = likeOrHate
+  }
 }

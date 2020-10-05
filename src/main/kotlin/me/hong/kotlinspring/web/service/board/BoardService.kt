@@ -125,10 +125,10 @@ class BoardService(
 
     boardReadDomain.getOptional(boardId, userId).ifPresentOrElse({
       currentLikeOrHate = it.likeOrHate
-      if (it.likeOrHate == likeOrHate) {
+      if (currentLikeOrHate == likeOrHate) {
         throw CustomException(CustomMessage.SAME_VALUES)
       }
-      it.likeOrHate = likeOrHate
+      it.read(likeOrHate)
       read = it
     }, {
       read = boardReadDomain.read(boardId, userId, likeOrHate)
