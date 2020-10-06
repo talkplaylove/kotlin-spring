@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.data.domain.board
 
-import me.hong.kotlinspring.data.constant.board.LikeOrHate
+import me.hong.kotlinspring.data.enums.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.BoardCommentRead
 import me.hong.kotlinspring.data.entity.board.embedded.BoardCommentReadId
 import me.hong.kotlinspring.data.repo.board.BoardCommentReadRepo

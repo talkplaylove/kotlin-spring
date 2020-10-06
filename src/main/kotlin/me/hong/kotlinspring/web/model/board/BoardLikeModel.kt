@@ -1,6 +1,6 @@
 package me.hong.kotlinspring.web.model.board
 
-import me.hong.kotlinspring.data.constant.board.LikeOrHate
+import me.hong.kotlinspring.data.enums.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.BoardRead
 import java.time.LocalDateTime
 import javax.validation.constraints.NotNull
