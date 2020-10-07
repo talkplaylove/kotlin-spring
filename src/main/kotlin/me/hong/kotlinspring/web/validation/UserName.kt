@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 @MustBeDocumented
 @Constraint(validatedBy = [UserNameValidator::class])
 annotation class UserName(
-    val message: String = "이름은 2글자 이상이어야 합니다.",
+    val message: String = "잘못된 이름입니다.",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )
