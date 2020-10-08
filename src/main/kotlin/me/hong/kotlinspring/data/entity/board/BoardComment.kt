@@ -33,7 +33,7 @@ class BoardComment(
   var hateCount: Long = 0L
 
   @CreatedBy
-  val createdBy: Long? = null
+  var createdBy: Long? = null
 
   @CreationTimestamp
   val createdAt: LocalDateTime? = null

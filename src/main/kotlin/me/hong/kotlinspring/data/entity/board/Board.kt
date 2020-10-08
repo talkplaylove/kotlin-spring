@@ -35,7 +35,7 @@ class Board(
   var hitCount: Long = 0
 
   @CreatedBy
-  val createdBy: Long? = null
+  var createdBy: Long? = null
 
   @CreationTimestamp
   val createdAt: LocalDateTime? = null
