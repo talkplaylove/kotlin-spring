@@ -5,7 +5,7 @@ import me.hong.kotlinspring.data.repo.board.BoardRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -13,22 +13,22 @@ import java.util.*
 class BoardDomain(
     private val boardRepo: BoardRepo
 ) {
-  fun getActivePage(page: Int, size: Int): Page<Board> {
-    return boardRepo.findAllByActive(PageRequest.of(page, size))
+  fun getActivePage(pageable: Pageable): Page<Board> {
+    return boardRepo.findAllByActive(pageable)
   }
 
-  fun getActivePage(word: String, page: Int, size: Int): Page<Board> {
+  fun getActivePage(word: String, pageable: Pageable): Page<Board> {
     return boardRepo.findAllByTitleContainingOrContentContainingAndActive(
         title = word,
         content = word,
-        pageable = PageRequest.of(page, size)
+        pageable = pageable
     )
   }
 
-  fun getActivePage(createdBy: Long, page: Int, size: Int): Page<Board> {
+  fun getActivePage(createdBy: Long, pageable: Pageable): Page<Board> {
     return boardRepo.findAllByCreatedByAndActiveOrderByIdDesc(
         createdBy = createdBy,
-        pageable = PageRequest.of(page, size)
+        pageable = pageable
     )
   }
 

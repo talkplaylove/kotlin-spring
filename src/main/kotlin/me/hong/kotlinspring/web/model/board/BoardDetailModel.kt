@@ -1,8 +1,8 @@
 package me.hong.kotlinspring.web.model.board
 
-import me.hong.kotlinspring.data.enums.board.LikeOrHate
 import me.hong.kotlinspring.data.entity.board.Board
 import me.hong.kotlinspring.data.entity.board.BoardUser
+import me.hong.kotlinspring.data.enums.board.LikeOrHate
 import java.time.LocalDateTime
 
 data class BoardDetailRes(

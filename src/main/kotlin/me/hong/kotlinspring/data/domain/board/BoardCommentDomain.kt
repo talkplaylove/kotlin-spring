@@ -5,7 +5,7 @@ import me.hong.kotlinspring.data.repo.board.BoardCommentRepo
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -13,9 +13,9 @@ import java.util.*
 class BoardCommentDomain(
     private val boardCommentRepo: BoardCommentRepo
 ) {
-  fun getActivePage(boardId: Long, page: Int, size: Int): Page<BoardComment> {
+  fun getActivePage(boardId: Long, pageable: Pageable): Page<BoardComment> {
     return boardCommentRepo.findAllByBoardIdAndActive(
-        boardId = boardId, pageable = PageRequest.of(page, size)
+        boardId = boardId, pageable = pageable
     )
   }
 

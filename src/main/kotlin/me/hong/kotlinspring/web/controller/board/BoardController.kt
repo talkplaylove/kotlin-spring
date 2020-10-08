@@ -4,11 +4,11 @@ import me.hong.kotlinspring.util.ServletUtils
 import me.hong.kotlinspring.web.advice.SigninUser
 import me.hong.kotlinspring.web.model.board.*
 import me.hong.kotlinspring.web.service.board.BoardService
+import org.springframework.data.domain.Pageable
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
-import javax.validation.constraints.Min
 
 @RestController
 @Validated
@@ -17,16 +17,14 @@ class BoardController(
     private val signinUser: SigninUser
 ) {
   @GetMapping("/boards")
-  fun get(@RequestParam(defaultValue = "0") page: Int,
-          @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardRes> {
-    return boardService.getBoards(page, size)
+  fun get(pageable: Pageable): Collection<BoardRes> {
+    return boardService.getBoards(pageable)
   }
 
   @GetMapping("/boards/search")
   fun get(@RequestParam word: String,
-          @RequestParam(defaultValue = "0") page: Int,
-          @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardRes> {
-    return boardService.searchBoards(word.trim(), page, size)
+          pageable: Pageable): Collection<BoardRes> {
+    return boardService.searchBoards(word.trim(), pageable)
   }
 
   @GetMapping("/boards/{boardId}")
@@ -39,9 +37,8 @@ class BoardController(
 
   @GetMapping("/users/{userId}/boards")
   fun get(@PathVariable userId: Long,
-          @RequestParam(defaultValue = "0") page: Int,
-          @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardRes> {
-    return boardService.getBoards(userId, page, size)
+          pageable: Pageable): Collection<BoardRes> {
+    return boardService.getBoards(userId, pageable)
   }
 
   @PostMapping("/boards")

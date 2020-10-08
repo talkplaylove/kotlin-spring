@@ -1,7 +1,7 @@
 package me.hong.kotlinspring.web.model.user
 
-import me.hong.kotlinspring.data.enums.user.Gender
 import me.hong.kotlinspring.data.entity.user.User
+import me.hong.kotlinspring.data.enums.user.Gender
 import me.hong.kotlinspring.web.validation.Password
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank

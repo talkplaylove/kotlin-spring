@@ -1,10 +1,10 @@
 package me.hong.kotlinspring.web.service.board
 
-import me.hong.kotlinspring.data.enums.board.LikeOrHate
 import me.hong.kotlinspring.data.domain.board.BoardCommentDomain
 import me.hong.kotlinspring.data.domain.board.BoardCommentReadDomain
 import me.hong.kotlinspring.data.domain.board.BoardUserDomain
 import me.hong.kotlinspring.data.entity.board.BoardCommentRead
+import me.hong.kotlinspring.data.enums.board.LikeOrHate
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.SigninUser
@@ -12,6 +12,7 @@ import me.hong.kotlinspring.web.model.board.BoardCommentLikeRes
 import me.hong.kotlinspring.web.model.board.BoardCommentPutReq
 import me.hong.kotlinspring.web.model.board.BoardCommentPutRes
 import me.hong.kotlinspring.web.model.board.BoardCommentRes
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.stream.Collectors
@@ -22,8 +23,8 @@ class BoardCommentService(
     private val boardCommentReadDomain: BoardCommentReadDomain,
     private val boardUserDomain: BoardUserDomain
 ) {
-  fun getComments(boardId: Long, page: Int, size: Int): Collection<BoardCommentRes> {
-    val comments = boardCommentDomain.getActivePage(boardId, page, size)
+  fun getComments(boardId: Long, pageable: Pageable): Collection<BoardCommentRes> {
+    val comments = boardCommentDomain.getActivePage(boardId, pageable)
 
     val userIds = comments.stream().map { it.createdBy }.collect(Collectors.toSet())
     val users = boardUserDomain.getMap(userIds)

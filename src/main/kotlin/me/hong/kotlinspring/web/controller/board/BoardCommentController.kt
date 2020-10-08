@@ -3,10 +3,10 @@ package me.hong.kotlinspring.web.controller.board
 import me.hong.kotlinspring.web.advice.SigninUser
 import me.hong.kotlinspring.web.model.board.*
 import me.hong.kotlinspring.web.service.board.BoardCommentService
+import org.springframework.data.domain.Pageable
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
-import javax.validation.constraints.Min
 
 @RestController
 @Validated
@@ -16,9 +16,8 @@ class BoardCommentController(
 ) {
   @GetMapping("/boards/{boardId}/comments")
   fun get(@PathVariable boardId: Long,
-          @RequestParam(defaultValue = "0") page: Int,
-          @RequestParam(defaultValue = "20") @Min(5) size: Int): Collection<BoardCommentRes> {
-    return boardCommentService.getComments(boardId, page, size)
+          pageable: Pageable): Collection<BoardCommentRes> {
+    return boardCommentService.getComments(boardId, pageable)
   }
 
   @PostMapping("/boards/{boardId}/comments")

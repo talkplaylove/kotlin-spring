@@ -1,16 +1,17 @@
 package me.hong.kotlinspring.web.service.board
 
-import me.hong.kotlinspring.data.enums.board.LikeOrHate
 import me.hong.kotlinspring.data.domain.board.BoardDomain
 import me.hong.kotlinspring.data.domain.board.BoardHitDomain
 import me.hong.kotlinspring.data.domain.board.BoardReadDomain
 import me.hong.kotlinspring.data.domain.board.BoardUserDomain
 import me.hong.kotlinspring.data.entity.board.BoardRead
 import me.hong.kotlinspring.data.entity.board.BoardUser
+import me.hong.kotlinspring.data.enums.board.LikeOrHate
 import me.hong.kotlinspring.web.advice.CustomException
 import me.hong.kotlinspring.web.advice.CustomMessage
 import me.hong.kotlinspring.web.advice.SigninUser
 import me.hong.kotlinspring.web.model.board.*
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.stream.Collectors
@@ -22,27 +23,27 @@ class BoardService(
     private val boardReadDomain: BoardReadDomain,
     private val boardUserDomain: BoardUserDomain
 ) {
-  fun getBoards(page: Int, size: Int): Collection<BoardRes> {
-    val boards = boardDomain.getActivePage(page, size)
+  fun getBoards(pageable: Pageable): Collection<BoardRes> {
+    val boards = boardDomain.getActivePage(pageable)
 
     val userIds = boards.stream().map { it.createdBy }.collect(Collectors.toSet())
     val users = boardUserDomain.getMap(userIds)
     return BoardRes.listOf(boards.content, users)
   }
 
-  fun searchBoards(word: String, page: Int, size: Int): Collection<BoardRes> {
+  fun searchBoards(word: String, pageable: Pageable): Collection<BoardRes> {
     if (word.length == 1)
       throw CustomException(CustomMessage.AT_LEAST_TWO_LETTERS)
 
-    val boards = boardDomain.getActivePage(word, page, size)
+    val boards = boardDomain.getActivePage(word, pageable)
 
     val userIds = boards.stream().map { it.createdBy }.collect(Collectors.toSet())
     val users = boardUserDomain.getMap(userIds)
     return BoardRes.listOf(boards.content, users)
   }
 
-  fun getBoards(userId: Long, page: Int, size: Int): Collection<BoardRes> {
-    val boards = boardDomain.getActivePage(userId, page, size)
+  fun getBoards(userId: Long, pageable: Pageable): Collection<BoardRes> {
+    val boards = boardDomain.getActivePage(userId, pageable)
 
     val userIds = boards.stream().map { it.createdBy }.collect(Collectors.toSet())
     val users = boardUserDomain.getMap(userIds)
