@@ -13,11 +13,4 @@ class UserAccessId(userId: Long, date: LocalDate) : Serializable {
   @Column(name = "date")
   var id2: LocalDate? = date
 
-  override fun equals(other: Any?): Boolean {
-    return super.equals(other)
-  }
-
-  override fun hashCode(): Int {
-    return super.hashCode()
-  }
 }

@@ -10,7 +10,7 @@ import java.util.*
 @EnableJpaAuditing
 @Configuration
 class AuditorAwareConfig(
-    private val signinUser: SigninUser
+  private val signinUser: SigninUser
 ) {
   @Bean
   fun auditorAware(): AuditorAware<Long> {

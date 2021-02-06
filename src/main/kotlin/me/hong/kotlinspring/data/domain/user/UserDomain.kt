@@ -9,7 +9,7 @@ import java.util.*
 
 @Component
 class UserDomain(
-    private val userRepo: UserRepo
+  private val userRepo: UserRepo
 ) {
   fun getOptional(email: String): Optional<User> {
     return userRepo.findByEmail(email)

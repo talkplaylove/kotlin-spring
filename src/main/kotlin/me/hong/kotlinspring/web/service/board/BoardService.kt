@@ -18,10 +18,10 @@ import java.util.stream.Collectors
 
 @Service
 class BoardService(
-    private val boardDomain: BoardDomain,
-    private val boardHitDomain: BoardHitDomain,
-    private val boardReadDomain: BoardReadDomain,
-    private val boardUserDomain: BoardUserDomain
+  private val boardDomain: BoardDomain,
+  private val boardHitDomain: BoardHitDomain,
+  private val boardReadDomain: BoardReadDomain,
+  private val boardUserDomain: BoardUserDomain
 ) {
   fun getBoards(pageable: Pageable): Collection<BoardRes> {
     val boards = boardDomain.getActivePage(pageable)

@@ -6,8 +6,8 @@ import java.time.LocalDateTime
 import javax.validation.constraints.NotEmpty
 
 class BoardPutReq(
-    title: String,
-    content: String
+  title: String,
+  content: String
 ) {
   @NotEmpty
   val title: String = title
@@ -17,31 +17,31 @@ class BoardPutReq(
 
   fun toBoard(): Board {
     return Board(
-        title = this.title,
-        content = this.content
+      title = this.title,
+      content = this.content
     )
   }
 }
 
 data class BoardPutRes(
-    val id: Long?,
-    val title: String,
-    val content: String,
-    val createdBy: Long?,
-    val createdName: String,
-    val createdAt: LocalDateTime?,
-    val updatedAt: LocalDateTime?
+  val id: Long?,
+  val title: String,
+  val content: String,
+  val createdBy: Long?,
+  val createdName: String,
+  val createdAt: LocalDateTime?,
+  val updatedAt: LocalDateTime?
 ) {
   companion object {
     fun of(board: Board, signinUser: SigninUser): BoardPutRes {
       return BoardPutRes(
-          id = board.id,
-          title = board.title,
-          content = board.content,
-          createdBy = board.createdBy,
-          createdName = signinUser.name,
-          createdAt = board.createdAt,
-          updatedAt = board.updatedAt
+        id = board.id,
+        title = board.title,
+        content = board.content,
+        createdBy = board.createdBy,
+        createdName = signinUser.name,
+        createdAt = board.createdAt,
+        updatedAt = board.updatedAt
       )
     }
   }

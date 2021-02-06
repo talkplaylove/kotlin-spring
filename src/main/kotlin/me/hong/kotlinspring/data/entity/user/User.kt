@@ -7,16 +7,18 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(indexes = [
-  Index(name = "IndexUserEmail", columnList = "email", unique = true),
-  Index(name = "IndexUserName", columnList = "name", unique = true),
-  Index(name = "IndexUserCreatedAt", columnList = "createdAt")
-])
+@Table(
+  indexes = [
+    Index(name = "IndexUserEmail", columnList = "email", unique = true),
+    Index(name = "IndexUserName", columnList = "name", unique = true),
+    Index(name = "IndexUserCreatedAt", columnList = "createdAt")
+  ]
+)
 class User(
-    email: String,
-    name: String,
-    password: String,
-    gender: Gender
+  email: String,
+  name: String,
+  password: String,
+  gender: Gender
 ) {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

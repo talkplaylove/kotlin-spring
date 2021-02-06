@@ -13,9 +13,9 @@ import kotlin.reflect.KClass
 @MustBeDocumented
 @Constraint(validatedBy = [PasswordValidator::class])
 annotation class Password(
-    val message: String = "비밀번호는 8~20자의 숫자,문자,특수문자를 포함해야 합니다.",
-    val groups: Array<KClass<*>> = [],
-    val payload: Array<KClass<out Payload>> = []
+  val message: String = "비밀번호는 8~20자의 숫자,문자,특수문자를 포함해야 합니다.",
+  val groups: Array<KClass<*>> = [],
+  val payload: Array<KClass<out Payload>> = []
 )
 
 class PasswordValidator : ConstraintValidator<Password, String> {

@@ -13,8 +13,8 @@ import javax.validation.Valid
 @RestController
 @Validated
 class BoardController(
-    private val boardService: BoardService,
-    private val signinUser: SigninUser
+  private val boardService: BoardService,
+  private val signinUser: SigninUser
 ) {
   @GetMapping("/boards")
   fun get(pageable: Pageable): Collection<BoardRes> {
@@ -22,8 +22,10 @@ class BoardController(
   }
 
   @GetMapping("/boards/search")
-  fun get(@RequestParam word: String,
-          pageable: Pageable): Collection<BoardRes> {
+  fun get(
+    @RequestParam word: String,
+    pageable: Pageable
+  ): Collection<BoardRes> {
     return boardService.searchBoards(word.trim(), pageable)
   }
 
@@ -36,8 +38,10 @@ class BoardController(
   }
 
   @GetMapping("/users/{userId}/boards")
-  fun get(@PathVariable userId: Long,
-          pageable: Pageable): Collection<BoardRes> {
+  fun get(
+    @PathVariable userId: Long,
+    pageable: Pageable
+  ): Collection<BoardRes> {
     return boardService.getBoards(userId, pageable)
   }
 
@@ -48,8 +52,10 @@ class BoardController(
   }
 
   @PatchMapping("/boards/{boardId}")
-  fun update(@PathVariable boardId: Long,
-             @RequestBody @Valid req: BoardPutReq): BoardPutRes {
+  fun update(
+    @PathVariable boardId: Long,
+    @RequestBody @Valid req: BoardPutReq
+  ): BoardPutRes {
     signinUser.unexistsThrow()
     return boardService.updateBoard(boardId, req, signinUser)
   }
@@ -71,8 +77,10 @@ class BoardController(
   }
 
   @PutMapping("/boards/{boardId}/like-or-hate")
-  fun likeOrHate(@PathVariable boardId: Long,
-                 @RequestBody @Valid req: BoardLIkeReq): BoardLikeRes {
+  fun likeOrHate(
+    @PathVariable boardId: Long,
+    @RequestBody @Valid req: BoardLIkeReq
+  ): BoardLikeRes {
     signinUser.unexistsThrow()
     return boardService.readBoard(boardId, req.likeOrHate, signinUser)
   }

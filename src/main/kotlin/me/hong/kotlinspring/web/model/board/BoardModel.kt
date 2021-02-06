@@ -5,24 +5,24 @@ import me.hong.kotlinspring.data.entity.board.BoardUser
 import java.time.LocalDateTime
 
 data class BoardRes(
-    val id: Long?,
-    val title: String,
-    val hitCount: Long,
-    val createdBy: Long?,
-    val createdName: String,
-    val createdAt: LocalDateTime?,
-    val updatedAt: LocalDateTime?
+  val id: Long?,
+  val title: String,
+  val hitCount: Long,
+  val createdBy: Long?,
+  val createdName: String,
+  val createdAt: LocalDateTime?,
+  val updatedAt: LocalDateTime?
 ) {
   companion object {
     fun of(board: Board, user: BoardUser?): BoardRes {
       return BoardRes(
-          id = board.id,
-          title = board.title,
-          hitCount = board.hitCount,
-          createdBy = board.createdBy,
-          createdName = user?.userName ?: "",
-          createdAt = board.createdAt,
-          updatedAt = board.updatedAt
+        id = board.id,
+        title = board.title,
+        hitCount = board.hitCount,
+        createdBy = board.createdBy,
+        createdName = user?.userName ?: "",
+        createdAt = board.createdAt,
+        updatedAt = board.updatedAt
       )
     }
 

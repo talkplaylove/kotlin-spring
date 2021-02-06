@@ -9,8 +9,8 @@ import javax.persistence.Id
 
 @Entity
 class BoardUser(
-    userId: Long,
-    userName: String
+  userId: Long,
+  userName: String
 ) {
   @Id
   val userId: Long = userId

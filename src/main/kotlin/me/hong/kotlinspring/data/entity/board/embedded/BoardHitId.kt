@@ -16,11 +16,4 @@ class BoardHitId(boardId: Long?, date: LocalDate?, ip: String?) : Serializable {
   @Column(name = "ip", length = 50)
   var id3: String? = ip
 
-  override fun equals(other: Any?): Boolean {
-    return super.equals(other)
-  }
-
-  override fun hashCode(): Int {
-    return super.hashCode()
-  }
 }

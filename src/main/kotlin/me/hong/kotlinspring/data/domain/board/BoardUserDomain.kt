@@ -8,7 +8,7 @@ import java.util.stream.Collectors
 
 @Component
 class BoardUserDomain(
-    private val boardUserRepo: BoardUserRepo
+  private val boardUserRepo: BoardUserRepo
 ) {
   fun getOptional(userId: Long): Optional<BoardUser> {
     return boardUserRepo.findById(userId)
@@ -20,7 +20,7 @@ class BoardUserDomain(
 
   fun getMap(userIds: Set<Long?>): Map<Long?, BoardUser> {
     return boardUserRepo.findAllById(userIds)
-        .stream().collect(Collectors.toMap(BoardUser::userId) { it }).toMap()
+      .stream().collect(Collectors.toMap(BoardUser::userId) { it }).toMap()
   }
 
   fun create(boardUser: BoardUser): BoardUser {

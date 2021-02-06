@@ -9,13 +9,15 @@ import java.util.*
 
 @Component
 class BoardReadDomain(
-    private val boardReadRepo: BoardReadRepo
+  private val boardReadRepo: BoardReadRepo
 ) {
   fun getOptional(boardId: Long, userId: Long): Optional<BoardRead> {
-    return boardReadRepo.findById(BoardReadId(
+    return boardReadRepo.findById(
+      BoardReadId(
         boardId = boardId,
         userId = userId
-    ))
+      )
+    )
   }
 
   fun create(boardId: Long, userId: Long): BoardRead {
@@ -23,12 +25,14 @@ class BoardReadDomain(
   }
 
   fun create(boardId: Long, userId: Long, likeOrHate: LikeOrHate): BoardRead {
-    return boardReadRepo.insert(BoardRead(
+    return boardReadRepo.insert(
+      BoardRead(
         id = BoardReadId(
-            boardId = boardId,
-            userId = userId
+          boardId = boardId,
+          userId = userId
         ),
         likeOrHate = likeOrHate
-    ))
+      )
+    )
   }
 }

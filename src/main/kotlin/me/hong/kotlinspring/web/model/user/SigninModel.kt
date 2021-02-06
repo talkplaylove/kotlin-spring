@@ -7,8 +7,8 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
 class SigninReq(
-    email: String,
-    password: String
+  email: String,
+  password: String
 ) {
   @NotBlank
   @Email
@@ -19,16 +19,16 @@ class SigninReq(
 }
 
 data class SigninRes(
-    val id: Long?,
-    val name: String,
-    val gender: Gender
+  val id: Long?,
+  val name: String,
+  val gender: Gender
 ) {
   companion object {
     fun of(user: User): SigninRes {
       return SigninRes(
-          id = user.id,
-          name = user.name,
-          gender = user.gender
+        id = user.id,
+        name = user.name,
+        gender = user.gender
       )
     }
   }

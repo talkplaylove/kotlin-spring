@@ -9,10 +9,10 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 class SignupReq(
-    name: String,
-    email: String,
-    password: String,
-    gender: Gender
+  name: String,
+  email: String,
+  password: String,
+  gender: Gender
 ) {
   @UserName
   val name: String = name
@@ -29,16 +29,16 @@ class SignupReq(
 
   fun toUser(encodedPassword: String): User {
     return User(
-        email = this.email,
-        name = this.name,
-        password = encodedPassword,
-        gender = this.gender
+      email = this.email,
+      name = this.name,
+      password = encodedPassword,
+      gender = this.gender
     )
   }
 }
 
 data class SignupRes(
-    val id: Long?
+  val id: Long?
 ) {
   companion object {
     fun of(user: User): SignupRes {

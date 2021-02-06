@@ -14,10 +14,10 @@ import java.time.LocalDate
 
 @Service
 class UserService(
-    private val userDomain: UserDomain,
-    private val userAccessDomain: UserAccessDomain,
-    private val boardService: BoardService,
-    private val passwordEncoder: PasswordEncoder
+  private val userDomain: UserDomain,
+  private val userAccessDomain: UserAccessDomain,
+  private val boardService: BoardService,
+  private val passwordEncoder: PasswordEncoder
 ) {
   @Transactional
   fun signin(req: SigninReq): SigninRes {

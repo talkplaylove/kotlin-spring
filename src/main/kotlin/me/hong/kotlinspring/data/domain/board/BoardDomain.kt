@@ -11,7 +11,7 @@ import java.util.*
 
 @Component
 class BoardDomain(
-    private val boardRepo: BoardRepo
+  private val boardRepo: BoardRepo
 ) {
   fun getActivePage(pageable: Pageable): Page<Board> {
     return boardRepo.findAllByActive(pageable)
@@ -19,16 +19,16 @@ class BoardDomain(
 
   fun getActivePage(word: String, pageable: Pageable): Page<Board> {
     return boardRepo.findAllByTitleContainingOrContentContainingAndActive(
-        title = word,
-        content = word,
-        pageable = pageable
+      title = word,
+      content = word,
+      pageable = pageable
     )
   }
 
   fun getActivePage(createdBy: Long, pageable: Pageable): Page<Board> {
     return boardRepo.findAllByCreatedByAndActiveOrderByIdDesc(
-        createdBy = createdBy,
-        pageable = pageable
+      createdBy = createdBy,
+      pageable = pageable
     )
   }
 

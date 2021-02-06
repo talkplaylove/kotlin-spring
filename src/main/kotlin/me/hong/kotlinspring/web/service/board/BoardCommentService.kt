@@ -19,9 +19,9 @@ import java.util.stream.Collectors
 
 @Service
 class BoardCommentService(
-    private val boardCommentDomain: BoardCommentDomain,
-    private val boardCommentReadDomain: BoardCommentReadDomain,
-    private val boardUserDomain: BoardUserDomain
+  private val boardCommentDomain: BoardCommentDomain,
+  private val boardCommentReadDomain: BoardCommentReadDomain,
+  private val boardUserDomain: BoardUserDomain
 ) {
   fun getComments(boardId: Long, pageable: Pageable): Collection<BoardCommentRes> {
     val comments = boardCommentDomain.getActivePage(boardId, pageable)
@@ -39,7 +39,12 @@ class BoardCommentService(
   }
 
   @Transactional
-  fun updateComment(boardId: Long, commentId: Long, req: BoardCommentPutReq, signinUser: SigninUser): BoardCommentPutRes {
+  fun updateComment(
+    boardId: Long,
+    commentId: Long,
+    req: BoardCommentPutReq,
+    signinUser: SigninUser
+  ): BoardCommentPutRes {
     val comment = boardCommentDomain.getActiveOne(commentId)
 
     signinUser.unmatchesThrow(comment.createdBy)
@@ -59,7 +64,12 @@ class BoardCommentService(
   }
 
   @Transactional
-  fun likeOrHateComment(boardId: Long, commentId: Long, likeOrHate: LikeOrHate, signinUser: SigninUser): BoardCommentLikeRes {
+  fun likeOrHateComment(
+    boardId: Long,
+    commentId: Long,
+    likeOrHate: LikeOrHate,
+    signinUser: SigninUser
+  ): BoardCommentLikeRes {
     val userId = signinUser.id
     var read: BoardCommentRead? = null
     var currentLikeOrHate = LikeOrHate.NONE

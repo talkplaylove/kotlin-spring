@@ -8,14 +8,16 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(indexes = [
-  Index(name = "IndexBoardCommentBoardId", columnList = "boardId"),
-  Index(name = "IndexBoardCommentCreatedBy", columnList = "createdBy")
-])
+@Table(
+  indexes = [
+    Index(name = "IndexBoardCommentBoardId", columnList = "boardId"),
+    Index(name = "IndexBoardCommentCreatedBy", columnList = "createdBy")
+  ]
+)
 @EntityListeners(AuditingEntityListener::class)
 class BoardComment(
-    boardId: Long,
-    content: String
+  boardId: Long,
+  content: String
 ) {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

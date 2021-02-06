@@ -9,19 +9,23 @@ import java.util.*
 
 @Component
 class BoardCommentReadDomain(
-    private val boardCommentReadRepo: BoardCommentReadRepo
+  private val boardCommentReadRepo: BoardCommentReadRepo
 ) {
   fun getOptional(commentId: Long, userId: Long): Optional<BoardCommentRead> {
-    return boardCommentReadRepo.findById(BoardCommentReadId(
+    return boardCommentReadRepo.findById(
+      BoardCommentReadId(
         commentId = commentId,
         userId = userId
-    ))
+      )
+    )
   }
 
   fun create(commentId: Long, userId: Long, likeOrHate: LikeOrHate): BoardCommentRead {
-    return boardCommentReadRepo.insert(BoardCommentRead(
+    return boardCommentReadRepo.insert(
+      BoardCommentRead(
         id = BoardCommentReadId(commentId, userId),
         likeOrHate = likeOrHate
-    ))
+      )
+    )
   }
 }

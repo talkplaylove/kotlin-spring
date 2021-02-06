@@ -9,25 +9,27 @@ import java.util.*
 
 @Component
 class BoardHitDomain(
-    private val boardHitRepo: BoardHitRepo
+  private val boardHitRepo: BoardHitRepo
 ) {
   fun getOptional(boardId: Long, ip: String): Optional<BoardHit> {
     return boardHitRepo.findById(
-        BoardHitId(
-            boardId = boardId,
-            date = LocalDate.now(),
-            ip = ip
-        )
+      BoardHitId(
+        boardId = boardId,
+        date = LocalDate.now(),
+        ip = ip
+      )
     )
   }
 
   fun create(boardId: Long, ip: String): BoardHit {
-    return boardHitRepo.insert(BoardHit(
+    return boardHitRepo.insert(
+      BoardHit(
         BoardHitId(
-            boardId = boardId,
-            date = LocalDate.now(),
-            ip = ip
+          boardId = boardId,
+          date = LocalDate.now(),
+          ip = ip
         )
-    ))
+      )
+    )
   }
 }

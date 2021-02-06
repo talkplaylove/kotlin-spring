@@ -10,9 +10,11 @@ import javax.persistence.Index
 import javax.persistence.Table
 
 @Entity
-@Table(indexes = [
-  Index(name = "IndexUserAccessCreatedAt", columnList = "createdAt")
-])
+@Table(
+  indexes = [
+    Index(name = "IndexUserAccessCreatedAt", columnList = "createdAt")
+  ]
+)
 class UserAccess(id: UserAccessId) {
 
   @EmbeddedId

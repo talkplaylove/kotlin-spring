@@ -9,13 +9,13 @@ import java.util.*
 interface BoardCommentRepo : JpaRepository<BoardComment, Long> {
 
   fun findAllByBoardIdAndActive(
-      boardId: Long,
-      active: Boolean = true,
-      pageable: Pageable
+    boardId: Long,
+    active: Boolean = true,
+    pageable: Pageable
   ): Page<BoardComment>
 
   fun findByIdAndActive(
-      id: Long,
-      active: Boolean = true
+    id: Long,
+    active: Boolean = true
   ): Optional<BoardComment>
 }

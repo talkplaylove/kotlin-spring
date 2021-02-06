@@ -12,8 +12,8 @@ import javax.validation.constraints.Size
 @RestController
 @Validated
 class UserController(
-    private val userService: UserService,
-    private val signinUser: SigninUser
+  private val userService: UserService,
+  private val signinUser: SigninUser
 ) {
   @GetMapping("/users/emails/{email}/duplicate")
   fun duplicateEmail(@PathVariable @Email email: String) {

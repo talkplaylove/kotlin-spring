@@ -8,13 +8,15 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(indexes = [
-  Index(name = "IndexBoardCreatedBy", columnList = "createdBy")
-])
+@Table(
+  indexes = [
+    Index(name = "IndexBoardCreatedBy", columnList = "createdBy")
+  ]
+)
 @EntityListeners(AuditingEntityListener::class)
 class Board(
-    title: String,
-    content: String
+  title: String,
+  content: String
 ) {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

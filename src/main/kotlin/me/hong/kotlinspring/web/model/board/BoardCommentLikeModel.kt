@@ -6,23 +6,23 @@ import java.time.LocalDateTime
 import javax.validation.constraints.NotNull
 
 class BoardCommentLIkeReq(
-    likeOrHate: LikeOrHate
+  likeOrHate: LikeOrHate
 ) {
   @NotNull
   val likeOrHate: LikeOrHate = likeOrHate
 }
 
 data class BoardCommentLikeRes(
-    var likeOrHate: LikeOrHate,
-    val createdAt: LocalDateTime?,
-    val updatedAt: LocalDateTime?
+  var likeOrHate: LikeOrHate,
+  val createdAt: LocalDateTime?,
+  val updatedAt: LocalDateTime?
 ) {
   companion object {
     fun of(read: BoardCommentRead?): BoardCommentLikeRes {
       return BoardCommentLikeRes(
-          likeOrHate = read!!.likeOrHate,
-          createdAt = read.createdAt,
-          updatedAt = read.updatedAt
+        likeOrHate = read!!.likeOrHate,
+        createdAt = read.createdAt,
+        updatedAt = read.updatedAt
       )
     }
   }

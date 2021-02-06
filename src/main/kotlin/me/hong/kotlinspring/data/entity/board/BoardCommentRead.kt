@@ -8,9 +8,11 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(indexes = [
-  Index(name = "IndexBoardCommentReadUserId", columnList = "userId", unique = false)
-])
+@Table(
+  indexes = [
+    Index(name = "IndexBoardCommentReadUserId", columnList = "userId", unique = false)
+  ]
+)
 class BoardCommentRead(id: BoardCommentReadId, likeOrHate: LikeOrHate) {
 
   @EmbeddedId

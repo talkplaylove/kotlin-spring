@@ -9,7 +9,7 @@ import java.util.*
 
 @Component
 class UserAccessDomain(
-    private val userAccessRepo: UserAccessRepo
+  private val userAccessRepo: UserAccessRepo
 ) {
   fun getOptional(userId: Long, date: LocalDate): Optional<UserAccess> {
     return userAccessRepo.findById(UserAccessId(userId, date))

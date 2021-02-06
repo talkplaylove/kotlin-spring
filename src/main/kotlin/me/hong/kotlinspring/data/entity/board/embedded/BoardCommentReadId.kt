@@ -12,11 +12,4 @@ class BoardCommentReadId(commentId: Long?, userId: Long?) : Serializable {
   @Column(name = "userId")
   var id2: Long? = userId
 
-  override fun equals(other: Any?): Boolean {
-    return super.equals(other)
-  }
-
-  override fun hashCode(): Int {
-    return super.hashCode()
-  }
 }

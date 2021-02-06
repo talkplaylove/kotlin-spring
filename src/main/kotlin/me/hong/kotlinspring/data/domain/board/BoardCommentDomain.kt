@@ -11,11 +11,11 @@ import java.util.*
 
 @Component
 class BoardCommentDomain(
-    private val boardCommentRepo: BoardCommentRepo
+  private val boardCommentRepo: BoardCommentRepo
 ) {
   fun getActivePage(boardId: Long, pageable: Pageable): Page<BoardComment> {
     return boardCommentRepo.findAllByBoardIdAndActive(
-        boardId = boardId, pageable = pageable
+      boardId = boardId, pageable = pageable
     )
   }
 
